@@ -209,7 +209,7 @@ function App() {
       </a>
 
       <header className="sticky top-0 z-50 border-b border-cyan-900/10 bg-slate-50/85 backdrop-blur-md">
-        <div className="mx-auto flex min-h-[74px] w-full max-w-6xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex min-h-[74px] w-full max-w-[1280px] items-center justify-between gap-3 px-4 sm:px-6 lg:px-10 xl:px-12">
           <a
             href="#home"
             className="font-display text-sm font-bold tracking-wide text-slate-900 transition hover:text-cyan-800 sm:text-base"
@@ -264,12 +264,17 @@ function App() {
         </div>
       </header>
 
-      <main id="main" className="mx-auto w-full max-w-6xl px-4 pb-20 pt-8 sm:px-6 lg:px-8">
+      <main
+        id="main"
+        className="relative mx-auto w-full max-w-[1280px] px-4 pb-20 pt-8 sm:px-6 lg:px-10 lg:pt-10 xl:px-12 xl:pt-12"
+      >
+        <div className="pointer-events-none absolute left-[-10rem] top-[16rem] -z-10 hidden h-72 w-72 rounded-full bg-cyan-300/20 blur-3xl lg:block" />
+        <div className="pointer-events-none absolute right-[-8rem] top-[42rem] -z-10 hidden h-72 w-72 rounded-full bg-amber-300/20 blur-3xl lg:block" />
         <section
           id="home"
-          className="grid gap-4 pb-16 md:grid-cols-[1.35fr_minmax(290px,0.95fr)] md:items-stretch"
+          className="grid gap-4 pb-16 md:grid-cols-[1.35fr_minmax(290px,0.95fr)] md:items-stretch lg:gap-6 xl:grid-cols-[1.5fr_minmax(320px,0.88fr)] xl:gap-8"
         >
-          <article className="animate-rise overflow-hidden rounded-[1.6rem] bg-gradient-to-br from-cyan-700 to-cyan-950 p-6 text-slate-100 shadow-soft sm:p-9">
+          <article className="animate-rise overflow-hidden rounded-[1.6rem] bg-gradient-to-br from-cyan-700 to-cyan-950 p-6 text-slate-100 shadow-soft sm:p-9 lg:p-10 xl:p-12">
             <div className="mb-4 flex flex-wrap items-center gap-2">
               <span className="rounded-full border border-cyan-100/35 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-cyan-50">
                 Open To Software Engineering Roles
@@ -282,10 +287,10 @@ function App() {
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-100">
               Full-Stack Software Engineer Track
             </p>
-            <h1 className="mt-2 font-display text-3xl font-bold leading-tight sm:text-5xl">
+            <h1 className="mt-2 font-display text-3xl font-bold leading-tight sm:text-5xl xl:text-[3.4rem]">
               Building reliable software products from backend to frontend.
             </h1>
-            <p className="mt-4 max-w-2xl text-base text-cyan-50 sm:text-lg">
+            <p className="mt-4 max-w-2xl text-base text-cyan-50 sm:text-lg xl:max-w-3xl">
               Final-year Software Engineering student with hands-on experience building
               production-style platforms, backend services, and responsive user interfaces.
               Focused on clean architecture, performance, and maintainable delivery.
@@ -313,7 +318,7 @@ function App() {
               </a>
             </div>
 
-            <div className="mt-7 grid gap-2 sm:grid-cols-3">
+            <div className="mt-7 grid gap-2 sm:grid-cols-3 lg:max-w-2xl">
               {quickStats.map((stat) => (
                 <div
                   key={stat.label}
@@ -327,7 +332,7 @@ function App() {
           </article>
 
           <aside
-            className="animate-rise rounded-[1.4rem] border border-slate-200/80 bg-white/90 p-4 shadow-soft [animation-delay:120ms] sm:p-5"
+            className="animate-rise rounded-[1.4rem] border border-slate-200/80 bg-white/90 p-4 shadow-soft [animation-delay:120ms] sm:p-5 lg:sticky lg:top-24 lg:h-fit lg:bg-white/95"
             aria-label="Profile card"
           >
             <img
@@ -369,9 +374,9 @@ function App() {
           </aside>
         </section>
 
-        <section id="summary" className="pb-12">
-          <div className="grid gap-4 lg:grid-cols-[1.45fr_1fr]">
-            <article className="rounded-2xl border border-slate-200 bg-white/90 p-6 shadow-soft sm:p-7">
+        <section id="summary" className="pb-14">
+          <div className="grid gap-4 lg:gap-5 xl:grid-cols-[1.5fr_1fr]">
+            <article className="rounded-2xl border border-slate-200 bg-white/90 p-6 shadow-soft sm:p-7 lg:p-8">
               <h2 className="font-display text-3xl font-semibold text-slate-900">
                 Professional Summary
               </h2>
@@ -404,7 +409,7 @@ function App() {
               </div>
             </article>
 
-            <article className="rounded-2xl border border-slate-200 bg-white/90 p-6 shadow-soft sm:p-7">
+            <article className="rounded-2xl border border-slate-200 bg-white/90 p-6 shadow-soft sm:p-7 lg:sticky lg:top-24 lg:h-fit">
               <h3 className="font-display text-2xl font-semibold text-slate-900">Focus Areas</h3>
               <ul className="mt-3 space-y-2">
                 {focusAreas.map((item) => (
@@ -420,16 +425,16 @@ function App() {
           </div>
         </section>
 
-        <section id="skills" className="pb-12">
+        <section id="skills" className="pb-14">
           <div className="mb-4 flex items-end justify-between gap-3">
             <h2 className="font-display text-3xl font-semibold text-slate-900">Skills</h2>
             <p className="text-sm text-slate-500">Technical strengths across full software delivery</p>
           </div>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4">
             {skillGroups.map((skill, idx) => (
               <article
                 key={skill.title}
-                className="group animate-rise rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-soft transition duration-300 hover:-translate-y-1 hover:border-cyan-200"
+                className="group animate-rise rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-soft transition duration-300 hover:-translate-y-1 hover:border-cyan-200 lg:min-h-[220px] lg:p-5"
                 style={{ animationDelay: `${idx * 90}ms` }}
               >
                 <div className="mb-3 h-1.5 w-14 rounded-full bg-gradient-to-r from-cyan-600 to-teal-500 transition group-hover:w-20" />
@@ -440,7 +445,7 @@ function App() {
           </div>
         </section>
 
-        <section id="projects" className="pb-12">
+        <section id="projects" className="pb-14">
           <div className="mb-4 flex items-end justify-between gap-3">
             <h2 className="font-display text-3xl font-semibold text-slate-900">Projects</h2>
             <a
@@ -452,15 +457,23 @@ function App() {
               View GitHub profile
             </a>
           </div>
-          <div className="grid gap-3 md:grid-cols-2">
+          <div className="grid gap-3 md:grid-cols-2 lg:gap-4 xl:grid-cols-3 xl:auto-rows-fr">
             {projects.map((project, idx) => (
               <article
                 key={project.name}
-                className="group animate-rise rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-soft transition duration-300 hover:-translate-y-1 hover:border-cyan-200"
+                className={`group animate-rise rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-soft transition duration-300 hover:-translate-y-1 hover:border-cyan-200 ${
+                  idx === 0 ? "xl:col-span-2 xl:p-6" : ""
+                }`}
                 style={{ animationDelay: `${idx * 90}ms` }}
               >
                 <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-                  <h3 className="font-display text-xl font-semibold text-slate-900">{project.name}</h3>
+                  <h3
+                    className={`font-display font-semibold text-slate-900 ${
+                      idx === 0 ? "text-2xl" : "text-xl"
+                    }`}
+                  >
+                    {project.name}
+                  </h3>
                   <span className="rounded-full border border-cyan-800/25 bg-cyan-50 px-3 py-1 text-xs font-bold uppercase tracking-wide text-cyan-800">
                     {project.badge}
                   </span>
@@ -488,13 +501,13 @@ function App() {
           </div>
         </section>
 
-        <section id="education" className="pb-12">
+        <section id="education" className="pb-14">
           <h2 className="font-display text-3xl font-semibold text-slate-900">Education</h2>
-          <div className="relative mt-5 space-y-3 pl-4 before:absolute before:left-0 before:top-0 before:h-full before:w-px before:bg-cyan-200">
+          <div className="relative mt-5 space-y-3 pl-4 before:absolute before:left-0 before:top-0 before:h-full before:w-px before:bg-cyan-200 lg:grid lg:grid-cols-2 lg:gap-4 lg:space-y-0 lg:pl-0 lg:before:hidden">
             {education.map((item, idx) => (
               <article
                 key={item.school}
-                className="animate-rise rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-soft"
+                className="animate-rise rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-soft lg:p-6"
                 style={{ animationDelay: `${idx * 90}ms` }}
               >
                 <div className="mb-2 inline-block rounded-full bg-cyan-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-cyan-900">
@@ -508,7 +521,7 @@ function App() {
           </div>
         </section>
 
-        <section id="languages" className="pb-12">
+        <section id="languages" className="pb-14">
           <h2 className="font-display text-3xl font-semibold text-slate-900">Languages</h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-3">
             {languages.map((language, idx) => (
@@ -533,8 +546,8 @@ function App() {
         </section>
 
         <section id="contact" className="pb-6">
-          <div className="grid gap-4 lg:grid-cols-[1.35fr_1fr]">
-            <article className="rounded-2xl border border-slate-200 bg-gradient-to-br from-cyan-800 to-cyan-950 p-6 text-slate-50 shadow-soft sm:p-7">
+          <div className="grid gap-4 lg:gap-5 xl:grid-cols-[1.5fr_1fr]">
+            <article className="rounded-2xl border border-slate-200 bg-gradient-to-br from-cyan-800 to-cyan-950 p-6 text-slate-50 shadow-soft sm:p-7 lg:p-8">
               <h2 className="font-display text-3xl font-semibold">Contact</h2>
               <p className="mt-2 max-w-3xl text-lg text-cyan-50">
                 Open to internship and early-career software engineering roles across backend,
@@ -576,7 +589,7 @@ function App() {
               </div>
             </article>
 
-            <article className="rounded-2xl border border-slate-200 bg-white/95 p-6 shadow-soft sm:p-7">
+            <article className="rounded-2xl border border-slate-200 bg-white/95 p-6 shadow-soft sm:p-7 lg:sticky lg:top-24 lg:h-fit">
               <h3 className="font-display text-2xl font-semibold text-slate-900">Quick Actions</h3>
               <p className="mt-2 text-sm text-slate-600">
                 Copy contact details and reach out quickly.
