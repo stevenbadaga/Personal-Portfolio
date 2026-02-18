@@ -12,6 +12,10 @@
   body {
     @apply m-0 font-body antialiased;
   }
+
+  section {
+    scroll-margin-top: 6.2rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
