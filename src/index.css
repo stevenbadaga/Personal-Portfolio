@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Space+Grotesk:wght@500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -7,14 +7,28 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    background-color: #FAF9F6;
+    color: #1E293B;
+  }
+
+  html.dark {
+    background-color: #060814;
+    color: #CBD5E1;
   }
 
   body {
-    @apply m-0 font-body antialiased;
+    @apply m-0 font-body antialiased transition-colors duration-300;
+    background-color: #FAF9F6;
+    color: #1E293B;
+  }
+
+  html.dark body {
+    background-color: #060814;
+    color: #CBD5E1;
   }
 
   section {
-    scroll-margin-top: 6.2rem;
+    scroll-margin-top: 6.8rem;
   }
 }
 
