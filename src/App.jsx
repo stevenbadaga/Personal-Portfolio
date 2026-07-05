@@ -274,7 +274,7 @@ function App() {
           <span className="absolute right-[8%] top-[45%] hidden md:inline">&lt;div className="portfolio-shell"&gt;</span>
           <span className="absolute left-[6%] top-[58%] hidden md:inline">git commit -m "Deploy to production"</span>
           <span className="absolute right-[15%] top-[68%] hidden lg:inline">fetch("https://api.codafriqa.rw/v1/projects")</span>
-          <span className="absolute left-[12%] top-[78%] hidden md:inline">&lt;article key={project.name}&gt;</span>
+          <span className="absolute left-[12%] top-[78%] hidden md:inline">&lt;article key=&#123;project.name&#125;&gt;</span>
           <span className="absolute right-[10%] top-[88%] hidden md:inline">&#123; isFeatured ? "Featured" : "Regular" &#125;</span>
         </div>
       </div>
