@@ -346,39 +346,36 @@ function App() {
       {/* Main Container */}
       <main
         id="main"
-        className="relative mx-auto w-full max-w-[1280px] px-3 sm:px-6 lg:px-10 lg:pt-12 xl:px-12"
+        className="relative mx-auto w-full max-w-[1280px] px-3 sm:px-6 lg:px-10 pt-20 sm:pt-24 lg:pt-24 xl:px-12"
       >
         {/* Glow decorative blobs */}
         <div className="pointer-events-none absolute left-[-10rem] top-[16rem] -z-10 hidden h-72 w-72 rounded-full bg-amber-500/5 blur-3xl lg:block" />
         <div className="pointer-events-none absolute right-[-8rem] top-[42rem] -z-10 hidden h-72 w-72 rounded-full bg-teal-500/5 blur-3xl lg:block" />
-
+ 
         {/* Hero Section */}
         <section
           id="home"
           className="grid gap-6 pb-16 md:grid-cols-[1.35fr_minmax(290px,0.95fr)] md:items-stretch lg:gap-8 xl:grid-cols-[1.5fr_minmax(320px,0.88fr)]"
         >
           {/* Main Hero Card */}
-          <article className="relative animate-rise overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 sm:p-9 lg:p-10 xl:p-12 transition-all duration-300">
+          <article className="relative animate-rise overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 sm:p-9 lg:p-10 xl:p-12 transition-all duration-300 flex flex-col justify-center">
             {/* Ambient glows inside card */}
             <div className="pointer-events-none absolute -right-20 -top-20 h-60 w-60 rounded-full bg-amber-500/10 blur-[80px]" />
             <div className="pointer-events-none absolute -left-20 -bottom-20 h-60 w-60 rounded-full bg-teal-500/10 blur-[80px]" />
-
+ 
             <div className="mb-6 flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-0.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
-                <span className="h-1.5 w-1.5 animate-ping rounded-full bg-emerald-500 dark:bg-emerald-400" />
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-0.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 animate-pulse">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400" />
                 Open To Software Engineering Roles
               </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-900/50 px-3 py-0.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">
-                Kigali, Rwanda
-              </span>
             </div>
-
+ 
             <p className="text-xs font-bold uppercase tracking-[0.25em] text-amber-600 dark:text-[#D4AF37]">
               Full-Stack Software Engineer Track
             </p>
             
             <h1 className="mt-3 font-display text-3xl font-extrabold leading-tight text-slate-900 dark:text-white sm:text-5xl xl:text-[3.5rem] tracking-tight">
-              Building reliable software products from <span className="bg-gradient-to-r from-amber-650 via-amber-500 to-teal-650 dark:from-amber-400 dark:via-yellow-200 dark:to-teal-400 bg-clip-text text-transparent">backend to frontend</span>.
+              Building reliable software products from <span className="bg-gradient-to-r from-amber-600 via-amber-500 to-teal-600 dark:from-amber-400 dark:via-yellow-200 dark:to-teal-400 bg-clip-text text-transparent">backend to frontend</span>.
             </h1>
             
             <p className="mt-5 max-w-2xl text-base text-slate-600 dark:text-slate-300 sm:text-lg leading-relaxed xl:max-w-3xl">
