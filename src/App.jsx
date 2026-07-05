@@ -50,19 +50,6 @@ const skillGroups = [
 
 const projects = [
   {
-    name: "Codafriqa",
-    category: "Tech Ecosystem Platform",
-    badge: "Featured Project",
-    description: "A platform supporting the African tech ecosystem by connecting developers, founders, and resources.",
-    tags: ["React", "Node.js", "Tailwind CSS", "PostgreSQL", "Systems Engineering"],
-    link: "https://www.codafriqa.rw/",
-    points: [
-      "Designed and deployed a platform supporting the African tech ecosystem.",
-      "Architected a modular backend focused on scalability and maintainability.",
-      "Managed hosting configuration and deployment processes."
-    ]
-  },
-  {
     name: "Volcano Art Center",
     category: "Full-stack web platform / Cultural and tourism website",
     badge: "Featured Project",
@@ -108,7 +95,8 @@ const education = [
 const languages = [
   { name: "Kinyarwanda", level: "Native", width: "100%" },
   { name: "English", level: "Fluent", width: "90%" },
-  { name: "French", level: "Intermediate", width: "65%" }
+  { name: "French", level: "Intermediate", width: "65%" },
+  { name: "Swahili", level: "Intermediate", width: "65%" }
 ];
 
 const focusAreas = [
@@ -596,7 +584,7 @@ function App() {
             </a>
           </div>
           
-          <div className="grid gap-5 md:grid-cols-2 lg:gap-6 xl:grid-cols-3 xl:auto-rows-fr">
+          <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto xl:auto-rows-fr">
             {projects.map((project, idx) => {
               const isFeatured = project.badge === "Featured Project";
               const isFinalYear = project.badge === "Final Year Project";
@@ -611,9 +599,7 @@ function App() {
               return (
                 <article
                   key={project.name}
-                  className={`group relative flex flex-col justify-between animate-rise rounded-[1.5rem] sm:rounded-[2rem] border bg-white/70 dark:bg-slate-900/40 p-5 sm:p-6 shadow-2xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 ${cardBorderClass} ${
-                    idx === 0 ? "md:col-span-2 lg:col-span-1" : ""
-                  }`}
+                  className={`group relative flex flex-col justify-between animate-rise rounded-[1.5rem] sm:rounded-[2rem] border bg-white/70 dark:bg-slate-900/40 p-5 sm:p-6 shadow-2xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 ${cardBorderClass}`}
                   style={{ animationDelay: `${idx * 90}ms` }}
                 >
                   <div>
@@ -736,7 +722,7 @@ function App() {
             <div className="mt-2.5 h-1 w-20 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
           </div>
 
-          <div className="mt-6 grid gap-4 sm:grid-cols-3">
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {languages.map((language, idx) => (
               <article
                 key={language.name}
