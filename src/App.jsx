@@ -115,19 +115,51 @@ const quickStats = [
 ];
 
 function App() {
-  const [theme, setTheme] = useState(() => {
+  const [themePreference, setThemePreference] = useState(() => {
     if (typeof window !== "undefined") {
       try {
-        const stored = localStorage.getItem("theme");
+        const stored = localStorage.getItem("themePreference");
         if (stored) return stored;
       } catch (e) {
-        // Fallback if localStorage is disabled/blocked
+        // Fallback
       }
-      const mql = window.matchMedia("(prefers-color-scheme: dark)");
-      return mql.matches ? "dark" : "light";
     }
-    return "dark";
+    return "system";
   });
+
+  const [resolvedTheme, setResolvedTheme] = useState("dark");
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    
+    const updateTheme = () => {
+      let isDark = false;
+      if (themePreference === "dark") {
+        isDark = true;
+      } else if (themePreference === "light") {
+        isDark = false;
+      } else {
+        isDark = mediaQuery.matches;
+      }
+      setResolvedTheme(isDark ? "dark" : "light");
+      document.documentElement.classList.toggle("dark", isDark);
+    };
+
+    updateTheme();
+
+    mediaQuery.addEventListener("change", updateTheme);
+    return () => mediaQuery.removeEventListener("change", updateTheme);
+  }, [themePreference]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("themePreference", themePreference);
+    } catch (e) {
+      console.error("Failed to write themePreference:", e);
+    }
+  }, [themePreference]);
+
+  const theme = resolvedTheme;
 
   const [activeSection, setActiveSection] = useState("#home");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -137,27 +169,6 @@ function App() {
 
   const currentYear = new Date().getFullYear();
   const sectionIds = useMemo(() => navigation.map((item) => item.href.replace("#", "")), []);
-
-  useEffect(() => {
-    const root = document.documentElement;
-    const isDark = theme === "dark";
-    console.log("Applying theme to HTML class: isDark =", isDark, "theme =", theme);
-    root.classList.toggle("dark", isDark);
-    try {
-      localStorage.setItem("theme", theme);
-    } catch (e) {
-      console.error("Failed to write to localStorage:", e);
-    }
-  }, [theme]);
-
-  const toggleTheme = () => {
-    console.log("Toggle theme clicked! Current theme:", theme);
-    setTheme((t) => {
-      const next = t === "dark" ? "light" : "dark";
-      console.log("Setting theme state to:", next);
-      return next;
-    });
-  };
 
   useEffect(() => {
     const sections = sectionIds
@@ -249,6 +260,25 @@ function App() {
       {/* Grid Pattern Overlay */}
       <div className="pointer-events-none fixed inset-0 -z-10 opacity-[0.03] dark:opacity-[0.03] [background-image:linear-gradient(rgba(0,0,0,0.07)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.07)_1px,transparent_1px)] dark:[background-image:linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.1)_1px,transparent_1px)] [background-size:40px_40px]" />
 
+      {/* Premium Abstract Code-Flow Background */}
+      <div className="pointer-events-none fixed inset-0 -z-30 select-none overflow-hidden">
+        {/* Repeating code-line linear flow texture layer */}
+        <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.04] [background-image:repeating-linear-gradient(0deg,transparent,transparent_39px,rgba(0,0,0,0.1)_39px,rgba(0,0,0,0.1)_40px)] dark:[background-image:repeating-linear-gradient(0deg,transparent,transparent_39px,rgba(255,255,255,0.06)_39px,rgba(255,255,255,0.06)_40px)]" />
+
+        {/* Decorative Syntax Code Symbols floating in background */}
+        <div className="absolute inset-0 font-mono text-[9px] sm:text-[10px] font-bold text-slate-800/10 dark:text-slate-100/5 leading-none">
+          {/* Faint Code Fragments positioned absolute across the viewport */}
+          <span className="absolute left-[8%] top-[14%] hidden md:inline">&lt;section id="home"&gt;</span>
+          <span className="absolute right-[12%] top-[22%] hidden md:inline">const [theme, setTheme] = useState()</span>
+          <span className="absolute left-[15%] top-[34%] hidden lg:inline">document.documentElement.classList.toggle("dark")</span>
+          <span className="absolute right-[8%] top-[45%] hidden md:inline">&lt;div className="portfolio-shell"&gt;</span>
+          <span className="absolute left-[6%] top-[58%] hidden md:inline">git commit -m "Deploy to production"</span>
+          <span className="absolute right-[15%] top-[68%] hidden lg:inline">fetch("https://api.codafriqa.rw/v1/projects")</span>
+          <span className="absolute left-[12%] top-[78%] hidden md:inline">&lt;article key={project.name}&gt;</span>
+          <span className="absolute right-[10%] top-[88%] hidden md:inline">&#123; isFeatured ? "Featured" : "Regular" &#125;</span>
+        </div>
+      </div>
+
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-slate-900 focus:px-4 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-white focus:ring-2 focus:ring-amber-500"
@@ -297,34 +327,43 @@ function App() {
 
           {/* Action Row containing Switcher and Menu Buttons */}
           <div className="flex items-center gap-2">
-            {/* Premium Theme Switcher */}
-            <button
-              type="button"
-              onClick={toggleTheme}
-              className="relative inline-flex h-[26px] w-[52px] shrink-0 cursor-pointer rounded-full border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 transition-colors duration-300 ease-in-out focus:outline-none focus:ring-1 focus:ring-amber-500 items-center"
-              role="switch"
-              aria-checked={theme === "dark"}
-              aria-label="Toggle light or dark theme"
-            >
-              {/* Switch Knob containing Sun/Moon Icon */}
-              <span
-                className={`${
-                  theme === "dark" ? "translate-x-[28px] bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950" : "translate-x-[2px] bg-white text-amber-500"
-                } pointer-events-none flex h-5 w-5 items-center justify-center rounded-full shadow-sm transition-all duration-300 ease-in-out`}
-              >
-                {theme === "dark" ? (
-                  /* Moon icon for dark mode knob */
-                  <svg className="h-2.5 w-2.5 fill-current" viewBox="0 0 20 20">
-                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                  </svg>
-                ) : (
-                  /* Sun icon for light mode knob */
-                  <svg className="h-3 w-3 fill-current" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 2.293a1 1 0 011.414 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM16 10a1 1 0 011-1h1a1 1 0 110 2h-1a1 1 0 01-1-1zm-1.707 4a1 1 0 010 1.414l-.707.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.707 14.293a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zm2.293-5.707a1 1 0 011.414 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM10 6a4 4 0 100 8 4 4 0 000-8z" clipRule="evenodd" />
-                  </svg>
-                )}
-              </span>
-            </button>
+            {/* Premium Theme Switcher (Light / Dark / System Segmented Control) */}
+            <div className="flex items-center gap-0.5 rounded-full border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 p-0.5 select-none">
+              {["light", "dark", "system"].map((mode) => {
+                const isActive = themePreference === mode;
+                return (
+                  <button
+                    key={mode}
+                    type="button"
+                    onClick={() => setThemePreference(mode)}
+                    className={`flex h-[22px] w-[22px] items-center justify-center rounded-full transition-all duration-300 focus:outline-none ${
+                      isActive
+                        ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 shadow-sm shadow-amber-500/10"
+                        : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+                    }`}
+                    aria-label={`Switch to ${mode} theme`}
+                  >
+                    {mode === "light" && (
+                      <svg className="h-2.5 w-2.5 fill-current" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 2.293a1 1 0 011.414 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM16 10a1 1 0 011-1h1a1 1 0 110 2h-1a1 1 0 01-1-1zm-1.707 4a1 1 0 010 1.414l-.707.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.707 14.293a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zm2.293-5.707a1 1 0 011.414 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM10 6a4 4 0 100 8 4 4 0 000-8z" clipRule="evenodd" />
+                      </svg>
+                    )}
+                    {mode === "dark" && (
+                      <svg className="h-2 w-2 fill-current" viewBox="0 0 20 20">
+                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                      </svg>
+                    )}
+                    {mode === "system" && (
+                      <svg className="h-2.5 w-2.5 fill-none stroke-current" strokeWidth="2.5" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+                        <line x1="8" y1="21" x2="16" y2="21" />
+                        <line x1="12" y1="17" x2="12" y2="21" />
+                      </svg>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
 
             {/* Mobile Menu Button */}
             <button
