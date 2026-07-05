@@ -112,10 +112,12 @@ const languages = [
 ];
 
 const focusAreas = [
-  "Designing scalable backend services and clean APIs",
-  "Building responsive, user-focused web interfaces",
-  "Improving performance, reliability, and maintainability",
-  "Collaborating through documentation and version control"
+  "Building full-stack applications with clean frontend, backend, and database structure",
+  "Designing backend services, REST APIs, authentication flows, and database-backed systems",
+  "Creating responsive, premium user interfaces for portfolios, dashboards, and public websites",
+  "Developing GIS-style and land management workflows through the GeoSmart Manager project",
+  "Preparing projects for real use through deployment workflows, environment setup, Git/GitHub, and debugging",
+  "Improving maintainability through documentation, clean code organization, and structured problem solving"
 ];
 
 const quickStats = [
@@ -483,28 +485,26 @@ function App() {
               </h2>
               <div className="mt-2.5 h-1 w-20 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
               
-              <p className="mt-6 text-lg leading-relaxed text-slate-600 dark:text-slate-300">
-                Final-year Software Engineering student with practical experience designing
-                and delivering full-stack applications, backend systems, and data-driven
-                solutions. Strong in translating requirements into clean architecture,
-                maintainable code, and reliable deployments. Seeking software engineering
-                opportunities where I can contribute to product delivery and system quality.
+              <p className="mt-6 text-[15px] leading-relaxed text-slate-600 dark:text-slate-300">
+                Final-year Software Engineering student with practical experience designing and building full-stack web applications, backend services, database-driven systems, and responsive user interfaces. Skilled in translating project requirements into clean architecture, maintainable code, and deployment-ready solutions. My work includes portfolio platforms, dashboard interfaces, GIS-style land management workflows, and web systems that support real operational needs. I am focused on building reliable software products that are scalable, user-friendly, and ready for real-world use.
               </p>
               
-              <div className="mt-8 flex flex-wrap gap-2.5">
+              <div className="mt-8 flex flex-wrap gap-2">
                 {[
                   "Full-Stack Development",
-                  "Backend Architecture",
-                  "REST API Development",
-                  "Database Design",
-                  "Troubleshooting",
-                  "Git Workflow",
+                  "Backend & API Design",
+                  "Database Systems",
+                  "Deployment Workflows",
+                  "GIS & Land Systems",
+                  "Dashboard Interfaces",
+                  "Responsive UI",
+                  "Git/GitHub",
                   "Documentation",
-                  "Analytical Thinking"
+                  "Problem Solving"
                 ].map((item, idx) => (
                   <span
                     key={item}
-                    className="animate-rise rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 px-4 py-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 shadow-sm transition hover:border-amber-500 dark:hover:border-[#D4AF37] hover:text-slate-900 dark:hover:text-white"
+                    className="animate-rise rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100/60 dark:bg-slate-950/40 px-3.5 py-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 shadow-sm transition hover:border-[#D4AF37]/60 dark:hover:border-[#D4AF37]/50 hover:text-slate-900 dark:hover:text-white"
                     style={{ animationDelay: `${idx * 70}ms` }}
                   >
                     {item}
@@ -514,18 +514,21 @@ function App() {
             </article>
 
             {/* Focus Areas Card */}
-            <article className="rounded-[1.5rem] sm:rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 sm:p-8 lg:sticky lg:top-24 lg:h-fit transition-all duration-300">
+            <article className="rounded-[1.5rem] sm:rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 sm:p-8 transition-all duration-300">
               <h3 className="font-display text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Focus Areas</h3>
               <div className="mt-2.5 h-1 w-14 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
               
-              <ul className="mt-6 space-y-3">
+              <ul className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
                 {focusAreas.map((item) => (
                   <li
                     key={item}
-                    className="rounded-xl border border-stone-200/80 dark:border-slate-800 bg-white/40 dark:bg-slate-900/40 px-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-300 flex items-start gap-3"
+                    className="rounded-xl border border-stone-200/60 dark:border-slate-800/80 bg-white/40 dark:bg-slate-900/20 p-4 text-xs font-medium text-slate-700 dark:text-slate-300 flex items-start gap-3 transition hover:border-amber-500/30 dark:hover:border-slate-750/50"
                   >
-                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500 dark:bg-[#D4AF37]" />
-                    <span>{item}</span>
+                    {/* Premium Checkmark Icon */}
+                    <svg className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500 dark:text-emerald-400 fill-none stroke-current" viewBox="0 0 24 24">
+                      <path d="M5 13l4 4L19 7" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    <span className="leading-relaxed">{item}</span>
                   </li>
                 ))}
               </ul>
