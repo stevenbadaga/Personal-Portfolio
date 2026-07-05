@@ -126,8 +126,12 @@ const quickStats = [
 function App() {
   const [theme, setTheme] = useState(() => {
     if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("theme");
-      if (stored) return stored;
+      try {
+        const stored = localStorage.getItem("theme");
+        if (stored) return stored;
+      } catch (e) {
+        // Fallback if localStorage is disabled/blocked
+      }
       const mql = window.matchMedia("(prefers-color-scheme: dark)");
       return mql.matches ? "dark" : "light";
     }
@@ -146,12 +150,22 @@ function App() {
   useEffect(() => {
     const root = document.documentElement;
     const isDark = theme === "dark";
+    console.log("Applying theme to HTML class: isDark =", isDark, "theme =", theme);
     root.classList.toggle("dark", isDark);
-    localStorage.setItem("theme", theme);
+    try {
+      localStorage.setItem("theme", theme);
+    } catch (e) {
+      console.error("Failed to write to localStorage:", e);
+    }
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme((t) => (t === "dark" ? "light" : "dark"));
+    console.log("Toggle theme clicked! Current theme:", theme);
+    setTheme((t) => {
+      const next = t === "dark" ? "light" : "dark";
+      console.log("Setting theme state to:", next);
+      return next;
+    });
   };
 
   useEffect(() => {
@@ -236,79 +250,23 @@ function App() {
         Skip to content
       </a>
 
-      {/* Sticky Premium Navbar */}
-      <header className="sticky top-0 z-50 border-b border-stone-200/80 dark:border-slate-900 bg-[#FAF9F6]/85 dark:bg-[#090D1A]/85 backdrop-blur-md transition-colors duration-300">
-        <div className="mx-auto flex min-h-[76px] w-full max-w-[1280px] items-center justify-between gap-3 px-4 sm:px-6 lg:px-10 xl:px-12">
+      <header className="sticky top-0 z-50 border-b border-stone-200/60 dark:border-slate-900 bg-[#FAF9F6]/80 dark:bg-[#060814]/80 backdrop-blur-lg transition-all duration-300 shadow-sm dark:shadow-none">
+        <div className="mx-auto flex h-16 w-full max-w-[1280px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-10 xl:px-12">
           <a
             href="#home"
-            className="font-display text-sm font-bold tracking-wider text-slate-800 dark:text-white transition hover:text-[#D4AF37] sm:text-base flex items-center gap-2 uppercase"
+            className="font-display text-[10px] sm:text-xs font-black tracking-widest text-slate-800 dark:text-white transition hover:text-[#D4AF37] flex items-center gap-1.5 uppercase select-none shrink-0"
           >
-            <span className="h-2.5 w-2.5 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
+            <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500" />
             IRANKUNDA BADAGA Steven
           </a>
-
-          {/* Action Row containing Switcher and Menu Buttons */}
-          <div className="flex items-center gap-4">
-            {/* Premium Theme Switcher */}
-            <button
-              type="button"
-              onClick={toggleTheme}
-              className="relative inline-flex h-8 w-[76px] shrink-0 cursor-pointer rounded-full border-2 border-stone-200 dark:border-slate-800 bg-stone-150 dark:bg-slate-950 transition-colors duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 items-center px-1"
-              role="switch"
-              aria-checked={theme === "dark"}
-              aria-label="Toggle light or dark theme"
-            >
-              {/* Labels inside switch */}
-              <span className="absolute inset-0 flex items-center justify-between px-2.5 text-[8px] font-black uppercase tracking-wider select-none pointer-events-none">
-                <span className={`${theme === "dark" ? "opacity-100 text-slate-400" : "opacity-0"} transition-opacity duration-300`}>Light</span>
-                <span className={`${theme === "light" ? "opacity-100 text-stone-500" : "opacity-0"} transition-opacity duration-300`}>Dark</span>
-              </span>
-              
-              {/* Switch Knob containing Sun/Moon Icon */}
-              <span
-                className={`${
-                  theme === "dark" ? "translate-x-9 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950" : "translate-x-0 bg-stone-400 text-white"
-                } pointer-events-none flex h-6 w-6 items-center justify-center rounded-full shadow-md transition duration-300 ease-in-out`}
-              >
-                {theme === "dark" ? (
-                  /* Moon icon for dark mode knob */
-                  <svg className="h-3 w-3 fill-current" viewBox="0 0 20 20">
-                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                  </svg>
-                ) : (
-                  /* Sun icon for light mode knob */
-                  <svg className="h-3.5 w-3.5 fill-current" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 2.293a1 1 0 011.414 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM16 10a1 1 0 011-1h1a1 1 0 110 2h-1a1 1 0 01-1-1zm-1.707 4a1 1 0 010 1.414l-.707.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.707 14.293a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zm2.293-5.707a1 1 0 011.414 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM10 6a4 4 0 100 8 4 4 0 000-8z" clipRule="evenodd" />
-                  </svg>
-                )}
-              </span>
-            </button>
-
-            {/* Mobile Menu Button */}
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen((open) => !open)}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-stone-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 transition hover:border-[#D4AF37] hover:text-slate-900 dark:hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 md:hidden"
-              aria-label="Toggle menu"
-              aria-expanded={mobileMenuOpen}
-            >
-              <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5 stroke-current">
-                {mobileMenuOpen ? (
-                  <path d="M6 6L18 18M6 18L18 6" strokeWidth="2" strokeLinecap="round" />
-                ) : (
-                  <path d="M4 7H20M4 12H20M4 17H20" strokeWidth="2" strokeLinecap="round" />
-                )}
-              </svg>
-            </button>
-          </div>
 
           <nav
             aria-label="Primary navigation"
             className={`${
               mobileMenuOpen ? "absolute block" : "hidden"
-            } left-0 top-[76px] w-full border-b border-stone-200 dark:border-slate-800 bg-[#FAF9F6]/95 dark:bg-[#090D1A]/95 px-4 py-5 shadow-2xl md:static md:block md:w-auto md:border-0 md:bg-transparent md:p-0 md:shadow-none transition-colors duration-300`}
+            } left-0 top-16 w-full border-b border-stone-200 dark:border-slate-800 bg-[#FAF9F6]/95 dark:bg-[#060814]/95 px-4 py-5 shadow-xl md:static md:block md:w-auto md:border-0 md:bg-transparent md:p-0 md:shadow-none transition-colors duration-300`}
           >
-            <ul className="flex flex-col gap-2 md:flex-row md:items-center md:gap-1.5">
+            <ul className="flex flex-col gap-2 md:flex-row md:items-center md:gap-1">
               {navigation.map((item) => {
                 const isActive = activeSection === item.href;
                 return (
@@ -316,10 +274,10 @@ function App() {
                     <a
                       href={item.href}
                       onClick={() => setMobileMenuOpen(false)}
-                      className={`inline-flex rounded-full px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
+                      className={`inline-flex rounded-full px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-amber-500 ${
                         isActive
-                          ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-955 dark:text-slate-950 shadow-md shadow-amber-500/20"
-                          : "text-slate-600 dark:text-slate-300 hover:bg-stone-200/50 dark:hover:bg-slate-800/40 hover:text-slate-900 dark:hover:text-white"
+                          ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 shadow-sm shadow-amber-500/10"
+                          : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-stone-200/40 dark:hover:bg-slate-800/40"
                       }`}
                       aria-current={isActive ? "page" : undefined}
                     >
@@ -330,13 +288,62 @@ function App() {
               })}
             </ul>
           </nav>
+
+          {/* Action Row containing Switcher and Menu Buttons */}
+          <div className="flex items-center gap-2">
+            {/* Premium Theme Switcher */}
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="relative inline-flex h-[26px] w-[52px] shrink-0 cursor-pointer rounded-full border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 transition-colors duration-300 ease-in-out focus:outline-none focus:ring-1 focus:ring-amber-500 items-center"
+              role="switch"
+              aria-checked={theme === "dark"}
+              aria-label="Toggle light or dark theme"
+            >
+              {/* Switch Knob containing Sun/Moon Icon */}
+              <span
+                className={`${
+                  theme === "dark" ? "translate-x-[28px] bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950" : "translate-x-[2px] bg-white text-amber-500"
+                } pointer-events-none flex h-5 w-5 items-center justify-center rounded-full shadow-sm transition-all duration-300 ease-in-out`}
+              >
+                {theme === "dark" ? (
+                  /* Moon icon for dark mode knob */
+                  <svg className="h-2.5 w-2.5 fill-current" viewBox="0 0 20 20">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                  </svg>
+                ) : (
+                  /* Sun icon for light mode knob */
+                  <svg className="h-3 w-3 fill-current" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 2.293a1 1 0 011.414 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM16 10a1 1 0 011-1h1a1 1 0 110 2h-1a1 1 0 01-1-1zm-1.707 4a1 1 0 010 1.414l-.707.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.707 14.293a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zm2.293-5.707a1 1 0 011.414 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM10 6a4 4 0 100 8 4 4 0 000-8z" clipRule="evenodd" />
+                  </svg>
+                )}
+              </span>
+            </button>
+
+            {/* Mobile Menu Button */}
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen((open) => !open)}
+              className="inline-flex h-[26px] w-[26px] sm:h-8 sm:w-8 items-center justify-center rounded-full border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 text-slate-600 dark:text-slate-400 transition hover:border-[#D4AF37] hover:text-slate-900 dark:hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-amber-500 md:hidden"
+              aria-label="Toggle menu"
+              aria-expanded={mobileMenuOpen}
+            >
+              <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4 stroke-current">
+                {mobileMenuOpen ? (
+                  <path d="M6 6L18 18M6 18L18 6" strokeWidth="2.5" strokeLinecap="round" />
+                ) : (
+                  <path d="M4 7H20M4 12H20M4 17H20" strokeWidth="2.5" strokeLinecap="round" />
+                )}
+              </svg>
+            </button>
+          </div>
         </div>
       </header>
 
       {/* Main Container */}
       <main
         id="main"
-        className="relative mx-auto w-full max-w-[1280px] px-4 pb-20 pt-8 sm:px-6 lg:px-10 lg:pt-12 xl:px-12"
+        className="relative mx-auto w-full max-w-[1280px] px-3 sm:px-6 lg:px-10 lg:pt-12 xl:px-12"
       >
         {/* Glow decorative blobs */}
         <div className="pointer-events-none absolute left-[-10rem] top-[16rem] -z-10 hidden h-72 w-72 rounded-full bg-amber-500/5 blur-3xl lg:block" />
@@ -348,17 +355,17 @@ function App() {
           className="grid gap-6 pb-16 md:grid-cols-[1.35fr_minmax(290px,0.95fr)] md:items-stretch lg:gap-8 xl:grid-cols-[1.5fr_minmax(320px,0.88fr)]"
         >
           {/* Main Hero Card */}
-          <article className="relative animate-rise overflow-hidden rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-6 text-slate-800 dark:text-slate-100 shadow-2xl backdrop-blur-md sm:p-9 lg:p-10 xl:p-12 transition-all duration-300">
+          <article className="relative animate-rise overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 sm:p-9 lg:p-10 xl:p-12 transition-all duration-300">
             {/* Ambient glows inside card */}
             <div className="pointer-events-none absolute -right-20 -top-20 h-60 w-60 rounded-full bg-amber-500/10 blur-[80px]" />
             <div className="pointer-events-none absolute -left-20 -bottom-20 h-60 w-60 rounded-full bg-teal-500/10 blur-[80px]" />
 
             <div className="mb-6 flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-0.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
                 <span className="h-1.5 w-1.5 animate-ping rounded-full bg-emerald-500 dark:bg-emerald-400" />
                 Open To Software Engineering Roles
               </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-900/50 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-900/50 px-3 py-0.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">
                 Kigali, Rwanda
               </span>
             </div>
@@ -377,25 +384,25 @@ function App() {
               Focused on clean architecture, performance, and maintainable delivery.
             </p>
 
-            <div className="mt-8 flex flex-wrap items-center gap-4">
+            <div className="mt-8 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:items-center sm:gap-4">
               <a
                 href="mailto:badagaclass@gmail.com"
-                className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-500 via-[#D4AF37] to-yellow-500 px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-slate-950 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:brightness-105 active:translate-y-0"
+                className="col-span-1 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-500 via-[#D4AF37] to-yellow-500 px-4 py-3.5 text-xs font-bold uppercase tracking-wider text-slate-955 dark:text-slate-950 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:brightness-105 active:translate-y-0 text-center"
               >
                 Email Me
               </a>
               <a
                 href="#projects"
-                className="inline-flex items-center justify-center rounded-full border border-stone-300 dark:border-slate-700 bg-white/80 dark:bg-slate-800/40 px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-200 transition-all duration-300 hover:-translate-y-0.5 hover:bg-stone-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white hover:border-stone-400 dark:hover:border-slate-600 active:translate-y-0"
+                className="col-span-1 inline-flex items-center justify-center rounded-full border border-stone-300 dark:border-slate-700 bg-white/80 dark:bg-slate-800/40 px-4 py-3.5 text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-200 transition-all duration-300 hover:-translate-y-0.5 hover:bg-stone-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white hover:border-stone-400 dark:hover:border-slate-600 active:translate-y-0 text-center"
               >
                 View Projects
               </a>
               <a
                 href="/assets/Irankunda-Badaga-Steven-CV.docx"
                 download
-                className="inline-flex items-center justify-center rounded-full border border-amber-600/50 dark:border-[#D4AF37]/45 bg-transparent px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-[#D4AF37] transition-all duration-300 hover:-translate-y-0.5 hover:bg-amber-500/5 dark:hover:bg-[#D4AF37]/10 active:translate-y-0"
+                className="col-span-2 inline-flex items-center justify-center rounded-full border border-amber-600/50 dark:border-[#D4AF37]/45 bg-transparent px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-[#D4AF37] transition-all duration-300 hover:-translate-y-0.5 hover:bg-amber-500/5 dark:hover:bg-[#D4AF37]/10 active:translate-y-0 text-center"
               >
-                <svg className="mr-2 h-4.5 w-4.5 fill-current" viewBox="0 0 20 20">
+                <svg className="mr-2 h-5 w-5 flex-shrink-0 fill-current" viewBox="0 0 20 20">
                   <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
                 </svg>
                 Download CV
@@ -406,7 +413,7 @@ function App() {
               {quickStats.map((stat) => (
                 <div
                   key={stat.label}
-                  className="group rounded-2xl border border-stone-200/80 dark:border-slate-800/60 bg-white/60 dark:bg-slate-900/30 p-4 transition-all duration-300 hover:border-stone-350 dark:hover:border-slate-700/80 hover:bg-stone-50 dark:hover:bg-slate-900/50"
+                  className="group rounded-2xl border border-stone-200/80 dark:border-slate-800/60 bg-white/60 dark:bg-slate-900/30 p-4 transition-all duration-300 hover:border-stone-300 dark:hover:border-slate-700/80 hover:bg-stone-50 dark:hover:bg-slate-900/50"
                 >
                   <p className="font-display text-3xl font-extrabold leading-none text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-[#D4AF37] transition-colors duration-300">{stat.value}</p>
                   <p className="mt-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">{stat.label}</p>
@@ -417,7 +424,7 @@ function App() {
 
           {/* Profile Sidebar Card */}
           <aside
-            className="animate-rise rounded-[2.2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/50 p-5 shadow-2xl backdrop-blur-md [animation-delay:120ms] lg:sticky lg:top-24 lg:h-fit transition-all duration-300"
+            className="animate-rise rounded-[1.5rem] sm:rounded-[2.2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/50 p-5 shadow-2xl backdrop-blur-md [animation-delay:120ms] lg:sticky lg:top-24 lg:h-fit transition-all duration-300"
             aria-label="Profile card"
           >
             <div className="relative group overflow-hidden rounded-2xl border border-stone-200 dark:border-slate-700/40">
@@ -435,11 +442,11 @@ function App() {
             <p className="text-xs font-bold tracking-widest uppercase text-amber-600 dark:text-[#D4AF37] mt-1">Software Engineering Track</p>
             
             <ul className="mt-5 space-y-2.5 text-sm text-slate-600 dark:text-slate-300">
-              <li className="rounded-xl border border-stone-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/30 px-4 py-3 flex items-center justify-between border-stone-100">
+              <li className="rounded-xl border border-stone-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/30 px-4 py-3 flex items-center justify-between">
                 <span className="text-slate-500 dark:text-slate-400 font-medium">Phone</span>
                 <a href="tel:+250788883986" className="font-bold text-slate-800 dark:text-white tracking-wide hover:text-amber-600 dark:hover:text-[#D4AF37] transition-colors">+250 788 883 986</a>
               </li>
-              <li className="rounded-xl border border-stone-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/30 px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 border-stone-100">
+              <li className="rounded-xl border border-stone-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/30 px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
                 <span className="text-slate-500 dark:text-slate-400 font-medium">Email</span>
                 <a href="mailto:badagaclass@gmail.com" className="font-bold text-slate-800 dark:text-white break-all text-xs sm:text-sm hover:text-amber-600 dark:hover:text-[#D4AF37] transition-colors">badagaclass@gmail.com</a>
               </li>
@@ -456,7 +463,7 @@ function App() {
               </a>
               <a
                 className="flex-1 text-center rounded-xl border border-stone-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/30 py-3 text-slate-600 dark:text-slate-300 transition-all duration-300 hover:border-amber-600 dark:hover:border-[#D4AF37] hover:text-slate-900 dark:hover:text-white hover:bg-stone-100/50 dark:hover:bg-slate-800/40"
-                href="https://github.com/Badagasteven"
+                href="https://github.com/stevenbadaga"
                 target="_blank"
                 rel="noreferrer noopener"
               >
@@ -469,7 +476,7 @@ function App() {
         {/* Professional Summary Section */}
         <section id="summary" className="pb-16">
           <div className="grid gap-6 xl:grid-cols-[1.6fr_1fr]">
-            <article className="rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-6 shadow-2xl backdrop-blur-md sm:p-8 lg:p-10 transition-all duration-300">
+            <article className="rounded-[1.5rem] sm:rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 sm:p-8 lg:p-10 transition-all duration-300">
               <h2 className="font-display text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
                 Professional Summary
               </h2>
@@ -506,7 +513,7 @@ function App() {
             </article>
 
             {/* Focus Areas Card */}
-            <article className="rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-6 shadow-2xl backdrop-blur-md sm:p-8 lg:sticky lg:top-24 lg:h-fit transition-all duration-300">
+            <article className="rounded-[1.5rem] sm:rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 sm:p-8 lg:sticky lg:top-24 lg:h-fit transition-all duration-300">
               <h3 className="font-display text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Focus Areas</h3>
               <div className="mt-2.5 h-1 w-14 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
               
@@ -514,7 +521,7 @@ function App() {
                 {focusAreas.map((item) => (
                   <li
                     key={item}
-                    className="rounded-xl border border-stone-200/80 dark:border-slate-800 bg-white/40 dark:bg-slate-955/40 px-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-300 flex items-start gap-3 border-stone-150 dark:bg-slate-950/40"
+                    className="rounded-xl border border-stone-200/80 dark:border-slate-800 bg-white/40 dark:bg-slate-900/40 px-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-300 flex items-start gap-3"
                   >
                     <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500 dark:bg-[#D4AF37]" />
                     <span>{item}</span>
@@ -539,7 +546,7 @@ function App() {
             {skillGroups.map((skill, idx) => (
               <article
                 key={skill.title}
-                className="group animate-rise rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 shadow-xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 hover:border-amber-500/50 lg:min-h-[220px] flex flex-col"
+                className="group animate-rise rounded-[1.5rem] sm:rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 shadow-xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 hover:border-amber-500/50 lg:min-h-[220px] flex flex-col"
                 style={{ animationDelay: `${idx * 90}ms` }}
               >
                 <div className="mb-4 h-1.5 w-12 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400 transition-all duration-300 group-hover:w-20" />
@@ -558,13 +565,13 @@ function App() {
               <div className="mt-2.5 h-1 w-20 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
             </div>
             <a
-              href="https://github.com/Badagasteven"
+              href="https://github.com/stevenbadaga"
               target="_blank"
               rel="noreferrer noopener"
               className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-amber-600 dark:text-[#D4AF37] transition-all hover:text-slate-950 dark:hover:text-white"
             >
               View GitHub profile
-              <svg className="h-4.5 w-4.5 fill-current" viewBox="0 0 20 20">
+              <svg className="h-5 w-5 flex-shrink-0 fill-current" viewBox="0 0 20 20">
                 <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5zM5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
               </svg>
             </a>
@@ -574,7 +581,7 @@ function App() {
             {projects.map((project, idx) => (
               <article
                 key={project.name}
-                className={`group relative animate-rise rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-6 shadow-2xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 hover:border-amber-500/50 ${
+                className={`group relative animate-rise rounded-[1.5rem] sm:rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 sm:p-6 shadow-2xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 hover:border-amber-500/50 ${
                   idx === 0 ? "xl:col-span-2 xl:p-8" : ""
                 }`}
                 style={{ animationDelay: `${idx * 90}ms` }}
@@ -630,7 +637,7 @@ function App() {
             {education.map((item, idx) => (
               <article
                 key={item.school}
-                className="animate-rise rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 shadow-2xl backdrop-blur-md lg:p-7 transition-all duration-300 hover:border-stone-350 dark:hover:border-slate-700/80"
+                className="animate-rise rounded-[1.5rem] sm:rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 shadow-2xl backdrop-blur-md lg:p-7 transition-all duration-300 hover:border-stone-300 dark:hover:border-slate-700/80"
                 style={{ animationDelay: `${idx * 90}ms` }}
               >
                 <div className="mb-3 inline-block rounded-full border border-amber-600/20 dark:border-amber-500/20 bg-amber-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-700 dark:text-[#D4AF37]">
@@ -655,7 +662,7 @@ function App() {
             {languages.map((language, idx) => (
               <article
                 key={language.name}
-                className="animate-rise rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 shadow-2xl backdrop-blur-md transition-all duration-300 hover:border-stone-350 dark:hover:border-slate-700/80"
+                className="animate-rise rounded-[1.5rem] sm:rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 shadow-2xl backdrop-blur-md transition-all duration-300 hover:border-stone-300 dark:hover:border-slate-700/80"
                 style={{ animationDelay: `${idx * 90}ms` }}
               >
                 <div className="mb-3 flex items-center justify-between gap-2">
@@ -676,7 +683,7 @@ function App() {
         {/* Contact Section */}
         <section id="contact" className="pb-8">
           <div className="grid gap-6 xl:grid-cols-[1.6fr_1fr]">
-            <article className="relative overflow-hidden rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-6 text-slate-800 dark:text-slate-100 shadow-2xl backdrop-blur-md sm:p-8 lg:p-10 transition-all duration-300">
+            <article className="relative overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 sm:p-8 lg:p-10 transition-all duration-300">
               <div className="pointer-events-none absolute -right-20 -top-20 h-60 w-60 rounded-full bg-amber-500/10 blur-[80px]" />
               
               <h2 className="font-display text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Contact</h2>
@@ -690,7 +697,7 @@ function App() {
               <div className="mt-8 grid gap-4 sm:grid-cols-2">
                 <a
                   href="mailto:badagaclass@gmail.com"
-                  className="group rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100/40 dark:bg-slate-955/40 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-amber-500/50 hover:bg-stone-50 dark:hover:bg-slate-900/30 bg-white/40 dark:bg-slate-950/40 border-stone-150"
+                  className="group rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100/40 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-amber-500/50 hover:bg-stone-50 dark:hover:bg-slate-900/30 bg-white/40 dark:bg-slate-950/40"
                 >
                   <span className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 transition-colors group-hover:text-amber-600 dark:group-hover:text-[#D4AF37]">Email</span>
                   <strong className="mt-1.5 block font-display text-lg text-slate-900 dark:text-white break-all">badagaclass@gmail.com</strong>
@@ -698,7 +705,7 @@ function App() {
                 
                 <a
                   href="tel:+250788883986"
-                  className="group rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100/40 dark:bg-slate-955/40 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-amber-500/50 hover:bg-stone-50 dark:hover:bg-slate-900/30 bg-white/40 dark:bg-slate-950/40 border-stone-150"
+                  className="group rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100/40 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-amber-500/50 hover:bg-stone-50 dark:hover:bg-slate-900/30 bg-white/40 dark:bg-slate-950/40"
                 >
                   <span className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 transition-colors group-hover:text-amber-600 dark:group-hover:text-[#D4AF37]">Phone</span>
                   <strong className="mt-1.5 block font-display text-lg text-slate-900 dark:text-white">+250 788 883 986</strong>
@@ -708,26 +715,26 @@ function App() {
                   href="https://www.linkedin.com/in/steven-irankunda-badaga-54b7a62b2/"
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="group rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100/40 dark:bg-slate-955/40 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-amber-500/50 hover:bg-stone-50 dark:hover:bg-slate-900/30 bg-white/40 dark:bg-slate-950/40 border-stone-150"
+                  className="group rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100/40 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-amber-500/50 hover:bg-stone-50 dark:hover:bg-slate-900/30 bg-white/40 dark:bg-slate-950/40"
                 >
                   <span className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 transition-colors group-hover:text-amber-600 dark:group-hover:text-[#D4AF37]">LinkedIn</span>
                   <strong className="mt-1.5 block font-display text-lg text-slate-900 dark:text-white">Steven Irankunda Badaga</strong>
                 </a>
 
                 <a
-                  href="https://github.com/Badagasteven"
+                  href="https://github.com/stevenbadaga"
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="group rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100/40 dark:bg-slate-955/40 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-amber-500/50 hover:bg-stone-50 dark:hover:bg-slate-900/30 bg-white/40 dark:bg-slate-950/40 border-stone-150"
+                  className="group rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100/40 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-amber-500/50 hover:bg-stone-50 dark:hover:bg-slate-900/30 bg-white/40 dark:bg-slate-950/40"
                 >
                   <span className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 transition-colors group-hover:text-amber-600 dark:group-hover:text-[#D4AF37]">GitHub</span>
-                  <strong className="mt-1.5 block font-display text-lg text-slate-900 dark:text-white">Badagasteven</strong>
+                  <strong className="mt-1.5 block font-display text-lg text-slate-900 dark:text-white">stevenbadaga</strong>
                 </a>
               </div>
             </article>
 
             {/* Quick Actions Card */}
-            <article className="rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-6 shadow-2xl backdrop-blur-md sm:p-8 lg:sticky lg:top-24 lg:h-fit transition-all duration-300">
+            <article className="rounded-[1.5rem] sm:rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 sm:p-8 lg:sticky lg:top-24 lg:h-fit transition-all duration-300">
               <h3 className="font-display text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Quick Actions</h3>
               <div className="mt-2.5 h-1 w-14 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
               
@@ -783,7 +790,7 @@ function App() {
       <button
         type="button"
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        className={`fixed bottom-6 right-6 z-40 rounded-full border border-stone-305 dark:border-amber-500/30 bg-white dark:bg-slate-900 p-3 text-slate-700 dark:text-slate-200 shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:bg-stone-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white hover:border-amber-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 border-stone-300 ${
+        className={`fixed bottom-6 right-6 z-40 rounded-full border border-stone-300 dark:border-amber-500/30 bg-white dark:bg-slate-900 p-3 text-slate-700 dark:text-slate-200 shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:bg-stone-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white hover:border-amber-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
           showTopButton ? "translate-y-0 opacity-100 scale-100" : "pointer-events-none translate-y-4 opacity-0 scale-90"
         }`}
         aria-label="Back to top"
