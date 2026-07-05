@@ -76,43 +76,6 @@ const projects = [
       "Planning and review support workflow with automated checks.",
       "Dashboard-based management and digital report generation."
     ]
-  },
-  {
-    name: "Kitenge Bora - Curated African Fabrics",
-    category: "E-commerce Platform",
-    badge: "Live Site",
-    description: "A responsive e-commerce experience for authentic African textiles and curated fabrics.",
-    tags: ["React", "HTML5", "CSS3", "JavaScript", "UI/UX Design"],
-    status: "Private Project",
-    points: [
-      "Built a responsive experience for authentic African textiles.",
-      "Integrated a custom UI for high-resolution imagery.",
-      "Optimized frontend performance for better retention."
-    ]
-  },
-  {
-    name: "Schooling Institution System",
-    category: "Educational Portal",
-    badge: "2024",
-    description: "A school portal for managing academic records, student portals, and scheduling systems.",
-    tags: ["HTML5", "CSS3", "JavaScript", "Relational Database"],
-    status: "Private Project",
-    points: [
-      "Developed a portal for academic records and schedules.",
-      "Implemented automated grade reporting and attendance tracking."
-    ]
-  },
-  {
-    name: "Hospital Management System",
-    category: "Healthcare Platform",
-    badge: "2023",
-    description: "A secure registration and role-based hospital management application for healthcare operational records.",
-    tags: ["C Language", "SQL", "Database Design", "Security"],
-    status: "Private Project",
-    points: [
-      "Built a secure system for patient registration and role-based access.",
-      "Supported healthcare operations with structured data handling."
-    ]
   }
 ];
 
@@ -619,7 +582,9 @@ function App() {
               return (
                 <article
                   key={project.name}
-                  className={`group relative flex flex-col justify-between animate-rise rounded-[1.5rem] sm:rounded-[2rem] border bg-white/70 dark:bg-slate-900/40 p-5 sm:p-6 shadow-2xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 ${cardBorderClass}`}
+                  className={`group relative flex flex-col justify-between animate-rise rounded-[1.5rem] sm:rounded-[2rem] border bg-white/70 dark:bg-slate-900/40 p-5 sm:p-6 shadow-2xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 ${cardBorderClass} ${
+                    idx === 0 ? "md:col-span-2 lg:col-span-1" : ""
+                  }`}
                   style={{ animationDelay: `${idx * 90}ms` }}
                 >
                   <div>
