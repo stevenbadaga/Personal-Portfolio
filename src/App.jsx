@@ -203,6 +203,21 @@ function App() {
 
   const handleCopy = async (value, successText) => {
     if (!navigator.clipboard) {
+      try {
+        const textArea = document.createElement("textarea");
+        textArea.value = value;
+        textArea.style.position = "fixed";
+        textArea.style.opacity = "0";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+        setCopyMessage(successText);
+        window.setTimeout(() => setCopyMessage(""), 1800);
+      } catch (err) {
+        setCopyMessage("");
+      }
       return;
     }
 
@@ -753,9 +768,8 @@ function App() {
               <h2 className="font-display text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Contact</h2>
               <div className="mt-2.5 h-1 w-14 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
               
-              <p className="mt-5 max-w-3xl text-lg leading-relaxed text-slate-600 dark:text-slate-300">
-                Open to internship and early-career software engineering roles across backend,
-                full-stack web development, and platform-focused teams.
+              <p className="mt-5 max-w-3xl text-sm sm:text-base leading-relaxed text-slate-600 dark:text-slate-300">
+                Open to software engineering internships, junior developer roles, and project opportunities where I can contribute to backend systems, full-stack applications, dashboards, GIS-style workflows, and responsive web platforms.
               </p>
               
               <div className="mt-8 grid gap-4 sm:grid-cols-2">
@@ -798,45 +812,47 @@ function App() {
             </article>
 
             {/* Quick Actions Card */}
-            <article className="rounded-[1.5rem] sm:rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 sm:p-8 lg:sticky lg:top-24 lg:h-fit transition-all duration-300">
-              <h3 className="font-display text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Quick Actions</h3>
-              <div className="mt-2.5 h-1 w-14 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
-              
-              <p className="mt-4 text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
-                Copy contact details and reach out quickly.
-              </p>
-              
-              <div className="mt-6 space-y-3">
-                <button
-                  type="button"
-                  onClick={() => handleCopy("badagaclass@gmail.com", "Email copied")}
-                  className="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100/55 dark:bg-slate-950/60 px-4 py-3.5 text-center text-xs font-bold uppercase tracking-widest text-slate-700 dark:text-slate-200 transition-all duration-300 hover:border-amber-500 hover:bg-stone-100 dark:hover:bg-slate-900/30 hover:text-slate-900 dark:hover:text-white"
+            <article className="rounded-[1.5rem] sm:rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 sm:p-8 lg:sticky lg:top-24 lg:h-fit transition-all duration-300 flex flex-col justify-between">
+              <div>
+                <h3 className="font-display text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Quick Actions</h3>
+                <div className="mt-2.5 h-1 w-14 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
+                
+                <p className="mt-4 text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                  Copy contact details and reach out quickly.
+                </p>
+                
+                <div className="mt-6 space-y-3">
+                  <button
+                    type="button"
+                    onClick={() => handleCopy("badagaclass@gmail.com", "Email copied")}
+                    className="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100/55 dark:bg-slate-950/60 px-4 py-3.5 text-center text-xs font-bold uppercase tracking-widest text-slate-700 dark:text-slate-200 transition-all duration-300 hover:border-amber-500 hover:bg-stone-100 dark:hover:bg-slate-900/30 hover:text-slate-900 dark:hover:text-white focus:outline-none focus:ring-1 focus:ring-amber-500"
+                  >
+                    Copy Email Address
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleCopy("+250788883986", "Phone copied")}
+                    className="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100/55 dark:bg-slate-950/60 px-4 py-3.5 text-center text-xs font-bold uppercase tracking-widest text-slate-700 dark:text-slate-200 transition-all duration-300 hover:border-amber-500 hover:bg-stone-100 dark:hover:bg-slate-900/30 hover:text-slate-900 dark:hover:text-white focus:outline-none focus:ring-1 focus:ring-amber-500"
+                  >
+                    Copy Phone Number
+                  </button>
+                </div>
+                
+                <p
+                  className="mt-4 min-h-[24px] text-center text-xs font-bold text-amber-600 dark:text-[#D4AF37]"
+                  aria-live="polite"
+                  role="status"
                 >
-                  Copy Email Address
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleCopy("+250788883986", "Phone copied")}
-                  className="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100/55 dark:bg-slate-950/60 px-4 py-3.5 text-center text-xs font-bold uppercase tracking-widest text-slate-700 dark:text-slate-200 transition-all duration-300 hover:border-amber-500 hover:bg-stone-100 dark:hover:bg-slate-900/30 hover:text-slate-900 dark:hover:text-white"
-                >
-                  Copy Phone Number
-                </button>
+                  {copyMessage}
+                </p>
               </div>
-              
-              <p
-                className="mt-4 min-h-6 text-center text-sm font-bold text-amber-600 dark:text-[#D4AF37]"
-                aria-live="polite"
-                role="status"
-              >
-                {copyMessage}
-              </p>
               
               <div className="mt-4 rounded-2xl border border-amber-500/20 bg-amber-500/5 p-5">
                 <p className="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-[#D4AF37]">
                   Current Status
                 </p>
-                <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-                  Available for software engineering internship and entry-level opportunities.
+                <p className="mt-2 text-xs sm:text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                  Available for software engineering internships, junior developer opportunities, freelance web projects, and collaborative software development work.
                 </p>
               </div>
             </article>
@@ -845,9 +861,8 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-stone-200/80 dark:border-slate-900 bg-stone-100/60 dark:bg-slate-950/80 py-8 text-center text-slate-500 text-sm transition-colors duration-300">
-        <p className="font-medium tracking-wide">&copy; {currentYear} IRANKUNDA BADAGA Steven. All rights reserved.</p>
-        <p className="mt-1.5 text-xs text-slate-400 dark:text-slate-600 font-display">Crafted as a premium technical portfolio</p>
+      <footer className="border-t border-stone-205/60 dark:border-slate-900 bg-stone-100/30 dark:bg-slate-950/80 py-6 text-center text-slate-500 text-xs transition-colors duration-300">
+        <p className="font-semibold tracking-wide">&copy; {currentYear} IRANKUNDA BADAGA Steven. All rights reserved.</p>
       </footer>
 
       {/* Back to Top */}
