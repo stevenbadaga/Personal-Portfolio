@@ -39,9 +39,9 @@ const skillGroups = [
 
 const projects = [
   {
-    name: "CodeAfrica",
+    name: "Codafriqa",
     badge: "Live Platform",
-    link: "https://codafrica.rw",
+    link: "https://www.codafriqa.rw/",
     points: [
       "Designed and deployed a platform supporting the African tech ecosystem.",
       "Architected a modular backend focused on scalability and maintainability.",
