@@ -12,28 +12,39 @@ const navigation = [
 
 const skillGroups = [
   {
-    title: "Software Engineering Foundations",
-    items: "Data modeling, API design, system decomposition, debugging, and maintainable code practices"
+    title: "Frontend Development",
+    description: "Building clean, responsive, and user-friendly interfaces with modern frontend tools and reusable components.",
+    skills: ["React", "JavaScript", "HTML5", "CSS3", "Tailwind CSS", "Responsive UI", "Component-based design", "Mobile-first layouts"]
   },
   {
-    title: "Backend Engineering",
-    items: "Java (Spring Boot), .NET (C#), Python, REST APIs, service-oriented backend design"
+    title: "Backend & API Development",
+    description: "Developing backend services, APIs, authentication flows, and structured application logic for scalable systems.",
+    skills: ["Java", "Spring Boot", "C#", ".NET", "Python", "REST APIs", "Authentication flows", "Service-oriented backend design"]
   },
   {
-    title: "Frontend Engineering",
-    items: "React, JavaScript, HTML5, CSS3, responsive UI implementation"
+    title: "Databases & Data Management",
+    description: "Designing relational databases, managing structured data, and creating efficient database-backed applications.",
+    skills: ["PostgreSQL", "SQL", "Relational database design", "Schema design", "Query optimization", "Data modeling", "Data handling"]
   },
   {
-    title: "Databases and Data",
-    items: "PostgreSQL, SQL, relational schema design, query-based optimization"
+    title: "Deployment, Systems & Infrastructure",
+    description: "Preparing applications for real use through deployment workflows, environment configuration, version control, and system troubleshooting.",
+    skills: ["Linux CLI", "Windows Server basics", "Git/GitHub", "Build workflows", "Environment variables", "Hosting/deployment workflows", "Debugging deployment issues", "Production-style project setup"]
   },
   {
-    title: "Systems and Infrastructure",
-    items: "Linux CLI, Linux administration basics, Windows Server fundamentals, deployment workflows"
+    title: "GIS, Mapping & Land Systems",
+    description: "Applying software engineering to land planning, parcel management, GIS-style workflows, and digital report generation.",
+    skills: ["GIS-style interfaces", "Parcel workflows", "Land subdivision logic", "Map-based visualization", "Spatial planning support", "Report generation", "GeoSmart Manager experience"]
   },
   {
-    title: "Engineering Practices",
-    items: "Git/GitHub workflow, documentation, troubleshooting, incident analysis, analytical thinking"
+    title: "UI/UX & Product Design",
+    description: "Designing clean digital experiences, dashboards, and professional interfaces that are easy to use and visually polished.",
+    skills: ["UI/UX design", "Dashboard design", "Admin interface design", "Design consistency", "Responsive design systems", "User-friendly workflows", "Premium web layouts"]
+  },
+  {
+    title: "Software Engineering Practices",
+    description: "Following practical engineering habits that support maintainable, reliable, and well-organized software delivery.",
+    skills: ["Debugging", "Documentation", "Clean architecture", "Maintainable code", "Testing and build checks", "Problem solving", "Analytical thinking", "Project organization"]
   }
 ];
 
@@ -532,18 +543,36 @@ function App() {
             <p className="text-sm font-bold tracking-widest uppercase text-slate-500 dark:text-slate-400">Technical strengths across software delivery</p>
           </div>
           
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {skillGroups.map((skill, idx) => (
-              <article
-                key={skill.title}
-                className="group animate-rise rounded-[1.5rem] sm:rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 shadow-xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 hover:border-amber-500/50 lg:min-h-[220px] flex flex-col"
-                style={{ animationDelay: `${idx * 90}ms` }}
-              >
-                <div className="mb-4 h-1.5 w-12 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400 transition-all duration-300 group-hover:w-20" />
-                <h3 className="font-display text-lg font-bold text-slate-900 dark:text-white transition-colors duration-300 group-hover:text-amber-600 dark:group-hover:text-[#D4AF37]">{skill.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-slate-500 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-slate-300 transition-colors duration-300 flex-grow">{skill.items}</p>
-              </article>
-            ))}
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {skillGroups.map((skill, idx) => {
+              const isLast = idx === skillGroups.length - 1;
+              return (
+                <article
+                  key={skill.title}
+                  className={`group animate-rise rounded-[1.5rem] sm:rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 shadow-xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 hover:border-amber-500/50 flex flex-col justify-between ${
+                    isLast ? "md:col-span-2 lg:col-span-3" : ""
+                  }`}
+                  style={{ animationDelay: `${idx * 90}ms` }}
+                >
+                  <div>
+                    <div className="mb-4 h-1.5 w-12 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400 transition-all duration-300 group-hover:w-20" />
+                    <h3 className="font-display text-lg font-bold text-slate-900 dark:text-white transition-colors duration-300 group-hover:text-amber-600 dark:group-hover:text-[#D4AF37]">{skill.title}</h3>
+                    <p className="mt-2.5 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">{skill.description}</p>
+                  </div>
+                  
+                  <div className="mt-4 flex flex-wrap gap-1.5">
+                    {skill.skills.map((item) => (
+                      <span
+                        key={item}
+                        className="rounded-lg bg-stone-100/60 dark:bg-slate-950/40 border border-stone-200/60 dark:border-slate-800 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 shadow-sm transition hover:border-[#D4AF37]/60 dark:hover:border-[#D4AF37]/50 hover:text-slate-900 dark:hover:text-white"
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </section>
 
