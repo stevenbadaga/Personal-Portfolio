@@ -40,51 +40,78 @@ const skillGroups = [
 const projects = [
   {
     name: "Codafriqa",
-    badge: "Live Platform",
+    category: "Tech Ecosystem Platform",
+    badge: "Featured Project",
+    description: "A platform supporting the African tech ecosystem by connecting developers, founders, and resources.",
+    tags: ["React", "Node.js", "Tailwind CSS", "PostgreSQL", "Systems Engineering"],
     link: "https://www.codafriqa.rw/",
     points: [
       "Designed and deployed a platform supporting the African tech ecosystem.",
       "Architected a modular backend focused on scalability and maintainability.",
-      "Managed hosting configuration and deployment processes.",
-      "Monitored backend stability to improve reliability.",
-      "Documented system structure and operations for continuity."
+      "Managed hosting configuration and deployment processes."
+    ]
+  },
+  {
+    name: "Volcano Art Center",
+    category: "Full-stack web platform / Cultural and tourism website",
+    badge: "Featured Project",
+    description: "A premium website platform for Volcano Art Center in Musanze, designed to showcase art, tourism experiences, conservation work, talent opportunities, and bookings.",
+    tags: ["React", "Tailwind CSS", "Vite", "UI/UX Design", "Dashboard", "Authentication", "Responsive Design"],
+    status: "Coming Soon",
+    points: [
+      "Premium public website design and art market integration.",
+      "Conservation pages, blog stories, and tourism bookings.",
+      "Admin dashboard with content management and talent application flows."
+    ]
+  },
+  {
+    name: "GeoSmart Manager",
+    category: "GIS & land subdivision management system",
+    badge: "Final Year Project",
+    description: "A GIS-based land planning and subdivision management system designed to support parcel analysis, subdivision workflows, planning checks, map-based visualization, and reports.",
+    tags: ["React", "Tailwind CSS", "GIS", "Land Subdivision", "Mapping", "Dashboard", "Report Generation", "Final Year Project"],
+    status: "Private Project",
+    points: [
+      "GIS-style map interface with land parcel subdivision analysis.",
+      "Planning and review support workflow with automated checks.",
+      "Dashboard-based management and digital report generation."
     ]
   },
   {
     name: "Kitenge Bora - Curated African Fabrics",
+    category: "E-commerce Platform",
     badge: "Live Site",
+    description: "A responsive e-commerce experience for authentic African textiles and curated fabrics.",
+    tags: ["React", "HTML5", "CSS3", "JavaScript", "UI/UX Design"],
+    status: "Private Project",
     points: [
-      "Built a responsive e-commerce experience for authentic African textiles.",
+      "Built a responsive experience for authentic African textiles.",
       "Integrated a custom UI for high-resolution imagery.",
-      "Optimized frontend performance for better retention.",
-      "Stack: HTML5, CSS3, JavaScript, React."
-    ]
-  },
-  {
-    name: "Agricultural Management System",
-    badge: "2025",
-    points: [
-      "Engineered a data-driven platform for crop and inventory tracking.",
-      "Designed a relational schema supporting weather-based planning.",
-      "Stack: Java, PostgreSQL."
+      "Optimized frontend performance for better retention."
     ]
   },
   {
     name: "Schooling Institution System",
+    category: "Educational Portal",
     badge: "2024",
+    description: "A school portal for managing academic records, student portals, and scheduling systems.",
+    tags: ["HTML5", "CSS3", "JavaScript", "Relational Database"],
+    status: "Private Project",
     points: [
       "Developed a portal for academic records and schedules.",
-      "Implemented automated grade reporting and attendance tracking.",
-      "Stack: HTML, CSS, JavaScript."
+      "Implemented automated grade reporting and attendance tracking."
     ]
   },
   {
     name: "Hospital Management System",
+    category: "Healthcare Platform",
     badge: "2023",
+    description: "A secure registration and role-based hospital management application for healthcare operational records.",
+    tags: ["C Language", "SQL", "Database Design", "Security"],
+    status: "Private Project",
     points: [
       "Built a secure system for patient registration and role-based access.",
-      "Supported healthcare operations with structured data handling.",
-      "Stack: C, SQL."
+      "Supported healthcare operations with structured data handling."
     ]
   }
 ];
@@ -387,7 +414,7 @@ function App() {
             <div className="mt-8 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:items-center sm:gap-4">
               <a
                 href="mailto:badagaclass@gmail.com"
-                className="col-span-1 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-500 via-[#D4AF37] to-yellow-500 px-4 py-3.5 text-xs font-bold uppercase tracking-wider text-slate-955 dark:text-slate-950 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:brightness-105 active:translate-y-0 text-center"
+                className="col-span-1 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-500 via-[#D4AF37] to-yellow-500 px-4 py-3.5 text-xs font-bold uppercase tracking-wider text-slate-950 dark:text-slate-950 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:brightness-105 active:translate-y-0 text-center"
               >
                 Email Me
               </a>
@@ -578,51 +605,108 @@ function App() {
           </div>
           
           <div className="grid gap-5 md:grid-cols-2 lg:gap-6 xl:grid-cols-3 xl:auto-rows-fr">
-            {projects.map((project, idx) => (
-              <article
-                key={project.name}
-                className={`group relative animate-rise rounded-[1.5rem] sm:rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 sm:p-6 shadow-2xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 hover:border-amber-500/50 ${
-                  idx === 0 ? "xl:col-span-2 xl:p-8" : ""
-                }`}
-                style={{ animationDelay: `${idx * 90}ms` }}
-              >
-                <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-                  <h3
-                    className={`font-display font-bold tracking-tight text-slate-900 dark:text-white transition-colors duration-300 group-hover:text-amber-600 dark:group-hover:text-[#D4AF37] ${
-                      idx === 0 ? "text-2xl sm:text-3xl" : "text-xl"
-                    }`}
-                  >
-                    {project.name}
-                  </h3>
-                  <span className="rounded-full border border-amber-600/30 dark:border-amber-500/30 bg-amber-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-700 dark:text-[#D4AF37]">
-                    {project.badge}
-                  </span>
-                </div>
-                
-                {project.link ? (
-                  <div className="mb-4 text-sm text-slate-500 dark:text-slate-400">
-                    <span className="font-semibold text-slate-700 dark:text-slate-300">Live Website: </span>
-                    <a
-                      href={project.link}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      className="font-bold text-amber-600 dark:text-[#D4AF37] hover:underline hover:text-amber-800 dark:hover:text-white transition-colors duration-200"
-                    >
-                      {project.link.replace("https://", "")}
-                    </a>
-                  </div>
-                ) : null}
+            {projects.map((project, idx) => {
+              const isFeatured = project.badge === "Featured Project";
+              const isFinalYear = project.badge === "Final Year Project";
+              
+              let cardBorderClass = "border-stone-200/80 dark:border-slate-800 hover:border-stone-400 dark:hover:border-slate-750";
+              if (isFeatured) {
+                cardBorderClass = "border-amber-500/30 dark:border-amber-500/20 shadow-lg shadow-amber-500/5 hover:border-amber-500/70";
+              } else if (isFinalYear) {
+                cardBorderClass = "border-teal-500/30 dark:border-teal-500/20 shadow-lg shadow-teal-500/5 hover:border-teal-500/70";
+              }
 
-                <ul className="mt-4 space-y-2.5 text-slate-500 dark:text-slate-400 text-sm">
-                  {project.points.map((point, pIdx) => (
-                    <li key={pIdx} className="flex items-start gap-2.5">
-                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500" />
-                      <span className="leading-relaxed group-hover:text-slate-800 dark:group-hover:text-slate-300 transition-colors duration-300">{point}</span>
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            ))}
+              return (
+                <article
+                  key={project.name}
+                  className={`group relative flex flex-col justify-between animate-rise rounded-[1.5rem] sm:rounded-[2rem] border bg-white/70 dark:bg-slate-900/40 p-5 sm:p-6 shadow-2xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 ${cardBorderClass}`}
+                  style={{ animationDelay: `${idx * 90}ms` }}
+                >
+                  <div>
+                    {/* Header Row */}
+                    <div className="mb-3.5 flex flex-wrap items-start justify-between gap-3">
+                      <div className="max-w-[70%]">
+                        <h3 className="font-display text-lg font-bold tracking-tight text-slate-900 dark:text-white transition-colors duration-300 group-hover:text-amber-600 dark:group-hover:text-[#D4AF37] break-words">
+                          {project.name}
+                        </h3>
+                        <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mt-0.5">
+                          {project.category}
+                        </p>
+                      </div>
+                      <span
+                        className={`inline-flex shrink-0 text-[8px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full ${
+                          isFeatured
+                            ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 shadow-sm shadow-amber-500/10"
+                            : isFinalYear
+                            ? "bg-gradient-to-r from-teal-500 to-emerald-500 text-slate-950 shadow-sm shadow-teal-500/10"
+                            : "border border-stone-200 dark:border-slate-800 bg-stone-100/50 dark:bg-slate-900/50 text-slate-600 dark:text-slate-300"
+                        }`}
+                      >
+                        {project.badge}
+                      </span>
+                    </div>
+
+                    {/* Short Description */}
+                    {project.description && (
+                      <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mt-2">
+                        {project.description}
+                      </p>
+                    )}
+
+                    {/* Highlights List */}
+                    <ul className="mt-4 space-y-2 text-xs text-slate-500 dark:text-slate-400">
+                      {project.points.map((point, pIdx) => (
+                        <li key={pIdx} className="flex items-start gap-2">
+                          <span className={`mt-1.5 h-1 w-1 shrink-0 rounded-full ${isFeatured ? "bg-amber-500" : isFinalYear ? "bg-teal-500" : "bg-slate-400"}`} />
+                          <span className="leading-relaxed group-hover:text-slate-800 dark:group-hover:text-slate-300 transition-colors duration-300">
+                            {point}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Technology Tags & Action Footer */}
+                  <div className="mt-5">
+                    {/* Tags */}
+                    {project.tags && (
+                      <div className="flex flex-wrap gap-1 mb-4">
+                        {project.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="rounded bg-stone-100 dark:bg-slate-900/60 border border-stone-200/50 dark:border-slate-800/50 px-2 py-0.5 text-[9px] font-semibold text-slate-500 dark:text-slate-400"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Action button area */}
+                    <div className="pt-3 border-t border-stone-150/40 dark:border-slate-800/40 flex items-center justify-between min-h-[32px]">
+                      {project.link ? (
+                        <a
+                          href={project.link}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                          className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-[#D4AF37] hover:text-slate-950 dark:hover:text-white transition-colors"
+                        >
+                          Visit Platform
+                          <svg className="h-3.5 w-3.5 fill-current" viewBox="0 0 20 20">
+                            <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5zM5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
+                          </svg>
+                        </a>
+                      ) : (
+                        <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 select-none">
+                          <span className={`h-1.5 w-1.5 rounded-full ${project.status === "Coming Soon" ? "bg-amber-500 animate-pulse" : "bg-slate-300 dark:bg-slate-700"}`} />
+                          {project.status}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </section>
 
@@ -781,7 +865,7 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-stone-200/80 dark:border-slate-900 bg-stone-100/60 dark:bg-slate-955/80 py-8 text-center text-slate-500 text-sm transition-colors duration-300 dark:bg-slate-950/80">
+      <footer className="border-t border-stone-200/80 dark:border-slate-900 bg-stone-100/60 dark:bg-slate-950/80 py-8 text-center text-slate-500 text-sm transition-colors duration-300">
         <p className="font-medium tracking-wide">&copy; {currentYear} IRANKUNDA BADAGA Steven. All rights reserved.</p>
         <p className="mt-1.5 text-xs text-slate-400 dark:text-slate-600 font-display">Crafted as a premium technical portfolio</p>
       </footer>
