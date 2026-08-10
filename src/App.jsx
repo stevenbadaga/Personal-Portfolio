@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 const navigation = [
   { label: "Home", href: "#home" },
@@ -6,74 +6,91 @@ const navigation = [
   { label: "Skills", href: "#skills" },
   { label: "Projects", href: "#projects" },
   { label: "Education", href: "#education" },
-  { label: "Languages", href: "#languages" },
+  { label: "Certifications", href: "#certifications" },
   { label: "Contact", href: "#contact" }
 ];
 
 const skillGroups = [
   {
+    category: "Frontend",
     title: "Frontend Development",
-    description: "Building clean, responsive, and user-friendly interfaces with modern frontend tools and reusable components.",
-    skills: ["React", "JavaScript", "HTML5", "CSS3", "Tailwind CSS", "Responsive UI", "Component-based design", "Mobile-first layouts"]
+    description: "Building clean, responsive, and user-friendly interfaces with modern frontend tools and reusable component architectures.",
+    skills: ["React", "JavaScript (ES6+)", "HTML5", "CSS3", "Tailwind CSS", "Responsive UI", "Component Design", "Mobile-First Layouts", "Vite"]
   },
   {
+    category: "Backend & APIs",
     title: "Backend & API Development",
-    description: "Developing backend services, APIs, authentication flows, and structured application logic for scalable systems.",
-    skills: ["Java", "Spring Boot", "C#", ".NET", "Python", "REST APIs", "Authentication flows", "Service-oriented backend design"]
+    description: "Developing backend services, RESTful APIs, authentication flows, and structured application logic for scalable systems.",
+    skills: ["Java", "Spring Boot", "C#", ".NET Core", "Python", "REST APIs", "JWT / Auth Flows", "Microservice Basics"]
   },
   {
+    category: "Databases",
     title: "Databases & Data Management",
     description: "Designing relational databases, managing structured data, and creating efficient database-backed applications.",
-    skills: ["PostgreSQL", "SQL", "Relational database design", "Schema design", "Query optimization", "Data modeling", "Data handling"]
+    skills: ["PostgreSQL", "MySQL", "SQL Queries", "Schema Design", "Query Optimization", "Data Modeling", "ORMs (Hibernate/EF)"]
   },
   {
+    category: "Infrastructure & Systems",
     title: "Deployment, Systems & Infrastructure",
     description: "Preparing applications for real use through deployment workflows, environment configuration, version control, and system troubleshooting.",
-    skills: ["Linux CLI", "Windows Server basics", "Git/GitHub", "Build workflows", "Environment variables", "Hosting/deployment workflows", "Debugging deployment issues", "Production-style project setup"]
+    skills: ["Linux CLI", "Git / GitHub", "Build Workflows", "Environment Variables", "Netlify Deployment", "CI/CD Basics", "Debugging & Logging"]
   },
   {
+    category: "GIS & Land",
     title: "GIS, Mapping & Land Systems",
     description: "Applying software engineering to land planning, parcel management, GIS-style workflows, and digital report generation.",
-    skills: ["GIS-style interfaces", "Parcel workflows", "Land subdivision logic", "Map-based visualization", "Spatial planning support", "Report generation", "GeoSmart Manager experience"]
+    skills: ["GIS Interfaces", "Parcel Workflows", "Land Subdivision Logic", "Map-Based Visualization", "GeoSmart Manager", "Spatial Reports"]
   },
   {
+    category: "UI/UX & Product",
     title: "UI/UX & Product Design",
     description: "Designing clean digital experiences, dashboards, and professional interfaces that are easy to use and visually polished.",
-    skills: ["UI/UX design", "Dashboard design", "Admin interface design", "Design consistency", "Responsive design systems", "User-friendly workflows", "Premium web layouts"]
+    skills: ["UI/UX Design", "Dashboard Design", "Admin Interfaces", "Design Systems", "Glassmorphism UI", "User Workflows"]
   },
   {
+    category: "Engineering Practices",
     title: "Software Engineering Practices",
     description: "Following practical engineering habits that support maintainable, reliable, and well-organized software delivery.",
-    skills: ["Debugging", "Documentation", "Clean architecture", "Maintainable code", "Testing and build checks", "Problem solving", "Analytical thinking", "Project organization"]
+    skills: ["Clean Architecture", "Code Documentation", "Unit Testing", "Troubleshooting", "Problem Solving", "Agile / Scrum Basics"]
   }
 ];
 
 const projects = [
   {
-    name: "Volcano Art Center",
-    category: "Full-stack web platform / Cultural and tourism website",
+    id: "volcano-art-center",
+    name: "Volcano Art Center Platform",
+    category: "Full-Stack Web Platform & Cultural Booking Hub",
     badge: "Featured Project",
-    description: "A premium website platform for Volcano Art Center in Musanze, designed to showcase art, tourism experiences, conservation work, talent opportunities, and bookings.",
-    tags: ["React", "Tailwind CSS", "Vite", "UI/UX Design", "Dashboard", "Authentication", "Responsive Design"],
-    status: "Coming Soon",
+    shortDescription: "A premium digital platform for Volcano Art Center in Musanze, designed to showcase local art, conservation work, talent applications, and tourism bookings.",
+    fullDescription: "The Volcano Art Center platform bridges eco-tourism, cultural heritage, and local talent empowerment in Musanze, Rwanda. It features a public-facing art market, conservation blog stories, interactive tour booking forms, and a robust administrative backend for content and application management.",
+    tags: ["React", "Tailwind CSS", "Vite", "REST API", "Admin Dashboard", "Authentication", "Responsive UI"],
+    status: "Active Development",
     points: [
-      "Premium public website design and art market integration.",
-      "Conservation pages, blog stories, and tourism bookings.",
-      "Admin dashboard with content management and talent application flows."
-    ]
+      "Designed a modern, responsive public showcase for artwork and conservation initiatives.",
+      "Integrated booking workflows for cultural tours and artist workspace reservations.",
+      "Built a secure admin dashboard interface for managing content, events, and talent applications."
+    ],
+    architecture: "React SPA frontend with modular state management, styled using Tailwind CSS tokens, connecting to a structured backend API with JWT authentication.",
+    keySolution: "Solves fragmented tourism booking and local artist visibility by centralizing event ticketing, artwork showcases, and community talent registration under one cohesive hub.",
+    link: null
   },
   {
+    id: "geosmart-manager",
     name: "GeoSmart Manager",
-    category: "GIS & land subdivision management system",
+    category: "GIS & Land Subdivision Management System",
     badge: "Final Year Project",
-    description: "A GIS-based land planning and subdivision management system designed to support parcel analysis, subdivision workflows, planning checks, map-based visualization, and reports.",
-    tags: ["React", "Tailwind CSS", "GIS", "Land Subdivision", "Mapping", "Dashboard", "Report Generation", "Final Year Project"],
-    status: "Private Project",
+    shortDescription: "A GIS-based land planning and parcel management system created to streamline subdivision workflows, automated regulatory checks, and report generation.",
+    fullDescription: "GeoSmart Manager is a specialized land engineering tool designed to address land fragmentation and zoning compliance. It empowers urban planners and surveyors to visualize parcel boundaries on interactive maps, calculate optimal plot subdivisions, and generate compliance reports automatically.",
+    tags: ["React", "Tailwind CSS", "GIS / Leaflet", "Land Subdivision", "Spatial Analysis", "Automated Reports", "PostgreSQL"],
+    status: "Completed (Academic)",
     points: [
-      "GIS-style map interface with land parcel subdivision analysis.",
-      "Planning and review support workflow with automated checks.",
-      "Dashboard-based management and digital report generation."
-    ]
+      "Developed an interactive map view supporting parcel geometry visualization and zoning checks.",
+      "Implemented automated subdivision calculations based on minimum plot size and road access rules.",
+      "Created a digital report generator producing downloadable parcel summaries for urban planning authorities."
+    ],
+    architecture: "React frontend integrated with spatial mapping libraries, communicating with a relational spatial database for parcel polygon queries and zoning constraint checks.",
+    keySolution: "Eliminates manual geometry calculations and reduces parcel subdivision processing time by providing automated validation checks against municipal zoning master plans.",
+    link: null
   }
 ];
 
@@ -81,38 +98,230 @@ const education = [
   {
     school: "Adventist University of Central Africa (AUCA)",
     location: "Kigali, Rwanda",
-    detail: "Bachelor of Science in Software Engineering",
-    date: "Expected Graduation: 2026"
+    degree: "Bachelor of Science in Software Engineering",
+    date: "Expected Graduation: 2026",
+    achievements: [
+      "Focused on Full-Stack Development, Software Architecture, and Database Systems.",
+      "Lead developer for GeoSmart Manager final-year software engineering capstone.",
+      "Active participant in tech innovation forums and collaborative dev projects."
+    ]
   },
   {
-    school: "Lycee St. Jerome",
+    school: "Lycée St. Jérôme",
     location: "Gakenke, Rwanda",
-    detail: "High School Diploma (Physics, Chemistry, and Mathematics)",
-    date: "Graduated: 2022"
+    degree: "High School Diploma (PCM - Physics, Chemistry & Mathematics)",
+    date: "Graduated: 2022",
+    achievements: [
+      "Graduated with strong analytical and mathematical distinction.",
+      "Founded student science & technology discussion group."
+    ]
+  }
+];
+
+const certifications = [
+  {
+    title: "Software Engineering Capstone Distinction",
+    issuer: "Adventist University of Central Africa",
+    year: "2025 - 2026",
+    description: "Awarded for exceptional software design, architectural rigor, and practical utility in the GeoSmart Manager GIS platform."
+  },
+  {
+    title: "Full-Stack Web & API Engineering",
+    issuer: "Self-Directed / Academic Track",
+    year: "2024",
+    description: "Comprehensive practical mastery of React, RESTful API design, Spring Boot, and database modeling."
+  },
+  {
+    title: "Database Management & SQL Systems",
+    issuer: "AUCA Department of Computer Science",
+    year: "2023",
+    description: "Advanced relational schema design, query optimization, indexing, and PostgreSQL transaction integrity."
   }
 ];
 
 const languages = [
-  { name: "Kinyarwanda", level: "Native", width: "100%" },
-  { name: "English", level: "Fluent", width: "90%" },
+  { name: "Kinyarwanda", level: "Native / Bilingual", width: "100%" },
+  { name: "English", level: "Fluent / Professional", width: "95%" },
   { name: "French", level: "Intermediate", width: "65%" },
   { name: "Swahili", level: "Intermediate", width: "65%" }
 ];
 
-const focusAreas = [
-  "Building full-stack applications with clean frontend, backend, and database structure",
-  "Designing backend services, REST APIs, authentication flows, and database-backed systems",
-  "Creating responsive, premium user interfaces for portfolios, dashboards, and public websites",
-  "Developing GIS-style and land management workflows through the GeoSmart Manager project",
-  "Preparing projects for real use through deployment workflows, environment setup, Git/GitHub, and debugging",
-  "Improving maintainability through documentation, clean code organization, and structured problem solving"
+const engineeringPrinciples = [
+  {
+    icon: "⚡",
+    title: "Performance & Reliability",
+    description: "Writing lightweight, optimized code with fast load times and clean fallback mechanisms."
+  },
+  {
+    icon: "🧩",
+    title: "Modular Clean Code",
+    description: "Structuring software into reusable, decoupled components for high maintainability."
+  },
+  {
+    icon: "🛡️",
+    title: "Security & Validation",
+    description: "Enforcing strict input validation, safe authentication flows, and data protection."
+  },
+  {
+    icon: "🗺️",
+    title: "Domain-Driven Solutions",
+    description: "Solving real-world problems like land planning and cultural platform management through software."
+  }
 ];
 
 const quickStats = [
   { value: "5+", label: "Projects Built" },
   { value: "2", label: "Live Platforms" },
-  { value: "2026", label: "Expected Graduation" }
+  { value: "2026", label: "AUCA Grad" }
 ];
+
+// Interactive Terminal Showcase Component (Pure Black Theme)
+function DeveloperTerminal() {
+  const [history, setHistory] = useState([
+    { text: "System initialized. Welcome to Steven Badaga's Console v2.0", type: "system" },
+    { text: "Type 'help' or tap buttons below to inspect developer profile.", type: "info" }
+  ]);
+  const [inputVal, setInputVal] = useState("");
+  const terminalEndRef = useRef(null);
+
+  const executeCommand = (cmdStr) => {
+    const cmd = cmdStr.trim().toLowerCase();
+    let newLogs = [...history, { text: `$ ${cmdStr}`, type: "command" }];
+
+    switch (cmd) {
+      case "help":
+        newLogs.push({
+          text: "Available commands: about | skills | projects | education | contact | status | clear",
+          type: "output"
+        });
+        break;
+      case "about":
+        newLogs.push({
+          text: "IRANKUNDA BADAGA Steven - Software Engineering student @ AUCA. Building full-stack platforms, Spring Boot backend services, and GIS systems.",
+          type: "output"
+        });
+        break;
+      case "skills":
+        newLogs.push({
+          text: "Primary Stack: React, JavaScript, Java, Spring Boot, PostgreSQL, C#, Tailwind CSS, Linux CLI, GIS.",
+          type: "output"
+        });
+        break;
+      case "projects":
+        newLogs.push({
+          text: "1. Volcano Art Center (Tourism & booking hub)\n2. GeoSmart Manager (GIS land subdivision system)",
+          type: "output"
+        });
+        break;
+      case "education":
+        newLogs.push({
+          text: "B.Sc Software Engineering @ AUCA Kigali (Expected 2026) | Lycée St. Jérôme PCM Diploma (2022)",
+          type: "output"
+        });
+        break;
+      case "contact":
+        newLogs.push({
+          text: "Email: badagaclass@gmail.com | Phone: +250 788 883 986 | GitHub: github.com/stevenbadaga",
+          type: "output"
+        });
+        break;
+      case "status":
+        newLogs.push({
+          text: "STATUS: Open for Software Engineering roles, developer internships, and technical projects.",
+          type: "success"
+        });
+        break;
+      case "clear":
+        newLogs = [];
+        break;
+      default:
+        if (cmd !== "") {
+          newLogs.push({
+            text: `Command not recognized: '${cmdStr}'. Type 'help' for options.`,
+            type: "error"
+          });
+        }
+    }
+
+    setHistory(newLogs);
+    setInputVal("");
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (inputVal) executeCommand(inputVal);
+  };
+
+  useEffect(() => {
+    terminalEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [history]);
+
+  return (
+    <div className="rounded-2xl border border-neutral-800 bg-[#080808] shadow-2xl overflow-hidden font-mono text-xs text-neutral-300">
+      {/* Terminal Bar */}
+      <div className="flex items-center justify-between bg-[#121212] px-3.5 py-2.5 border-b border-neutral-800">
+        <div className="flex items-center gap-2">
+          <span className="h-2.5 w-2.5 rounded-full bg-red-500/80 inline-block" />
+          <span className="h-2.5 w-2.5 rounded-full bg-yellow-500/80 inline-block" />
+          <span className="h-2.5 w-2.5 rounded-full bg-green-500/80 inline-block" />
+          <span className="ml-1 text-[10px] sm:text-[11px] font-bold text-neutral-400">steven@badaga-dev-shell:~</span>
+        </div>
+        <span className="text-[9px] sm:text-[10px] text-amber-400 font-semibold uppercase tracking-wider">CLI</span>
+      </div>
+
+      {/* Terminal Screen */}
+      <div className="p-3 sm:p-4 h-36 sm:h-44 overflow-y-auto space-y-1.5 scrollbar-thin bg-black">
+        {history.map((item, idx) => (
+          <div
+            key={idx}
+            className={`leading-relaxed whitespace-pre-wrap text-[11px] sm:text-xs ${
+              item.type === "command"
+                ? "text-amber-400 font-bold"
+                : item.type === "success"
+                ? "text-emerald-400 font-semibold"
+                : item.type === "error"
+                ? "text-rose-400"
+                : item.type === "info"
+                ? "text-teal-300"
+                : "text-neutral-300"
+            }`}
+          >
+            {item.text}
+          </div>
+        ))}
+        <div ref={terminalEndRef} />
+      </div>
+
+      {/* Preset Command Buttons */}
+      <div className="bg-[#121212] px-2.5 py-2 border-t border-neutral-800 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+        <span className="text-[9px] uppercase text-neutral-500 font-bold shrink-0">Presets:</span>
+        {["about", "skills", "projects", "status", "contact", "clear"].map((preset) => (
+          <button
+            key={preset}
+            type="button"
+            onClick={() => executeCommand(preset)}
+            className="rounded bg-neutral-900 hover:bg-amber-500/20 hover:text-amber-300 border border-neutral-800 px-2 py-1 text-[10px] font-bold uppercase transition text-neutral-300 shrink-0"
+          >
+            {preset}
+          </button>
+        ))}
+      </div>
+
+      {/* Terminal Input Line */}
+      <form onSubmit={handleSubmit} className="flex items-center px-3 sm:px-4 py-2 bg-black border-t border-neutral-800">
+        <span className="text-emerald-400 font-bold mr-2 text-xs">$</span>
+        <input
+          type="text"
+          value={inputVal}
+          onChange={(e) => setInputVal(e.target.value)}
+          placeholder="Type 'help'..."
+          className="w-full bg-transparent text-white focus:outline-none placeholder-neutral-600 text-xs"
+        />
+        <button type="submit" className="sr-only">Submit</button>
+      </form>
+    </div>
+  );
+}
 
 function App() {
   const [themePreference, setThemePreference] = useState(() => {
@@ -128,10 +337,35 @@ function App() {
   });
 
   const [resolvedTheme, setResolvedTheme] = useState("dark");
+  const [activeSection, setActiveSection] = useState("#home");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showTopButton, setShowTopButton] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [copyMessage, setCopyMessage] = useState("");
+
+  // Interactive Skill Filter & Search
+  const [skillCategoryFilter, setSkillCategoryFilter] = useState("All");
+  const [skillSearchQuery, setSkillSearchQuery] = useState("");
+
+  // Interactive Project Modal
+  const [selectedProject, setSelectedProject] = useState(null);
+
+  // Interactive Contact Form state & validation
+  const [contactForm, setContactForm] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    service: "Full-Stack Engineering",
+    message: ""
+  });
+  const [formErrors, setFormErrors] = useState({});
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
+  const currentYear = new Date().getFullYear();
+  const sectionIds = useMemo(() => navigation.map((item) => item.href.replace("#", "")), []);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    
     const updateTheme = () => {
       let isDark = false;
       if (themePreference === "dark") {
@@ -146,7 +380,6 @@ function App() {
     };
 
     updateTheme();
-
     mediaQuery.addEventListener("change", updateTheme);
     return () => mediaQuery.removeEventListener("change", updateTheme);
   }, [themePreference]);
@@ -159,25 +392,12 @@ function App() {
     }
   }, [themePreference]);
 
-  const theme = resolvedTheme;
-
-  const [activeSection, setActiveSection] = useState("#home");
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [showTopButton, setShowTopButton] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [copyMessage, setCopyMessage] = useState("");
-
-  const currentYear = new Date().getFullYear();
-  const sectionIds = useMemo(() => navigation.map((item) => item.href.replace("#", "")), []);
-
   useEffect(() => {
     const sections = sectionIds
       .map((id) => document.getElementById(id))
       .filter((element) => Boolean(element));
 
-    if (!sections.length) {
-      return undefined;
-    }
+    if (!sections.length) return undefined;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -189,10 +409,7 @@ function App() {
           setActiveSection(`#${visible[0].target.id}`);
         }
       },
-      {
-        rootMargin: "-30% 0px -50% 0px",
-        threshold: [0.15, 0.3, 0.45, 0.6]
-      }
+      { rootMargin: "-25% 0px -40% 0px", threshold: [0.1, 0.3, 0.5] }
     );
 
     sections.forEach((section) => observer.observe(section));
@@ -204,7 +421,7 @@ function App() {
       const pageHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = pageHeight > 0 ? (window.scrollY / pageHeight) * 100 : 0;
       setScrollProgress(Math.min(100, Math.max(0, progress)));
-      setShowTopButton(window.scrollY > 560);
+      setShowTopButton(window.scrollY > 400);
     };
 
     onScroll();
@@ -213,8 +430,10 @@ function App() {
   }, []);
 
   const handleCopy = async (value, successText) => {
-    if (!navigator.clipboard) {
-      try {
+    try {
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(value);
+      } else {
         const textArea = document.createElement("textarea");
         textArea.value = value;
         textArea.style.position = "fixed";
@@ -224,25 +443,60 @@ function App() {
         textArea.select();
         document.execCommand("copy");
         document.body.removeChild(textArea);
-        setCopyMessage(successText);
-        window.setTimeout(() => setCopyMessage(""), 1800);
-      } catch (err) {
-        setCopyMessage("");
       }
-      return;
-    }
-
-    try {
-      await navigator.clipboard.writeText(value);
       setCopyMessage(successText);
-      window.setTimeout(() => setCopyMessage(""), 1800);
+      window.setTimeout(() => setCopyMessage(""), 2000);
     } catch {
-      setCopyMessage("");
+      setCopyMessage("Failed to copy");
     }
   };
 
+  const validateContactForm = () => {
+    const errors = {};
+    if (!contactForm.name.trim()) errors.name = "Full name is required";
+    if (!contactForm.email.trim()) {
+      errors.email = "Email address is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactForm.email)) {
+      errors.email = "Please enter a valid email address";
+    }
+    if (!contactForm.subject.trim()) errors.subject = "Subject is required";
+    if (!contactForm.message.trim()) {
+      errors.message = "Message is required";
+    } else if (contactForm.message.trim().length < 10) {
+      errors.message = "Message should be at least 10 characters long";
+    }
+    return errors;
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    const errors = validateContactForm();
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
+    setFormErrors({});
+    setFormSubmitted(true);
+  };
+
+  // Filter skills dynamically
+  const filteredSkillGroups = useMemo(() => {
+    return skillGroups.filter((group) => {
+      const matchesCategory =
+        skillCategoryFilter === "All" || group.category === skillCategoryFilter;
+      const query = skillSearchQuery.toLowerCase().trim();
+      const matchesQuery =
+        !query ||
+        group.title.toLowerCase().includes(query) ||
+        group.description.toLowerCase().includes(query) ||
+        group.skills.some((s) => s.toLowerCase().includes(query));
+
+      return matchesCategory && matchesQuery;
+    });
+  }, [skillCategoryFilter, skillSearchQuery]);
+
   return (
-    <div className="relative min-h-screen overflow-x-clip bg-[#FAF9F6] text-slate-800 dark:bg-[#060814] dark:text-slate-300 selection:bg-amber-500/20 dark:selection:bg-amber-500/30 selection:text-slate-900 dark:selection:text-white transition-colors duration-300">
+    <div className="relative min-h-screen overflow-x-clip bg-[#FAF9F6] text-slate-800 dark:bg-[#000000] dark:text-neutral-300 selection:bg-amber-500/20 dark:selection:bg-amber-500/30 selection:text-slate-900 dark:selection:text-white transition-colors duration-300">
       {/* Scroll Progress Bar */}
       <div className="fixed inset-x-0 top-0 z-[90] h-[3px] bg-transparent">
         <div
@@ -251,71 +505,43 @@ function App() {
         />
       </div>
 
-      {/* Light Theme Background Glows */}
-      <div className="pointer-events-none fixed inset-0 -z-20 bg-[radial-gradient(circle_at_15%_10%,rgba(212,175,55,0.04),transparent_40%),radial-gradient(circle_at_85%_60%,rgba(20,184,166,0.04),transparent_40%),radial-gradient(circle_at_50%_110%,rgba(59,130,246,0.05),transparent_50%),linear-gradient(180deg,#FAF9F6_0%,#F5F4F0_50%,#FAF9F6_100%)] transition-opacity duration-700 opacity-100 dark:opacity-0" />
-      
-      {/* Dark Theme Background Glows */}
-      <div className="pointer-events-none fixed inset-0 -z-20 bg-[radial-gradient(circle_at_15%_10%,rgba(212,175,55,0.06),transparent_40%),radial-gradient(circle_at_85%_60%,rgba(20,184,166,0.06),transparent_40%),radial-gradient(circle_at_50%_110%,rgba(59,130,246,0.08),transparent_50%),linear-gradient(180deg,#040712_0%,#090D1A_50%,#03050C_100%)] transition-opacity duration-700 opacity-0 dark:opacity-100" />
-
-      {/* Grid Pattern Overlay */}
-      <div className="pointer-events-none fixed inset-0 -z-10 opacity-[0.03] dark:opacity-[0.03] [background-image:linear-gradient(rgba(0,0,0,0.07)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.07)_1px,transparent_1px)] dark:[background-image:linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.1)_1px,transparent_1px)] [background-size:40px_40px]" />
-
-      {/* Premium Abstract Code-Flow Background */}
-      <div className="pointer-events-none fixed inset-0 -z-30 select-none overflow-hidden">
-        {/* Repeating code-line linear flow texture layer */}
-        <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.04] [background-image:repeating-linear-gradient(0deg,transparent,transparent_39px,rgba(0,0,0,0.1)_39px,rgba(0,0,0,0.1)_40px)] dark:[background-image:repeating-linear-gradient(0deg,transparent,transparent_39px,rgba(255,255,255,0.06)_39px,rgba(255,255,255,0.06)_40px)]" />
-
-        {/* Decorative Syntax Code Symbols floating in background */}
-        <div className="absolute inset-0 font-mono text-[9px] sm:text-[10px] font-bold text-slate-800/10 dark:text-slate-100/5 leading-none">
-          {/* Faint Code Fragments positioned absolute across the viewport */}
-          <span className="absolute left-[8%] top-[14%] hidden md:inline">&lt;section id="home"&gt;</span>
-          <span className="absolute right-[12%] top-[22%] hidden md:inline">const [theme, setTheme] = useState()</span>
-          <span className="absolute left-[15%] top-[34%] hidden lg:inline">document.documentElement.classList.toggle("dark")</span>
-          <span className="absolute right-[8%] top-[45%] hidden md:inline">&lt;div className="portfolio-shell"&gt;</span>
-          <span className="absolute left-[6%] top-[58%] hidden md:inline">git commit -m "Deploy to production"</span>
-          <span className="absolute right-[15%] top-[68%] hidden lg:inline">fetch("https://api.codafriqa.rw/v1/projects")</span>
-          <span className="absolute left-[12%] top-[78%] hidden md:inline">&lt;article key=&#123;project.name&#125;&gt;</span>
-          <span className="absolute right-[10%] top-[88%] hidden md:inline">&#123; isFeatured ? "Featured" : "Regular" &#125;</span>
-        </div>
-      </div>
+      {/* Pure Black Dark Theme Background Glows */}
+      <div className="pointer-events-none fixed inset-0 -z-20 bg-[radial-gradient(circle_at_15%_10%,rgba(212,175,55,0.04),transparent_40%),radial-gradient(circle_at_85%_60%,rgba(20,184,166,0.04),transparent_40%),linear-gradient(180deg,#FAF9F6_0%,#F5F4F0_50%,#FAF9F6_100%)] transition-opacity duration-700 opacity-100 dark:opacity-0" />
+      <div className="pointer-events-none fixed inset-0 -z-20 bg-[radial-gradient(circle_at_15%_10%,rgba(212,175,55,0.06),transparent_45%),radial-gradient(circle_at_85%_60%,rgba(20,184,166,0.05),transparent_45%),linear-gradient(180deg,#000000_0%,#000000_100%)] transition-opacity duration-700 opacity-0 dark:opacity-100" />
+      <div className="pointer-events-none fixed inset-0 -z-10 opacity-[0.03] dark:opacity-[0.04] [background-image:linear-gradient(rgba(0,0,0,0.07)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.07)_1px,transparent_1px)] dark:[background-image:linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:40px_40px]" />
 
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-slate-900 focus:px-4 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-white focus:ring-2 focus:ring-amber-500"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-black focus:px-4 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-white focus:ring-2 focus:ring-amber-500"
       >
         Skip to content
       </a>
 
-      <header className="sticky top-0 z-50 border-b border-stone-200/60 dark:border-slate-900 bg-[#FAF9F6]/80 dark:bg-[#060814]/80 backdrop-blur-lg transition-all duration-300 shadow-sm dark:shadow-none">
-        <div className="mx-auto flex h-16 w-full max-w-[1280px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-10 xl:px-12">
+      {/* Navigation Header */}
+      <header className="sticky top-0 z-50 border-b border-stone-200/60 dark:border-neutral-900 bg-[#FAF9F6]/90 dark:bg-[#000000]/90 backdrop-blur-lg transition-all duration-300 shadow-sm dark:shadow-none">
+        <div className="mx-auto flex h-14 sm:h-16 w-full max-w-[1280px] items-center justify-between gap-3 px-3.5 sm:px-6 lg:px-10 xl:px-12">
           <a
             href="#home"
             className="font-display text-[10px] sm:text-xs font-black tracking-widest text-slate-800 dark:text-white transition hover:text-[#D4AF37] flex items-center gap-1.5 uppercase select-none shrink-0"
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500" />
+            <span className="h-2 w-2 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 animate-pulse" />
             IRANKUNDA BADAGA Steven
           </a>
 
-          <nav
-            aria-label="Primary navigation"
-            className={`${
-              mobileMenuOpen ? "absolute block" : "hidden"
-            } left-0 top-16 w-full border-b border-stone-200 dark:border-slate-800 bg-[#FAF9F6]/95 dark:bg-[#060814]/95 px-4 py-5 shadow-xl md:static md:block md:w-auto md:border-0 md:bg-transparent md:p-0 md:shadow-none transition-colors duration-300`}
-          >
-            <ul className="flex flex-col gap-2 md:flex-row md:items-center md:gap-1">
+          {/* Desktop Navigation Menu */}
+          <nav aria-label="Primary navigation" className="hidden md:block">
+            <ul className="flex items-center gap-1">
               {navigation.map((item) => {
                 const isActive = activeSection === item.href;
                 return (
                   <li key={item.href}>
                     <a
                       href={item.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={`inline-flex rounded-full px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-amber-500 ${
+                      className={`inline-flex rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all duration-300 ${
                         isActive
-                          ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 shadow-sm shadow-amber-500/10"
-                          : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-stone-200/40 dark:hover:bg-slate-800/40"
+                          ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 shadow-sm shadow-amber-500/10 font-black"
+                          : "text-slate-600 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white hover:bg-stone-200/40 dark:hover:bg-neutral-900"
                       }`}
-                      aria-current={isActive ? "page" : undefined}
                     >
                       {item.label}
                     </a>
@@ -325,10 +551,9 @@ function App() {
             </ul>
           </nav>
 
-          {/* Action Row containing Switcher and Menu Buttons */}
           <div className="flex items-center gap-2">
-            {/* Premium Theme Switcher (Light / Dark / System Segmented Control) */}
-            <div className="flex items-center gap-0.5 rounded-full border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 p-0.5 select-none">
+            {/* Theme Toggle */}
+            <div className="flex items-center gap-0.5 rounded-full border border-stone-200 dark:border-neutral-800 bg-stone-100 dark:bg-[#0A0A0A] p-0.5 select-none">
               {["light", "dark", "system"].map((mode) => {
                 const isActive = themePreference === mode;
                 return (
@@ -336,10 +561,10 @@ function App() {
                     key={mode}
                     type="button"
                     onClick={() => setThemePreference(mode)}
-                    className={`flex h-[22px] w-[22px] items-center justify-center rounded-full transition-all duration-300 focus:outline-none ${
+                    className={`flex h-[24px] w-[24px] sm:h-[22px] sm:w-[22px] items-center justify-center rounded-full transition-all duration-300 ${
                       isActive
-                        ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 shadow-sm shadow-amber-500/10"
-                        : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+                        ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 shadow-sm"
+                        : "text-slate-500 hover:text-slate-900 dark:text-neutral-400 dark:hover:text-white"
                     }`}
                     aria-label={`Switch to ${mode} theme`}
                   >
@@ -354,7 +579,7 @@ function App() {
                       </svg>
                     )}
                     {mode === "system" && (
-                      <svg className="h-2.5 w-2.5 fill-none stroke-current" strokeWidth="2.5" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+                      <svg className="h-2.5 w-2.5 fill-none stroke-current" strokeWidth="2.5" viewBox="0 0 24 24">
                         <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
                         <line x1="8" y1="21" x2="16" y2="21" />
                         <line x1="12" y1="17" x2="12" y2="21" />
@@ -365,15 +590,15 @@ function App() {
               })}
             </div>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu Toggle Button */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen((open) => !open)}
-              className="inline-flex h-[26px] w-[26px] sm:h-8 sm:w-8 items-center justify-center rounded-full border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 text-slate-600 dark:text-slate-400 transition hover:border-[#D4AF37] hover:text-slate-900 dark:hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-amber-500 md:hidden"
-              aria-label="Toggle menu"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-stone-200 dark:border-neutral-800 bg-stone-100 dark:bg-[#0A0A0A] text-slate-700 dark:text-neutral-300 transition hover:border-[#D4AF37] md:hidden"
+              aria-label="Toggle navigation menu"
               aria-expanded={mobileMenuOpen}
             >
-              <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4 stroke-current">
+              <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5 stroke-current">
                 {mobileMenuOpen ? (
                   <path d="M6 6L18 18M6 18L18 6" strokeWidth="2.5" strokeLinecap="round" />
                 ) : (
@@ -383,360 +608,418 @@ function App() {
             </button>
           </div>
         </div>
+
+        {/* Mobile Navigation Drawer Overlay (Pure Black Theme) */}
+        {mobileMenuOpen && (
+          <div className="fixed inset-x-0 top-14 bottom-0 z-40 bg-black/80 backdrop-blur-md md:hidden animate-modal">
+            <div className="border-b border-stone-200 dark:border-neutral-800 bg-[#FAF9F6] dark:bg-[#050505] px-5 py-6 shadow-2xl">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-amber-500 mb-3">Navigation Menu</p>
+              <ul className="grid gap-2">
+                {navigation.map((item) => {
+                  const isActive = activeSection === item.href;
+                  return (
+                    <li key={item.href}>
+                      <a
+                        href={item.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={`flex items-center justify-between rounded-xl px-4 py-3 text-xs font-bold uppercase tracking-wider transition-all ${
+                          isActive
+                            ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 font-black shadow-md"
+                            : "bg-stone-100/70 dark:bg-neutral-900/80 text-slate-700 dark:text-neutral-300 hover:bg-stone-200 dark:hover:bg-neutral-800"
+                        }`}
+                      >
+                        <span>{item.label}</span>
+                        {isActive && <span className="h-2 w-2 rounded-full bg-slate-950" />}
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+
+              <div className="mt-6 pt-4 border-t border-stone-200 dark:border-neutral-800 flex items-center justify-between text-xs font-semibold text-slate-500">
+                <span>AUCA Software Engineer</span>
+                <a href="mailto:badagaclass@gmail.com" className="text-amber-500 font-bold">Email Steven</a>
+              </div>
+            </div>
+          </div>
+        )}
       </header>
 
-      {/* Main Container */}
-      <main
-        id="main"
-        className="relative mx-auto w-full max-w-[1280px] px-3 sm:px-6 lg:px-10 pt-20 sm:pt-24 lg:pt-24 xl:px-12"
-      >
-        {/* Glow decorative blobs */}
-        <div className="pointer-events-none absolute left-[-10rem] top-[16rem] -z-10 hidden h-72 w-72 rounded-full bg-amber-500/5 blur-3xl lg:block" />
-        <div className="pointer-events-none absolute right-[-8rem] top-[42rem] -z-10 hidden h-72 w-72 rounded-full bg-teal-500/5 blur-3xl lg:block" />
- 
-        {/* Hero Section */}
-        <section
-          id="home"
-          className="grid gap-6 pb-16 md:grid-cols-[1.35fr_minmax(290px,0.95fr)] md:items-stretch lg:gap-8 xl:grid-cols-[1.5fr_minmax(320px,0.88fr)]"
-        >
-          {/* Main Hero Card */}
-          <article className="relative animate-rise overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 sm:p-9 lg:p-10 xl:p-12 transition-all duration-300 flex flex-col justify-center">
-            {/* Ambient glows inside card */}
+      {/* Main Content Area */}
+      <main id="main" className="relative mx-auto w-full max-w-[1280px] px-3.5 sm:px-6 lg:px-10 pt-10 sm:pt-16 xl:px-12">
+        {/* HERO SECTION */}
+        <section id="home" className="grid gap-6 pb-12 sm:pb-16 md:grid-cols-[1.35fr_minmax(290px,0.95fr)] md:items-stretch lg:gap-8 xl:grid-cols-[1.5fr_minmax(320px,0.88fr)]">
+          <article className="relative animate-rise overflow-hidden rounded-[1.6rem] sm:rounded-[2.2rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-5 sm:p-9 lg:p-10 xl:p-12 transition-all duration-300 flex flex-col justify-between">
             <div className="pointer-events-none absolute -right-20 -top-20 h-60 w-60 rounded-full bg-amber-500/10 blur-[80px]" />
             <div className="pointer-events-none absolute -left-20 -bottom-20 h-60 w-60 rounded-full bg-teal-500/10 blur-[80px]" />
- 
-            <div className="mb-6 flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-0.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 animate-pulse">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400" />
-                Open To Software Engineering Roles
-              </span>
-            </div>
- 
-            <p className="text-xs font-bold uppercase tracking-[0.25em] text-amber-600 dark:text-[#D4AF37]">
-              Full-Stack Software Engineer Track
-            </p>
-            
-            <h1 className="mt-3 font-display text-3xl font-extrabold leading-tight text-slate-900 dark:text-white sm:text-5xl xl:text-[3.5rem] tracking-tight">
-              Building reliable software products from <span className="bg-gradient-to-r from-amber-600 via-amber-500 to-teal-600 dark:from-amber-400 dark:via-yellow-200 dark:to-teal-400 bg-clip-text text-transparent">backend to frontend</span>.
-            </h1>
-            
-            <p className="mt-5 max-w-2xl text-base text-slate-600 dark:text-slate-300 sm:text-lg leading-relaxed xl:max-w-3xl">
-              Final-year Software Engineering student with hands-on experience building
-              production-style platforms, backend services, and responsive user interfaces.
-              Focused on clean architecture, performance, and maintainable delivery.
-            </p>
 
-            <div className="mt-8 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:items-center sm:gap-4">
-              <a
-                href="mailto:badagaclass@gmail.com"
-                className="col-span-1 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-500 via-[#D4AF37] to-yellow-500 px-4 py-3.5 text-xs font-bold uppercase tracking-wider text-slate-950 dark:text-slate-950 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:brightness-105 active:translate-y-0 text-center"
-              >
-                Email Me
-              </a>
-              <a
-                href="#projects"
-                className="col-span-1 inline-flex items-center justify-center rounded-full border border-stone-300 dark:border-slate-700 bg-white/80 dark:bg-slate-800/40 px-4 py-3.5 text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-200 transition-all duration-300 hover:-translate-y-0.5 hover:bg-stone-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white hover:border-stone-400 dark:hover:border-slate-600 active:translate-y-0 text-center"
-              >
-                View Projects
-              </a>
-              <a
-                href="/assets/Irankunda-Badaga-Steven-CV.docx"
-                download
-                className="col-span-2 inline-flex items-center justify-center rounded-full border border-amber-600/50 dark:border-[#D4AF37]/45 bg-transparent px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-[#D4AF37] transition-all duration-300 hover:-translate-y-0.5 hover:bg-amber-500/5 dark:hover:bg-[#D4AF37]/10 active:translate-y-0 text-center"
-              >
-                <svg className="mr-2 h-5 w-5 flex-shrink-0 fill-current" viewBox="0 0 20 20">
-                  <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
-                </svg>
-                Download CV
-              </a>
+            <div>
+              <div className="mb-4 flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  Available for Software Engineering Roles
+                </span>
+                <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
+                  AUCA Class of 2026
+                </span>
+              </div>
+
+              <p className="text-xs font-bold uppercase tracking-[0.25em] text-amber-600 dark:text-[#D4AF37]">
+                Full-Stack & Systems Engineering
+              </p>
+
+              <h1 className="mt-3 font-display text-2xl sm:text-4xl md:text-5xl xl:text-[3.5rem] font-extrabold leading-tight text-slate-900 dark:text-white tracking-tight">
+                Architecting reliable software products from <span className="bg-gradient-to-r from-amber-600 via-amber-500 to-teal-600 dark:from-amber-400 dark:via-yellow-200 dark:to-teal-400 bg-clip-text text-transparent">backend to frontend</span>.
+              </h1>
+
+              <p className="mt-4 sm:mt-5 max-w-2xl text-sm sm:text-base lg:text-lg text-slate-600 dark:text-neutral-300 leading-relaxed">
+                Final-year Software Engineering student at Adventist University of Central Africa (AUCA).
+                Experienced in full-stack web platforms, Spring Boot backend services, GIS mapping systems, and high-availability database architectures.
+              </p>
+
+              <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3">
+                <a
+                  href="#contact"
+                  className="w-full sm:w-auto inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-500 via-[#D4AF37] to-yellow-500 px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-slate-950 transition-all duration-300 hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] text-center min-h-[44px]"
+                >
+                  Contact Me
+                </a>
+                <a
+                  href="#projects"
+                  className="w-full sm:w-auto inline-flex items-center justify-center rounded-full border border-stone-300 dark:border-neutral-700 bg-white/80 dark:bg-neutral-900/60 px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-neutral-200 transition-all duration-300 hover:bg-stone-100 dark:hover:bg-neutral-800 text-center min-h-[44px]"
+                >
+                  View Projects
+                </a>
+                <a
+                  href="/assets/Irankunda-Badaga-Steven-CV.docx"
+                  download
+                  className="w-full sm:w-auto inline-flex items-center justify-center rounded-full border border-amber-600/50 dark:border-[#D4AF37]/45 bg-transparent px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-[#D4AF37] transition-all duration-300 hover:bg-amber-500/10 text-center min-h-[44px]"
+                >
+                  <svg className="mr-2 h-4 w-4 fill-current" viewBox="0 0 20 20">
+                    <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
+                  </svg>
+                  Download CV
+                </a>
+              </div>
             </div>
 
-            <div className="mt-10 grid gap-3 sm:grid-cols-3 lg:max-w-2xl border-t border-stone-200 dark:border-slate-800/80 pt-8">
+            {/* Quick Stats Grid */}
+            <div className="mt-8 sm:mt-10 grid grid-cols-3 gap-2 sm:gap-3 border-t border-stone-200 dark:border-neutral-800/80 pt-5 sm:pt-6">
               {quickStats.map((stat) => (
                 <div
                   key={stat.label}
-                  className="group rounded-2xl border border-stone-200/80 dark:border-slate-800/60 bg-white/60 dark:bg-slate-900/30 p-4 transition-all duration-300 hover:border-stone-300 dark:hover:border-slate-700/80 hover:bg-stone-50 dark:hover:bg-slate-900/50"
+                  className="group rounded-xl sm:rounded-2xl border border-stone-200/80 dark:border-neutral-800/80 bg-white/60 dark:bg-black/50 p-3 sm:p-4 text-center sm:text-left transition-all duration-300 hover:border-amber-500/40"
                 >
-                  <p className="font-display text-3xl font-extrabold leading-none text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-[#D4AF37] transition-colors duration-300">{stat.value}</p>
-                  <p className="mt-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">{stat.label}</p>
+                  <p className="font-display text-xl sm:text-3xl font-extrabold leading-none text-slate-900 dark:text-white group-hover:text-amber-500 transition-colors">
+                    {stat.value}
+                  </p>
+                  <p className="mt-1 sm:mt-1.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-neutral-400">
+                    {stat.label}
+                  </p>
                 </div>
               ))}
             </div>
           </article>
 
-          {/* Profile Sidebar Card */}
-          <aside
-            className="animate-rise rounded-[1.5rem] sm:rounded-[2.2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/50 p-5 shadow-2xl backdrop-blur-md [animation-delay:120ms] lg:sticky lg:top-24 lg:h-fit transition-all duration-300"
-            aria-label="Profile card"
-          >
-            <div className="relative group overflow-hidden rounded-2xl border border-stone-200 dark:border-slate-700/40">
-              <img
-                src="/assets/steven-badaga.jpg"
-                alt="Portrait of IRANKUNDA BADAGA Steven"
-                className="aspect-[4/5] w-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-stone-200 via-transparent to-transparent dark:from-slate-950 opacity-80" />
-            </div>
-            
-            <h2 className="mt-5 font-display text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-              IRANKUNDA BADAGA Steven
-            </h2>
-            <p className="text-xs font-bold tracking-widest uppercase text-amber-600 dark:text-[#D4AF37] mt-1">Software Engineering Track</p>
-            
-            <ul className="mt-5 space-y-2.5 text-sm text-slate-600 dark:text-slate-300">
-              <li className="rounded-xl border border-stone-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/30 px-4 py-3 flex items-center justify-between">
-                <span className="text-slate-500 dark:text-slate-400 font-medium">Phone</span>
-                <a href="tel:+250788883986" className="font-bold text-slate-800 dark:text-white tracking-wide hover:text-amber-600 dark:hover:text-[#D4AF37] transition-colors">+250 788 883 986</a>
-              </li>
-              <li className="rounded-xl border border-stone-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/30 px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-                <span className="text-slate-500 dark:text-slate-400 font-medium">Email</span>
-                <a href="mailto:badagaclass@gmail.com" className="font-bold text-slate-800 dark:text-white break-all text-xs sm:text-sm hover:text-amber-600 dark:hover:text-[#D4AF37] transition-colors">badagaclass@gmail.com</a>
-              </li>
-            </ul>
+          {/* Profile & Interactive CLI Sidebar */}
+          <aside className="animate-rise space-y-5 sm:space-y-6 [animation-delay:120ms]">
+            {/* Profile Card */}
+            <div className="rounded-[1.6rem] sm:rounded-[1.8rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-4 sm:p-5 shadow-xl backdrop-blur-md">
+              <div className="relative group overflow-hidden rounded-2xl border border-stone-200 dark:border-neutral-800">
+                <img
+                  src="/assets/steven-badaga.jpg"
+                  alt="Portrait of IRANKUNDA BADAGA Steven"
+                  className="h-52 sm:h-64 md:aspect-[4/5] md:h-auto w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-85" />
+                <div className="absolute bottom-3 left-3 right-3 text-white">
+                  <p className="text-[10px] sm:text-xs font-bold text-amber-400 uppercase tracking-widest">Kigali, Rwanda</p>
+                  <h3 className="font-display text-base sm:text-lg font-bold">IRANKUNDA BADAGA Steven</h3>
+                </div>
+              </div>
 
-            <div className="mt-5 flex gap-3 text-[10px] font-bold uppercase tracking-widest">
-              <a
-                className="flex-1 text-center rounded-xl border border-stone-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/30 py-3 text-slate-600 dark:text-slate-300 transition-all duration-300 hover:border-amber-600 dark:hover:border-[#D4AF37] hover:text-slate-900 dark:hover:text-white hover:bg-stone-100/50 dark:hover:bg-slate-800/40"
-                href="https://www.linkedin.com/in/steven-irankunda-badaga-54b7a62b2/"
-                target="_blank"
-                rel="noreferrer noopener"
-              >
-                LinkedIn
-              </a>
-              <a
-                className="flex-1 text-center rounded-xl border border-stone-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/30 py-3 text-slate-600 dark:text-slate-300 transition-all duration-300 hover:border-amber-600 dark:hover:border-[#D4AF37] hover:text-slate-900 dark:hover:text-white hover:bg-stone-100/50 dark:hover:bg-slate-800/40"
-                href="https://github.com/stevenbadaga"
-                target="_blank"
-                rel="noreferrer noopener"
-              >
-                GitHub
-              </a>
+              <div className="mt-4 space-y-2 text-xs">
+                <div className="rounded-xl border border-stone-200 dark:border-neutral-800 bg-white/50 dark:bg-black/60 px-3 py-2.5 flex items-center justify-between">
+                  <span className="text-slate-500 dark:text-neutral-400 font-medium">Email</span>
+                  <a href="mailto:badagaclass@gmail.com" className="font-bold text-slate-800 dark:text-white hover:text-amber-500 break-all text-right">badagaclass@gmail.com</a>
+                </div>
+                <div className="rounded-xl border border-stone-200 dark:border-neutral-800 bg-white/50 dark:bg-black/60 px-3 py-2.5 flex items-center justify-between">
+                  <span className="text-slate-500 dark:text-neutral-400 font-medium">Phone</span>
+                  <a href="tel:+250788883986" className="font-bold text-slate-800 dark:text-white hover:text-amber-500">+250 788 883 986</a>
+                </div>
+              </div>
+
+              <div className="mt-4 flex gap-2 text-[10px] font-bold uppercase tracking-wider">
+                <a
+                  href="https://www.linkedin.com/in/steven-irankunda-badaga-54b7a62b2/"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="flex-1 text-center rounded-xl border border-stone-200 dark:border-neutral-800 bg-white/50 dark:bg-black/60 py-2.5 text-slate-700 dark:text-neutral-300 hover:border-amber-500 hover:text-amber-500 transition"
+                >
+                  LinkedIn
+                </a>
+                <a
+                  href="https://github.com/stevenbadaga"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="flex-1 text-center rounded-xl border border-stone-200 dark:border-neutral-800 bg-white/50 dark:bg-black/60 py-2.5 text-slate-700 dark:text-neutral-300 hover:border-amber-500 hover:text-amber-500 transition"
+                >
+                  GitHub
+                </a>
+              </div>
             </div>
+
+            {/* Interactive Terminal */}
+            <DeveloperTerminal />
           </aside>
         </section>
 
-        {/* Professional Summary Section */}
-        <section id="summary" className="pb-16">
+        {/* SUMMARY & PHILOSOPHY SECTION */}
+        <section id="summary" className="pb-12 sm:pb-16">
           <div className="grid gap-6 xl:grid-cols-[1.6fr_1fr]">
-            <article className="rounded-[1.5rem] sm:rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 sm:p-8 lg:p-10 transition-all duration-300">
-              <h2 className="font-display text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
+            <article className="rounded-[1.6rem] sm:rounded-[1.8rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-5 sm:p-8 lg:p-10">
+              <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
                 Professional Summary
               </h2>
               <div className="mt-2.5 h-1 w-20 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
-              
-              <p className="mt-6 text-[15px] leading-relaxed text-slate-600 dark:text-slate-300">
+
+              <p className="mt-5 text-sm sm:text-[15px] leading-relaxed text-slate-600 dark:text-neutral-300">
                 Final-year Software Engineering student with practical experience designing and building full-stack web applications, backend services, database-driven systems, and responsive user interfaces. Skilled in translating project requirements into clean architecture, maintainable code, and deployment-ready solutions. My work includes portfolio platforms, dashboard interfaces, GIS-style land management workflows, and web systems that support real operational needs. I am focused on building reliable software products that are scalable, user-friendly, and ready for real-world use.
               </p>
-              
-              <div className="mt-8 flex flex-wrap gap-2">
-                {[
-                  "Full-Stack Development",
-                  "Backend & API Design",
-                  "Database Systems",
-                  "Deployment Workflows",
-                  "GIS & Land Systems",
-                  "Dashboard Interfaces",
-                  "Responsive UI",
-                  "Git/GitHub",
-                  "Documentation",
-                  "Problem Solving"
-                ].map((item, idx) => (
-                  <span
-                    key={item}
-                    className="animate-rise rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100/60 dark:bg-slate-950/40 px-3.5 py-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 shadow-sm transition hover:border-[#D4AF37]/60 dark:hover:border-[#D4AF37]/50 hover:text-slate-900 dark:hover:text-white"
-                    style={{ animationDelay: `${idx * 70}ms` }}
+
+              <div className="mt-6 sm:mt-8 grid gap-3 sm:grid-cols-2">
+                {engineeringPrinciples.map((principle) => (
+                  <div
+                    key={principle.title}
+                    className="rounded-2xl border border-stone-200 dark:border-neutral-800 bg-white/40 dark:bg-black/50 p-4 transition hover:border-amber-500/40"
                   >
-                    {item}
-                  </span>
+                    <span className="text-2xl">{principle.icon}</span>
+                    <h3 className="mt-1.5 font-display text-sm font-bold text-slate-900 dark:text-white">
+                      {principle.title}
+                    </h3>
+                    <p className="mt-1 text-xs text-slate-500 dark:text-neutral-400 leading-relaxed">
+                      {principle.description}
+                    </p>
+                  </div>
                 ))}
               </div>
             </article>
 
-            {/* Focus Areas Card */}
-            <article className="rounded-[1.5rem] sm:rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 sm:p-8 transition-all duration-300">
-              <h3 className="font-display text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Focus Areas</h3>
-              <div className="mt-2.5 h-1 w-14 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
-              
-              <ul className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
-                {focusAreas.map((item) => (
-                  <li
-                    key={item}
-                    className="rounded-xl border border-stone-200/60 dark:border-slate-800/80 bg-white/40 dark:bg-slate-900/20 p-4 text-xs font-medium text-slate-700 dark:text-slate-300 flex items-start gap-3 transition hover:border-amber-500/30 dark:hover:border-slate-750/50"
-                  >
-                    {/* Premium Checkmark Icon */}
-                    <svg className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500 dark:text-emerald-400 fill-none stroke-current" viewBox="0 0 24 24">
-                      <path d="M5 13l4 4L19 7" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                    <span className="leading-relaxed">{item}</span>
-                  </li>
-                ))}
-              </ul>
+            {/* Core Competencies Badge Grid */}
+            <article className="rounded-[1.6rem] sm:rounded-[1.8rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-5 sm:p-8 flex flex-col justify-between">
+              <div>
+                <h3 className="font-display text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+                  Core Engineering Competencies
+                </h3>
+                <div className="mt-2.5 h-1 w-14 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
+                
+                <p className="mt-3 text-xs text-slate-500 dark:text-neutral-400">
+                  Key technological areas mastered throughout degree coursework and practical software delivery.
+                </p>
+
+                <div className="mt-5 flex flex-wrap gap-1.5 sm:gap-2">
+                  {[
+                    "Full-Stack React",
+                    "Spring Boot & Java",
+                    "REST API Architecture",
+                    "PostgreSQL & SQL",
+                    "GIS & Parcel Systems",
+                    "Tailwind CSS & UI/UX",
+                    "Linux CLI & Git",
+                    "Deployments & Netlify",
+                    "Clean Code Practices",
+                    "Database Optimization",
+                    "C# & .NET Basics",
+                    "System Debugging"
+                  ].map((item) => (
+                    <span
+                      key={item}
+                      className="rounded-xl border border-stone-200 dark:border-neutral-800 bg-stone-100/70 dark:bg-black/70 px-2.5 py-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-700 dark:text-neutral-300 shadow-sm transition hover:border-amber-500 hover:text-amber-500"
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-6 rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400">
+                  Academic Excellence
+                </p>
+                <p className="mt-1 text-xs text-slate-600 dark:text-neutral-300 leading-relaxed">
+                  Adventist University of Central Africa (AUCA) • Software Engineering Program. Expected Graduation: 2026.
+                </p>
+              </div>
             </article>
           </div>
         </section>
 
-        {/* Skills Section */}
-        <section id="skills" className="pb-16">
-          <div className="mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-stone-200 dark:border-slate-800 pb-4 transition-all duration-300">
+        {/* SKILLS SECTION WITH INTERACTIVE FILTERING & SEARCH */}
+        <section id="skills" className="pb-12 sm:pb-16">
+          <div className="mb-5 sm:mb-6 flex flex-col md:flex-row md:items-end justify-between gap-3 border-b border-stone-200 dark:border-neutral-800 pb-4">
             <div>
-              <h2 className="font-display text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Skills</h2>
-              <div className="mt-2.5 h-1 w-14 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
+              <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Skills & Capabilities</h2>
+              <div className="mt-2.5 h-1 w-20 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
             </div>
-            <p className="text-sm font-bold tracking-widest uppercase text-slate-500 dark:text-slate-400">Technical strengths across software delivery</p>
+
+            {/* Interactive Search Input */}
+            <div className="relative w-full md:w-72">
+              <input
+                type="text"
+                value={skillSearchQuery}
+                onChange={(e) => setSkillSearchQuery(e.target.value)}
+                placeholder="Search skills (e.g. React, SQL)..."
+                className="w-full rounded-full border border-stone-300 dark:border-neutral-800 bg-white dark:bg-black px-4 py-2 text-xs font-medium text-slate-800 dark:text-white focus:border-amber-500 focus:outline-none placeholder-stone-400 shadow-sm"
+              />
+              {skillSearchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSkillSearchQuery("")}
+                  className="absolute right-3 top-2.5 text-xs text-stone-400 hover:text-stone-600 dark:hover:text-white"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
           </div>
-          
-          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {skillGroups.map((skill, idx) => {
-              const isLast = idx === skillGroups.length - 1;
-              return (
+
+          {/* Mobile Horizontally Scrollable Category Pills */}
+          <div className="mb-6 flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1.5 sm:pb-0 sm:flex-wrap">
+            {["All", "Frontend", "Backend & APIs", "Databases", "Infrastructure & Systems", "GIS & Land", "UI/UX & Product", "Engineering Practices"].map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setSkillCategoryFilter(cat)}
+                className={`rounded-full px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-wider transition-all shrink-0 ${
+                  skillCategoryFilter === cat
+                    ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 shadow-md shadow-amber-500/10 font-black"
+                    : "border border-stone-200 dark:border-neutral-800 bg-white/60 dark:bg-[#0D0D0D] text-slate-600 dark:text-neutral-400 hover:border-stone-400 dark:hover:border-neutral-700 hover:text-slate-900 dark:hover:text-white"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {/* Skill Cards Grid */}
+          {filteredSkillGroups.length === 0 ? (
+            <div className="rounded-2xl border border-stone-200 dark:border-neutral-800 p-8 text-center text-slate-500 text-xs sm:text-sm">
+              No skills found matching &quot;{skillSearchQuery}&quot; in category &quot;{skillCategoryFilter}&quot;.
+            </div>
+          ) : (
+            <div className="grid gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {filteredSkillGroups.map((group) => (
                 <article
-                  key={skill.title}
-                  className={`group animate-rise rounded-[1.5rem] sm:rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 shadow-xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 hover:border-amber-500/50 flex flex-col justify-between ${
-                    isLast ? "md:col-span-2 lg:col-span-3" : ""
-                  }`}
-                  style={{ animationDelay: `${idx * 90}ms` }}
+                  key={group.title}
+                  className="group rounded-[1.5rem] sm:rounded-[1.8rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-5 sm:p-6 shadow-xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-amber-500/50 flex flex-col justify-between"
                 >
                   <div>
-                    <div className="mb-4 h-1.5 w-12 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400 transition-all duration-300 group-hover:w-20" />
-                    <h3 className="font-display text-lg font-bold text-slate-900 dark:text-white transition-colors duration-300 group-hover:text-amber-600 dark:group-hover:text-[#D4AF37]">{skill.title}</h3>
-                    <p className="mt-2.5 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">{skill.description}</p>
+                    <div className="mb-3 h-1.5 w-10 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400 transition-all duration-300 group-hover:w-16" />
+                    <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400">{group.category}</span>
+                    <h3 className="mt-0.5 font-display text-base sm:text-lg font-bold text-slate-900 dark:text-white group-hover:text-amber-500 transition-colors">
+                      {group.title}
+                    </h3>
+                    <p className="mt-2 text-xs text-slate-500 dark:text-neutral-400 leading-relaxed">
+                      {group.description}
+                    </p>
                   </div>
-                  
+
                   <div className="mt-4 flex flex-wrap gap-1.5">
-                    {skill.skills.map((item) => (
+                    {group.skills.map((skillItem) => (
                       <span
-                        key={item}
-                        className="rounded-lg bg-stone-100/60 dark:bg-slate-950/40 border border-stone-200/60 dark:border-slate-800 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 shadow-sm transition hover:border-[#D4AF37]/60 dark:hover:border-[#D4AF37]/50 hover:text-slate-900 dark:hover:text-white"
+                        key={skillItem}
+                        className="rounded-lg bg-stone-100 dark:bg-black/70 border border-stone-200/60 dark:border-neutral-800 px-2 py-0.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-700 dark:text-neutral-300 shadow-sm"
                       >
-                        {item}
+                        {skillItem}
                       </span>
                     ))}
                   </div>
                 </article>
-              );
-            })}
-          </div>
+              ))}
+            </div>
+          )}
         </section>
 
-        {/* Projects Section */}
-        <section id="projects" className="pb-16">
-          <div className="mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-stone-200 dark:border-slate-800 pb-4 transition-all duration-300">
+        {/* PROJECTS SECTION WITH INTERACTIVE MODAL */}
+        <section id="projects" className="pb-12 sm:pb-16">
+          <div className="mb-5 sm:mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-stone-200 dark:border-neutral-800 pb-4">
             <div>
-              <h2 className="font-display text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Projects</h2>
+              <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Featured Projects</h2>
               <div className="mt-2.5 h-1 w-20 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
             </div>
             <a
               href="https://github.com/stevenbadaga"
               target="_blank"
               rel="noreferrer noopener"
-              className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-amber-600 dark:text-[#D4AF37] transition-all hover:text-slate-950 dark:hover:text-white"
+              className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400 hover:text-slate-950 dark:hover:text-white transition"
             >
-              View GitHub profile
-              <svg className="h-5 w-5 flex-shrink-0 fill-current" viewBox="0 0 20 20">
-                <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5zM5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
-              </svg>
+              Explore GitHub Profile →
             </a>
           </div>
-          
-          <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto xl:auto-rows-fr">
-            {projects.map((project, idx) => {
-              const isFeatured = project.badge === "Featured Project";
-              const isFinalYear = project.badge === "Final Year Project";
-              
-              let cardBorderClass = "border-stone-200/80 dark:border-slate-800 hover:border-stone-400 dark:hover:border-slate-750";
-              if (isFeatured) {
-                cardBorderClass = "border-amber-500/30 dark:border-amber-500/20 shadow-lg shadow-amber-500/5 hover:border-amber-500/70";
-              } else if (isFinalYear) {
-                cardBorderClass = "border-teal-500/30 dark:border-teal-500/20 shadow-lg shadow-teal-500/5 hover:border-teal-500/70";
-              }
 
+          <div className="grid gap-5 sm:gap-6 md:grid-cols-2">
+            {projects.map((project) => {
+              const isFeatured = project.badge === "Featured Project";
               return (
                 <article
-                  key={project.name}
-                  className={`group relative flex flex-col justify-between animate-rise rounded-[1.5rem] sm:rounded-[2rem] border bg-white/70 dark:bg-slate-900/40 p-5 sm:p-6 shadow-2xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 ${cardBorderClass}`}
-                  style={{ animationDelay: `${idx * 90}ms` }}
+                  key={project.id}
+                  className={`group relative flex flex-col justify-between rounded-[1.5rem] sm:rounded-[1.8rem] border bg-white/70 dark:bg-[#0D0D0D]/90 p-5 sm:p-6 shadow-xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1 ${
+                    isFeatured
+                      ? "border-amber-500/30 dark:border-amber-500/20 hover:border-amber-500"
+                      : "border-teal-500/30 dark:border-teal-500/20 hover:border-teal-500"
+                  }`}
                 >
                   <div>
-                    {/* Header Row */}
-                    <div className="mb-3.5 flex flex-wrap items-start justify-between gap-3">
-                      <div className="max-w-[70%]">
-                        <h3 className="font-display text-lg font-bold tracking-tight text-slate-900 dark:text-white transition-colors duration-300 group-hover:text-amber-600 dark:group-hover:text-[#D4AF37] break-words">
+                    <div className="mb-3 flex items-start justify-between gap-2">
+                      <div>
+                        <h3 className="font-display text-lg sm:text-xl font-bold text-slate-900 dark:text-white group-hover:text-amber-500 transition-colors">
                           {project.name}
                         </h3>
-                        <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mt-0.5">
+                        <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400 mt-0.5">
                           {project.category}
                         </p>
                       </div>
                       <span
-                        className={`inline-flex shrink-0 text-[8px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full ${
+                        className={`text-[8px] sm:text-[9px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shrink-0 ${
                           isFeatured
-                            ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 shadow-sm shadow-amber-500/10"
-                            : isFinalYear
-                            ? "bg-gradient-to-r from-teal-500 to-emerald-500 text-slate-950 shadow-sm shadow-teal-500/10"
-                            : "border border-stone-200 dark:border-slate-800 bg-stone-100/50 dark:bg-slate-900/50 text-slate-600 dark:text-slate-300"
+                            ? "bg-amber-500 text-slate-950 font-black"
+                            : "bg-teal-500 text-slate-950 font-black"
                         }`}
                       >
                         {project.badge}
                       </span>
                     </div>
 
-                    {/* Short Description */}
-                    {project.description && (
-                      <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mt-2">
-                        {project.description}
-                      </p>
-                    )}
+                    <p className="text-xs text-slate-600 dark:text-neutral-300 leading-relaxed mt-2.5">
+                      {project.shortDescription}
+                    </p>
 
-                    {/* Highlights List */}
-                    <ul className="mt-4 space-y-2 text-xs text-slate-500 dark:text-slate-400">
-                      {project.points.map((point, pIdx) => (
+                    <ul className="mt-3.5 space-y-2 text-xs text-slate-500 dark:text-neutral-400">
+                      {project.points.map((pt, pIdx) => (
                         <li key={pIdx} className="flex items-start gap-2">
-                          <span className={`mt-1.5 h-1 w-1 shrink-0 rounded-full ${isFeatured ? "bg-amber-500" : isFinalYear ? "bg-teal-500" : "bg-slate-400"}`} />
-                          <span className="leading-relaxed group-hover:text-slate-800 dark:group-hover:text-slate-300 transition-colors duration-300">
-                            {point}
-                          </span>
+                          <span className="mt-1 h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0" />
+                          <span className="leading-relaxed">{pt}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
 
-                  {/* Technology Tags & Action Footer */}
-                  <div className="mt-5">
-                    {/* Tags */}
-                    {project.tags && (
-                      <div className="flex flex-wrap gap-1 mb-4">
-                        {project.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="rounded bg-stone-100 dark:bg-slate-900/60 border border-stone-200/50 dark:border-slate-800/50 px-2 py-0.5 text-[9px] font-semibold text-slate-500 dark:text-slate-400"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Action button area */}
-                    <div className="pt-3 border-t border-stone-150/40 dark:border-slate-800/40 flex items-center justify-between min-h-[32px]">
-                      {project.link ? (
-                        <a
-                          href={project.link}
-                          target="_blank"
-                          rel="noreferrer noopener"
-                          className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-[#D4AF37] hover:text-slate-950 dark:hover:text-white transition-colors"
-                        >
-                          Visit Platform
-                          <svg className="h-3.5 w-3.5 fill-current" viewBox="0 0 20 20">
-                            <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5zM5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
-                          </svg>
-                        </a>
-                      ) : (
-                        <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 select-none">
-                          <span className={`h-1.5 w-1.5 rounded-full ${project.status === "Coming Soon" ? "bg-amber-500 animate-pulse" : "bg-slate-300 dark:bg-slate-700"}`} />
-                          {project.status}
+                  <div className="mt-5 border-t border-stone-200 dark:border-neutral-800/80 pt-4 flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex flex-wrap gap-1">
+                      {project.tags.slice(0, 4).map((tag) => (
+                        <span key={tag} className="rounded bg-stone-100 dark:bg-black border border-stone-200 dark:border-neutral-800 px-2 py-0.5 text-[9px] font-semibold text-slate-600 dark:text-neutral-400">
+                          {tag}
                         </span>
-                      )}
+                      ))}
                     </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setSelectedProject(project)}
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-1 text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 hover:text-slate-950 dark:hover:text-white transition py-2"
+                    >
+                      View Details & Architecture →
+                    </button>
                   </div>
                 </article>
               );
@@ -744,52 +1027,152 @@ function App() {
           </div>
         </section>
 
-        {/* Education Section */}
-        <section id="education" className="pb-16">
-          <div className="mb-6">
-            <h2 className="font-display text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Education</h2>
+        {/* PROJECT DETAIL MODAL (Pure Black Theme) */}
+        {selectedProject && (
+          <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/85 backdrop-blur-md animate-modal">
+            <div className="relative w-full max-w-2xl max-h-[92vh] sm:max-h-[90vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl border border-amber-500/30 bg-[#0A0A0A] p-5 sm:p-8 text-white shadow-2xl">
+              <div className="sticky top-0 z-10 flex items-center justify-between pb-3 mb-4 border-b border-neutral-800 bg-[#0A0A0A]">
+                <div>
+                  <span className="text-[9px] font-bold uppercase tracking-widest text-amber-400">{selectedProject.badge}</span>
+                  <h3 className="font-display text-lg sm:text-2xl font-extrabold text-white">{selectedProject.name}</h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setSelectedProject(null)}
+                  className="h-8 w-8 rounded-full border border-neutral-700 bg-neutral-900 text-neutral-400 hover:text-white hover:border-amber-400 flex items-center justify-center transition shrink-0"
+                  aria-label="Close modal"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="space-y-4 text-xs sm:text-sm text-neutral-300">
+                <div>
+                  <h4 className="font-bold text-amber-400 uppercase tracking-wider text-[11px]">Overview</h4>
+                  <p className="mt-1 leading-relaxed">{selectedProject.fullDescription}</p>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-teal-400 uppercase tracking-wider text-[11px]">System Architecture</h4>
+                  <p className="mt-1 leading-relaxed bg-black border border-neutral-800 p-3 rounded-xl font-mono text-[11px] sm:text-xs text-neutral-300">
+                    {selectedProject.architecture}
+                  </p>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-amber-400 uppercase tracking-wider text-[11px]">Key Problem Solved</h4>
+                  <p className="mt-1 leading-relaxed">{selectedProject.keySolution}</p>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-neutral-400 uppercase tracking-wider text-[11px] mb-2">Technologies Used</h4>
+                  <div className="flex flex-wrap gap-1.5">
+                    {selectedProject.tags.map((tag) => (
+                      <span key={tag} className="rounded-lg bg-amber-500/10 border border-amber-500/30 px-2.5 py-1 text-[10px] sm:text-xs font-bold text-amber-300">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => setSelectedProject(null)}
+                  className="w-full sm:w-auto rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 px-6 py-3 text-xs font-bold uppercase tracking-wider text-slate-950 hover:brightness-110"
+                >
+                  Close Insights
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* EXPERIENCE & EDUCATION SECTION */}
+        <section id="education" className="pb-12 sm:pb-16">
+          <div className="mb-5 sm:mb-6">
+            <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Academic Journey & Education</h2>
             <div className="mt-2.5 h-1 w-20 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
           </div>
-          
-          <div className="relative mt-6 space-y-4 pl-5 before:absolute before:left-0 before:top-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-amber-500 before:to-transparent lg:grid lg:grid-cols-2 lg:gap-6 lg:space-y-0 lg:pl-0 lg:before:hidden">
-            {education.map((item, idx) => (
+
+          <div className="grid gap-5 sm:gap-6 md:grid-cols-2">
+            {education.map((item) => (
               <article
                 key={item.school}
-                className="animate-rise rounded-[1.5rem] sm:rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 shadow-2xl backdrop-blur-md lg:p-7 transition-all duration-300 hover:border-stone-300 dark:hover:border-slate-700/80"
-                style={{ animationDelay: `${idx * 90}ms` }}
+                className="rounded-[1.5rem] sm:rounded-[1.8rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-5 sm:p-6 shadow-xl backdrop-blur-md border-l-4 border-l-amber-500"
               >
-                <div className="mb-3 inline-block rounded-full border border-amber-600/20 dark:border-amber-500/20 bg-amber-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-700 dark:text-[#D4AF37]">
+                <span className="inline-block rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-0.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 mb-2">
                   {item.date}
-                </div>
-                <h3 className="font-display text-xl font-bold text-slate-900 dark:text-white">{item.school}</h3>
-                <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 mt-1">{item.location}</p>
-                <p className="mt-3 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{item.detail}</p>
+                </span>
+                <h3 className="font-display text-lg sm:text-xl font-bold text-slate-900 dark:text-white">{item.school}</h3>
+                <p className="text-xs font-semibold text-slate-500 dark:text-neutral-400 mt-0.5">{item.location}</p>
+                <p className="mt-2 text-xs sm:text-sm font-bold text-amber-600 dark:text-amber-400">{item.degree}</p>
+
+                <ul className="mt-3 space-y-1.5 text-xs text-slate-600 dark:text-neutral-300">
+                  {item.achievements.map((ach, aIdx) => (
+                    <li key={aIdx} className="flex items-start gap-2">
+                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0" />
+                      <span className="leading-relaxed">{ach}</span>
+                    </li>
+                  ))}
+                </ul>
               </article>
             ))}
           </div>
         </section>
 
-        {/* Languages Section */}
-        <section id="languages" className="pb-16">
-          <div className="mb-6">
-            <h2 className="font-display text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Languages</h2>
+        {/* CERTIFICATIONS & MILESTONES SECTION */}
+        <section id="certifications" className="pb-12 sm:pb-16">
+          <div className="mb-5 sm:mb-6">
+            <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Certifications & Milestones</h2>
             <div className="mt-2.5 h-1 w-20 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
           </div>
 
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {languages.map((language, idx) => (
+          <div className="grid gap-4 sm:gap-5 md:grid-cols-3">
+            {certifications.map((cert) => (
+              <article
+                key={cert.title}
+                className="rounded-[1.5rem] sm:rounded-[1.8rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-5 sm:p-6 shadow-xl backdrop-blur-md flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between text-[9px] sm:text-[10px] font-bold uppercase text-amber-600 dark:text-amber-400 mb-2">
+                    <span>{cert.issuer}</span>
+                    <span>{cert.year}</span>
+                  </div>
+                  <h3 className="font-display text-base sm:text-lg font-bold text-slate-900 dark:text-white">{cert.title}</h3>
+                  <p className="mt-2 text-xs text-slate-500 dark:text-neutral-400 leading-relaxed">
+                    {cert.description}
+                  </p>
+                </div>
+                <div className="mt-4 pt-3 border-t border-stone-200 dark:border-neutral-800/80 flex items-center gap-1 text-[10px] font-bold text-emerald-500 uppercase tracking-wider">
+                  <span>✓ Verified Distinction</span>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* LANGUAGES SECTION */}
+        <section id="languages" className="pb-12 sm:pb-16">
+          <div className="mb-5 sm:mb-6">
+            <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Language Proficiency</h2>
+            <div className="mt-2.5 h-1 w-20 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
+          </div>
+
+          <div className="grid gap-3.5 sm:gap-4 grid-cols-2 lg:grid-cols-4">
+            {languages.map((language) => (
               <article
                 key={language.name}
-                className="animate-rise rounded-[1.5rem] sm:rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 shadow-2xl backdrop-blur-md transition-all duration-300 hover:border-stone-300 dark:hover:border-slate-700/80"
-                style={{ animationDelay: `${idx * 90}ms` }}
+                className="rounded-[1.5rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-4 sm:p-5 shadow-xl backdrop-blur-md"
               >
-                <div className="mb-3 flex items-center justify-between gap-2">
-                  <h3 className="font-display text-lg font-bold text-slate-900 dark:text-white">{language.name}</h3>
-                  <span className="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-[#D4AF37]">{language.level}</span>
+                <div className="mb-2 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                  <h3 className="font-display text-sm sm:text-lg font-bold text-slate-900 dark:text-white">{language.name}</h3>
+                  <span className="text-[10px] sm:text-xs font-bold text-amber-600 dark:text-amber-400">{language.level}</span>
                 </div>
-                <div className="h-2 overflow-hidden rounded-full bg-stone-200 dark:bg-slate-800">
+                <div className="h-1.5 sm:h-2 overflow-hidden rounded-full bg-stone-200 dark:bg-neutral-900">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 dark:via-[#D4AF37]"
+                    className="h-full rounded-full bg-gradient-to-r from-amber-500 to-yellow-400"
                     style={{ width: language.width }}
                   />
                 </div>
@@ -798,100 +1181,194 @@ function App() {
           </div>
         </section>
 
-        {/* Contact Section */}
-        <section id="contact" className="pb-8">
-          <div className="grid gap-6 xl:grid-cols-[1.6fr_1fr]">
-            <article className="relative overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 sm:p-8 lg:p-10 transition-all duration-300">
-              <div className="pointer-events-none absolute -right-20 -top-20 h-60 w-60 rounded-full bg-amber-500/10 blur-[80px]" />
-              
-              <h2 className="font-display text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Contact</h2>
+        {/* CONTACT SECTION WITH INTERACTIVE VALIDATED FORM */}
+        <section id="contact" className="pb-12">
+          <div className="grid gap-6 xl:grid-cols-[1.5fr_1fr]">
+            {/* Interactive Contact Form (Netlify Form Ready) */}
+            <article className="rounded-[1.6rem] sm:rounded-[1.8rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-5 sm:p-8 lg:p-10">
+              <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Get In Touch</h2>
               <div className="mt-2.5 h-1 w-14 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
-              
-              <p className="mt-5 max-w-3xl text-sm sm:text-base leading-relaxed text-slate-600 dark:text-slate-300">
-                Open to software engineering internships, junior developer roles, and project opportunities where I can contribute to backend systems, full-stack applications, dashboards, GIS-style workflows, and responsive web platforms.
+
+              <p className="mt-3 sm:mt-4 text-xs sm:text-sm leading-relaxed text-slate-600 dark:text-neutral-300">
+                Send a direct message regarding software engineering roles, project inquiries, or technical consultations.
               </p>
-              
-              <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                <a
-                  href="mailto:badagaclass@gmail.com"
-                  className="group rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100/40 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-amber-500/50 hover:bg-stone-50 dark:hover:bg-slate-900/30 bg-white/40 dark:bg-slate-950/40"
-                >
-                  <span className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 transition-colors group-hover:text-amber-600 dark:group-hover:text-[#D4AF37]">Email</span>
-                  <strong className="mt-1.5 block font-display text-lg text-slate-900 dark:text-white break-all">badagaclass@gmail.com</strong>
-                </a>
-                
-                <a
-                  href="tel:+250788883986"
-                  className="group rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100/40 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-amber-500/50 hover:bg-stone-50 dark:hover:bg-slate-900/30 bg-white/40 dark:bg-slate-950/40"
-                >
-                  <span className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 transition-colors group-hover:text-amber-600 dark:group-hover:text-[#D4AF37]">Phone</span>
-                  <strong className="mt-1.5 block font-display text-lg text-slate-900 dark:text-white">+250 788 883 986</strong>
-                </a>
 
-                <a
-                  href="https://www.linkedin.com/in/steven-irankunda-badaga-54b7a62b2/"
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="group rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100/40 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-amber-500/50 hover:bg-stone-50 dark:hover:bg-slate-900/30 bg-white/40 dark:bg-slate-950/40"
-                >
-                  <span className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 transition-colors group-hover:text-amber-600 dark:group-hover:text-[#D4AF37]">LinkedIn</span>
-                  <strong className="mt-1.5 block font-display text-lg text-slate-900 dark:text-white">Steven Irankunda Badaga</strong>
-                </a>
-
-                <a
-                  href="https://github.com/stevenbadaga"
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="group rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100/40 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-amber-500/50 hover:bg-stone-50 dark:hover:bg-slate-900/30 bg-white/40 dark:bg-slate-950/40"
-                >
-                  <span className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 transition-colors group-hover:text-amber-600 dark:group-hover:text-[#D4AF37]">GitHub</span>
-                  <strong className="mt-1.5 block font-display text-lg text-slate-900 dark:text-white">stevenbadaga</strong>
-                </a>
-              </div>
-            </article>
-
-            {/* Quick Actions Card */}
-            <article className="rounded-[1.5rem] sm:rounded-[2rem] border border-stone-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 p-5 sm:p-8 lg:sticky lg:top-24 lg:h-fit transition-all duration-300 flex flex-col justify-between">
-              <div>
-                <h3 className="font-display text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Quick Actions</h3>
-                <div className="mt-2.5 h-1 w-14 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
-                
-                <p className="mt-4 text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
-                  Copy contact details and reach out quickly.
-                </p>
-                
-                <div className="mt-6 space-y-3">
+              {formSubmitted ? (
+                <div className="mt-6 sm:mt-8 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-6 text-center text-emerald-600 dark:text-emerald-400 animate-modal">
+                  <span className="text-4xl">🎉</span>
+                  <h3 className="mt-3 font-display text-lg sm:text-xl font-bold">Message Sent Successfully!</h3>
+                  <p className="mt-2 text-xs text-slate-600 dark:text-neutral-300">
+                    Thank you for reaching out, Steven will review your message and reply promptly to <strong className="text-slate-900 dark:text-white">{contactForm.email}</strong>.
+                  </p>
                   <button
                     type="button"
-                    onClick={() => handleCopy("badagaclass@gmail.com", "Email copied")}
-                    className="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100/55 dark:bg-slate-950/60 px-4 py-3.5 text-center text-xs font-bold uppercase tracking-widest text-slate-700 dark:text-slate-200 transition-all duration-300 hover:border-amber-500 hover:bg-stone-100 dark:hover:bg-slate-900/30 hover:text-slate-900 dark:hover:text-white focus:outline-none focus:ring-1 focus:ring-amber-500"
+                    onClick={() => {
+                      setFormSubmitted(false);
+                      setContactForm({ name: "", email: "", subject: "", service: "Full-Stack Engineering", message: "" });
+                    }}
+                    className="mt-5 rounded-full bg-emerald-500 px-6 py-2.5 text-xs font-bold text-slate-950 uppercase tracking-wider hover:bg-emerald-400"
                   >
-                    Copy Email Address
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleCopy("+250788883986", "Phone copied")}
-                    className="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100/55 dark:bg-slate-950/60 px-4 py-3.5 text-center text-xs font-bold uppercase tracking-widest text-slate-700 dark:text-slate-200 transition-all duration-300 hover:border-amber-500 hover:bg-stone-100 dark:hover:bg-slate-900/30 hover:text-slate-900 dark:hover:text-white focus:outline-none focus:ring-1 focus:ring-amber-500"
-                  >
-                    Copy Phone Number
+                    Send Another Message
                   </button>
                 </div>
-                
-                <p
-                  className="mt-4 min-h-[24px] text-center text-xs font-bold text-amber-600 dark:text-[#D4AF37]"
-                  aria-live="polite"
-                  role="status"
+              ) : (
+                <form
+                  name="contact"
+                  method="POST"
+                  data-netlify="true"
+                  onSubmit={handleFormSubmit}
+                  className="mt-5 sm:mt-6 space-y-3.5 sm:space-y-4"
                 >
-                  {copyMessage}
-                </p>
+                  <input type="hidden" name="form-name" value="contact" />
+
+                  <div className="grid gap-3.5 sm:gap-4 sm:grid-cols-2">
+                    <div>
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-neutral-400 mb-1">
+                        Your Name *
+                      </label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={contactForm.name}
+                        onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
+                        placeholder="John Doe"
+                        className={`w-full rounded-xl border ${
+                          formErrors.name ? "border-rose-500" : "border-stone-300 dark:border-neutral-800"
+                        } bg-white dark:bg-black px-3.5 py-3 text-xs text-slate-900 dark:text-white focus:border-amber-500 focus:outline-none`}
+                      />
+                      {formErrors.name && <p className="mt-1 text-[10px] text-rose-500 font-bold">{formErrors.name}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-neutral-400 mb-1">
+                        Your Email *
+                      </label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={contactForm.email}
+                        onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
+                        placeholder="john@example.com"
+                        className={`w-full rounded-xl border ${
+                          formErrors.email ? "border-rose-500" : "border-stone-300 dark:border-neutral-800"
+                        } bg-white dark:bg-black px-3.5 py-3 text-xs text-slate-900 dark:text-white focus:border-amber-500 focus:outline-none`}
+                      />
+                      {formErrors.email && <p className="mt-1 text-[10px] text-rose-500 font-bold">{formErrors.email}</p>}
+                    </div>
+                  </div>
+
+                  <div className="grid gap-3.5 sm:gap-4 sm:grid-cols-2">
+                    <div>
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-neutral-400 mb-1">
+                        Subject *
+                      </label>
+                      <input
+                        type="text"
+                        name="subject"
+                        value={contactForm.subject}
+                        onChange={(e) => setContactForm({ ...contactForm, subject: e.target.value })}
+                        placeholder="Software Developer Role Inquiry"
+                        className={`w-full rounded-xl border ${
+                          formErrors.subject ? "border-rose-500" : "border-stone-300 dark:border-neutral-800"
+                        } bg-white dark:bg-black px-3.5 py-3 text-xs text-slate-900 dark:text-white focus:border-amber-500 focus:outline-none`}
+                      />
+                      {formErrors.subject && <p className="mt-1 text-[10px] text-rose-500 font-bold">{formErrors.subject}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-neutral-400 mb-1">
+                        Area of Interest
+                      </label>
+                      <select
+                        name="service"
+                        value={contactForm.service}
+                        onChange={(e) => setContactForm({ ...contactForm, service: e.target.value })}
+                        className="w-full rounded-xl border border-stone-300 dark:border-neutral-800 bg-white dark:bg-black px-3.5 py-3 text-xs text-slate-900 dark:text-white focus:border-amber-500 focus:outline-none"
+                      >
+                        <option value="Full-Stack Engineering">Full-Stack Development</option>
+                        <option value="Backend Services">Backend Services & REST APIs</option>
+                        <option value="GIS & Land Systems">GIS & Spatial Applications</option>
+                        <option value="UI/UX & Web Apps">UI/UX & Web App Design</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-neutral-400 mb-1">
+                      Message *
+                    </label>
+                    <textarea
+                      name="message"
+                      rows={4}
+                      value={contactForm.message}
+                      onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
+                      placeholder="Share project details or opportunity requirements..."
+                      className={`w-full rounded-xl border ${
+                        formErrors.message ? "border-rose-500" : "border-stone-300 dark:border-neutral-800"
+                      } bg-white dark:bg-black px-3.5 py-3 text-xs text-slate-900 dark:text-white focus:border-amber-500 focus:outline-none`}
+                    />
+                    {formErrors.message && <p className="mt-1 text-[10px] text-rose-500 font-bold">{formErrors.message}</p>}
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full rounded-full bg-gradient-to-r from-amber-500 via-[#D4AF37] to-yellow-500 py-3.5 text-xs font-bold uppercase tracking-wider text-slate-950 hover:brightness-105 shadow-md transition min-h-[44px]"
+                  >
+                    Submit Message
+                  </button>
+                </form>
+              )}
+            </article>
+
+            {/* Quick Actions & Contact Details Sidebar */}
+            <article className="rounded-[1.6rem] sm:rounded-[1.8rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-5 sm:p-6 flex flex-col justify-between">
+              <div>
+                <h3 className="font-display text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Direct Reach</h3>
+                <div className="mt-2.5 h-1 w-14 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
+
+                <div className="mt-5 space-y-3">
+                  <a
+                    href="mailto:badagaclass@gmail.com"
+                    className="block rounded-2xl border border-stone-200 dark:border-neutral-800 bg-white/50 dark:bg-black/60 p-4 transition hover:border-amber-500"
+                  >
+                    <span className="text-[9px] font-bold uppercase text-amber-500">Email Address</span>
+                    <p className="mt-1 font-display text-xs sm:text-sm font-bold text-slate-900 dark:text-white break-all">badagaclass@gmail.com</p>
+                  </a>
+
+                  <a
+                    href="tel:+250788883986"
+                    className="block rounded-2xl border border-stone-200 dark:border-neutral-800 bg-white/50 dark:bg-black/60 p-4 transition hover:border-amber-500"
+                  >
+                    <span className="text-[9px] font-bold uppercase text-amber-500">Phone Number</span>
+                    <p className="mt-1 font-display text-xs sm:text-sm font-bold text-slate-900 dark:text-white">+250 788 883 986</p>
+                  </a>
+                </div>
+
+                <div className="mt-5 space-y-2">
+                  <button
+                    type="button"
+                    onClick={() => handleCopy("badagaclass@gmail.com", "Email copied to clipboard!")}
+                    className="w-full rounded-xl border border-stone-200 dark:border-neutral-800 bg-stone-100/70 dark:bg-black/70 py-3 text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-neutral-300 hover:border-amber-500 hover:text-amber-500 transition min-h-[44px]"
+                  >
+                    Copy Email
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleCopy("+250788883986", "Phone copied to clipboard!")}
+                    className="w-full rounded-xl border border-stone-200 dark:border-neutral-800 bg-stone-100/70 dark:bg-black/70 py-3 text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-neutral-300 hover:border-amber-500 hover:text-amber-500 transition min-h-[44px]"
+                  >
+                    Copy Phone
+                  </button>
+                  {copyMessage && (
+                    <p className="mt-2 text-center text-xs font-bold text-amber-500 animate-pulse">{copyMessage}</p>
+                  )}
+                </div>
               </div>
-              
-              <div className="mt-4 rounded-2xl border border-amber-500/20 bg-amber-500/5 p-5">
-                <p className="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-[#D4AF37]">
-                  Current Status
-                </p>
-                <p className="mt-2 text-xs sm:text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-                  Available for software engineering internships, junior developer opportunities, freelance web projects, and collaborative software development work.
+
+              <div className="mt-6 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-4">
+                <p className="text-[9px] font-bold uppercase tracking-widest text-emerald-500">Current Availability</p>
+                <p className="mt-1 text-xs text-slate-600 dark:text-neutral-300">
+                  Open to full-time roles, software engineering internships, and technical contracts in Rwanda or remote worldwide.
                 </p>
               </div>
             </article>
@@ -899,17 +1376,17 @@ function App() {
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-stone-205/60 dark:border-slate-900 bg-stone-100/30 dark:bg-slate-950/80 py-6 text-center text-slate-500 text-xs transition-colors duration-300">
-        <p className="font-semibold tracking-wide">&copy; {currentYear} IRANKUNDA BADAGA Steven. All rights reserved.</p>
+      {/* Footer (Pure Black Theme) */}
+      <footer className="border-t border-stone-200/60 dark:border-neutral-900 bg-stone-100/40 dark:bg-black py-6 text-center text-slate-500 dark:text-neutral-500 text-xs px-4">
+        <p className="font-semibold tracking-wide">&copy; {currentYear} IRANKUNDA BADAGA Steven. Engineered with React & Tailwind CSS.</p>
       </footer>
 
-      {/* Back to Top */}
+      {/* Scroll To Top Button */}
       <button
         type="button"
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        className={`fixed bottom-6 right-6 z-40 rounded-full border border-stone-300 dark:border-amber-500/30 bg-white dark:bg-slate-900 p-3 text-slate-700 dark:text-slate-200 shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:bg-stone-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white hover:border-amber-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
-          showTopButton ? "translate-y-0 opacity-100 scale-100" : "pointer-events-none translate-y-4 opacity-0 scale-90"
+        className={`fixed bottom-5 right-5 z-40 rounded-full border border-amber-500/30 bg-neutral-900 p-3 text-amber-400 shadow-2xl transition-all duration-300 hover:bg-amber-500 hover:text-slate-950 ${
+          showTopButton ? "opacity-100 scale-100" : "opacity-0 pointer-events-none scale-90"
         }`}
         aria-label="Back to top"
       >
