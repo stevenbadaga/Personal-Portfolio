@@ -60,37 +60,64 @@ const projects = [
     id: "volcano-art-center",
     name: "Volcano Art Center Platform",
     category: "Full-Stack Web Platform & Cultural Booking Hub",
-    badge: "Featured Project",
-    shortDescription: "A premium digital platform for Volcano Art Center in Musanze, designed to showcase local art, conservation work, talent applications, and tourism bookings.",
+    badge: "Featured Hosted Platform",
+    isHosted: true,
+    liveUrl: "https://volcano-art-center.netlify.app",
+    githubUrl: "https://github.com/stevenbadaga/Volcano-Art-Center",
+    displayUrl: "volcano-art-center.netlify.app",
+    shortDescription: "A live, premium digital platform for Volcano Art Center in Musanze, designed to showcase local art, conservation work, talent applications, and tourism bookings.",
     fullDescription: "The Volcano Art Center platform bridges eco-tourism, cultural heritage, and local talent empowerment in Musanze, Rwanda. It features a public-facing art market, conservation blog stories, interactive tour booking forms, and a robust administrative backend for content and application management.",
     tags: ["React", "Tailwind CSS", "Vite", "REST API", "Admin Dashboard", "Authentication", "Responsive UI"],
-    status: "Active Development",
+    status: "Live Hosted Platform",
     points: [
       "Designed a modern, responsive public showcase for artwork and conservation initiatives.",
       "Integrated booking workflows for cultural tours and artist workspace reservations.",
       "Built a secure admin dashboard interface for managing content, events, and talent applications."
     ],
     architecture: "React SPA frontend with modular state management, styled using Tailwind CSS tokens, connecting to a structured backend API with JWT authentication.",
-    keySolution: "Solves fragmented tourism booking and local artist visibility by centralizing event ticketing, artwork showcases, and community talent registration under one cohesive hub.",
-    link: null
+    keySolution: "Solves fragmented tourism booking and local artist visibility by centralizing event ticketing, artwork showcases, and community talent registration under one cohesive hub."
   },
   {
     id: "geosmart-manager",
-    name: "GeoSmart Manager",
+    name: "GeoSmart Manager GIS",
     category: "GIS & Land Subdivision Management System",
-    badge: "Final Year Project",
-    shortDescription: "A GIS-based land planning and parcel management system created to streamline subdivision workflows, automated regulatory checks, and report generation.",
+    badge: "Hosted Capstone System",
+    isHosted: true,
+    liveUrl: "https://geosmart-manager.netlify.app",
+    githubUrl: "https://github.com/stevenbadaga/GeoSmart-Manager",
+    displayUrl: "geosmart-manager.netlify.app",
+    shortDescription: "A live GIS-based land planning and parcel management system created to streamline subdivision workflows, automated regulatory checks, and report generation.",
     fullDescription: "GeoSmart Manager is a specialized land engineering tool designed to address land fragmentation and zoning compliance. It empowers urban planners and surveyors to visualize parcel boundaries on interactive maps, calculate optimal plot subdivisions, and generate compliance reports automatically.",
     tags: ["React", "Tailwind CSS", "GIS / Leaflet", "Land Subdivision", "Spatial Analysis", "Automated Reports", "PostgreSQL"],
-    status: "Completed (Academic)",
+    status: "Live Hosted Platform",
     points: [
       "Developed an interactive map view supporting parcel geometry visualization and zoning checks.",
       "Implemented automated subdivision calculations based on minimum plot size and road access rules.",
       "Created a digital report generator producing downloadable parcel summaries for urban planning authorities."
     ],
     architecture: "React frontend integrated with spatial mapping libraries, communicating with a relational spatial database for parcel polygon queries and zoning constraint checks.",
-    keySolution: "Eliminates manual geometry calculations and reduces parcel subdivision processing time by providing automated validation checks against municipal zoning master plans.",
-    link: null
+    keySolution: "Eliminates manual geometry calculations and reduces parcel subdivision processing time by providing automated validation checks against municipal zoning master plans."
+  },
+  {
+    id: "personal-portfolio",
+    name: "Steven Badaga Developer Portfolio",
+    category: "Production Web Platform & Interactive CLI",
+    badge: "Live Production Site",
+    isHosted: true,
+    liveUrl: "https://stevenbadaga.netlify.app",
+    githubUrl: "https://github.com/stevenbadaga/Personal-Portfolio",
+    displayUrl: "stevenbadaga.netlify.app",
+    shortDescription: "A high-performance production portfolio engineered with React, Tailwind CSS, dark mode aesthetics, interactive developer CLI, and Netlify CI/CD auto-deployment.",
+    fullDescription: "This production portfolio application highlights full-stack capabilities, live hosted projects, interactive terminal emulation, and direct netlify form handling with pure AMOLED black aesthetics.",
+    tags: ["React", "Tailwind CSS", "Vite", "Netlify CI/CD", "Interactive CLI", "Pure Black Dark Mode"],
+    status: "Live Production Platform",
+    points: [
+      "Built with component-based React architecture and mobile-first responsive layout.",
+      "Integrated live interactive CLI terminal emulator for developer inspection.",
+      "Configured automated GitHub to Netlify continuous deployment pipeline."
+    ],
+    architecture: "Vite + React single-page application deployed to global CDN edge servers via Netlify git integration with automated build checks.",
+    keySolution: "Provides technical recruiters and project stakeholders with an instant, interactive demonstration of engineering capabilities and live software platforms."
   }
 ];
 
@@ -170,8 +197,8 @@ const engineeringPrinciples = [
 ];
 
 const quickStats = [
-  { value: "5+", label: "Projects Built" },
-  { value: "2", label: "Live Platforms" },
+  { value: "3", label: "Live Hosted Platforms" },
+  { value: "5+", label: "Systems Built" },
   { value: "2026", label: "AUCA Grad" }
 ];
 
@@ -179,7 +206,7 @@ const quickStats = [
 function DeveloperTerminal() {
   const [history, setHistory] = useState([
     { text: "System initialized. Welcome to Steven Badaga's Console v2.0", type: "system" },
-    { text: "Type 'help' or tap buttons below to inspect developer profile.", type: "info" }
+    { text: "Type 'help' or tap buttons below to inspect live developer profile.", type: "info" }
   ]);
   const [inputVal, setInputVal] = useState("");
   const terminalEndRef = useRef(null);
@@ -209,7 +236,7 @@ function DeveloperTerminal() {
         break;
       case "projects":
         newLogs.push({
-          text: "1. Volcano Art Center (Tourism & booking hub)\n2. GeoSmart Manager (GIS land subdivision system)",
+          text: "1. Volcano Art Center (Live Hosted Hub)\n2. GeoSmart Manager (Live Hosted GIS Platform)\n3. Personal Portfolio (Live Production)",
           type: "output"
         });
         break;
@@ -346,6 +373,9 @@ function App() {
   // Interactive Skill Filter & Search
   const [skillCategoryFilter, setSkillCategoryFilter] = useState("All");
   const [skillSearchQuery, setSkillSearchQuery] = useState("");
+
+  // Interactive Project Filter
+  const [projectCategoryFilter, setProjectCategoryFilter] = useState("All");
 
   // Interactive Project Modal
   const [selectedProject, setSelectedProject] = useState(null);
@@ -494,6 +524,15 @@ function App() {
       return matchesCategory && matchesQuery;
     });
   }, [skillCategoryFilter, skillSearchQuery]);
+
+  // Filter projects dynamically
+  const filteredProjects = useMemo(() => {
+    if (projectCategoryFilter === "All") return projects;
+    if (projectCategoryFilter === "Live") return projects.filter((p) => p.isHosted);
+    if (projectCategoryFilter === "Full-Stack") return projects.filter((p) => p.category.includes("Full-Stack") || p.category.includes("Web Platform"));
+    if (projectCategoryFilter === "GIS") return projects.filter((p) => p.category.includes("GIS"));
+    return projects;
+  }, [projectCategoryFilter]);
 
   return (
     <div className="relative min-h-screen overflow-x-clip bg-[#FAF9F6] text-slate-800 dark:bg-[#000000] dark:text-neutral-300 selection:bg-amber-500/20 dark:selection:bg-amber-500/30 selection:text-slate-900 dark:selection:text-white transition-colors duration-300">
@@ -688,7 +727,7 @@ function App() {
                   href="#projects"
                   className="w-full sm:w-auto inline-flex items-center justify-center rounded-full border border-stone-300 dark:border-neutral-700 bg-white/80 dark:bg-neutral-900/60 px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-neutral-200 transition-all duration-300 hover:bg-stone-100 dark:hover:bg-neutral-800 text-center min-h-[44px]"
                 >
-                  View Projects
+                  View Live Projects
                 </a>
                 <a
                   href="/assets/Irankunda-Badaga-Steven-CV.docx"
@@ -940,61 +979,94 @@ function App() {
           )}
         </section>
 
-        {/* PROJECTS SECTION WITH INTERACTIVE MODAL */}
+        {/* HOSTED PROJECTS SHOWCASE SECTION */}
         <section id="projects" className="pb-12 sm:pb-16">
-          <div className="mb-5 sm:mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-stone-200 dark:border-neutral-800 pb-4">
+          <div className="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-3 border-b border-stone-200 dark:border-neutral-800 pb-4">
             <div>
-              <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Featured Projects</h2>
-              <div className="mt-2.5 h-1 w-20 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
+              <div className="flex items-center gap-2 mb-1">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-500">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  Live Hosted Systems
+                </span>
+              </div>
+              <h2 className="font-display text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                Featured Hosted Projects
+              </h2>
+              <div className="mt-2.5 h-1 w-20 rounded-full bg-gradient-to-r from-amber-500 via-[#D4AF37] to-emerald-400" />
             </div>
-            <a
-              href="https://github.com/stevenbadaga"
-              target="_blank"
-              rel="noreferrer noopener"
-              className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400 hover:text-slate-950 dark:hover:text-white transition"
-            >
-              Explore GitHub Profile →
-            </a>
+
+            {/* Filter Buttons */}
+            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+              {[
+                { label: "All Projects", key: "All" },
+                { label: "⚡ Live Hosted", key: "Live" },
+                { label: "🏛️ Full-Stack", key: "Full-Stack" },
+                { label: "🗺️ GIS & Spatial", key: "GIS" }
+              ].map((tab) => (
+                <button
+                  key={tab.key}
+                  type="button"
+                  onClick={() => setProjectCategoryFilter(tab.key)}
+                  className={`rounded-full px-3.5 py-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider transition-all shrink-0 ${
+                    projectCategoryFilter === tab.key
+                      ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 font-black shadow-md"
+                      : "border border-stone-200 dark:border-neutral-800 bg-white/60 dark:bg-neutral-900/60 text-slate-600 dark:text-neutral-400 hover:text-white"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
           </div>
 
-          <div className="grid gap-5 sm:gap-6 md:grid-cols-2">
-            {projects.map((project) => {
-              const isFeatured = project.badge === "Featured Project";
+          {/* Hosted Projects Cards Container */}
+          <div className="grid gap-6 lg:grid-cols-3">
+            {filteredProjects.map((project) => {
               return (
                 <article
                   key={project.id}
-                  className={`group relative flex flex-col justify-between rounded-[1.5rem] sm:rounded-[1.8rem] border bg-white/70 dark:bg-[#0D0D0D]/90 p-5 sm:p-6 shadow-xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1 ${
-                    isFeatured
-                      ? "border-amber-500/30 dark:border-amber-500/20 hover:border-amber-500"
-                      : "border-teal-500/30 dark:border-teal-500/20 hover:border-teal-500"
-                  }`}
+                  className="group relative flex flex-col justify-between overflow-hidden rounded-[1.8rem] border border-stone-200 dark:border-neutral-800 bg-white/80 dark:bg-[#0D0D0D] p-5 sm:p-6 shadow-2xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 hover:border-amber-500/60"
                 >
+                  {/* Glowing ambient light */}
+                  <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-amber-500/10 blur-2xl group-hover:bg-amber-500/20 transition-all" />
+
                   <div>
+                    {/* Simulated Browser Frame Bar for Hosted Projects */}
+                    <div className="mb-4 rounded-xl border border-stone-200 dark:border-neutral-800/80 bg-stone-100/80 dark:bg-black/80 px-3 py-2 flex items-center justify-between font-mono text-[10px]">
+                      <div className="flex items-center gap-1.5">
+                        <span className="h-2 w-2 rounded-full bg-rose-500/80 inline-block" />
+                        <span className="h-2 w-2 rounded-full bg-yellow-500/80 inline-block" />
+                        <span className="h-2 w-2 rounded-full bg-emerald-500/80 inline-block" />
+                      </div>
+                      <div className="flex items-center gap-1.5 text-slate-500 dark:text-neutral-400 truncate max-w-[170px] sm:max-w-[200px]">
+                        <span className="text-emerald-400 font-bold">🔒 https://</span>
+                        <span className="truncate text-amber-300 font-semibold">{project.displayUrl}</span>
+                      </div>
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    </div>
+
+                    {/* Header Row */}
                     <div className="mb-3 flex items-start justify-between gap-2">
                       <div>
-                        <h3 className="font-display text-lg sm:text-xl font-bold text-slate-900 dark:text-white group-hover:text-amber-500 transition-colors">
+                        <h3 className="font-display text-xl font-bold text-slate-900 dark:text-white group-hover:text-amber-400 transition-colors">
                           {project.name}
                         </h3>
                         <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400 mt-0.5">
                           {project.category}
                         </p>
                       </div>
-                      <span
-                        className={`text-[8px] sm:text-[9px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shrink-0 ${
-                          isFeatured
-                            ? "bg-amber-500 text-slate-950 font-black"
-                            : "bg-teal-500 text-slate-950 font-black"
-                        }`}
-                      >
-                        {project.badge}
+                      <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 shrink-0">
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        LIVE
                       </span>
                     </div>
 
-                    <p className="text-xs text-slate-600 dark:text-neutral-300 leading-relaxed mt-2.5">
+                    <p className="text-xs text-slate-600 dark:text-neutral-300 leading-relaxed mt-3">
                       {project.shortDescription}
                     </p>
 
-                    <ul className="mt-3.5 space-y-2 text-xs text-slate-500 dark:text-neutral-400">
+                    {/* Bullet Highlights */}
+                    <ul className="mt-4 space-y-2 text-xs text-slate-500 dark:text-neutral-400">
                       {project.points.map((pt, pIdx) => (
                         <li key={pIdx} className="flex items-start gap-2">
                           <span className="mt-1 h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0" />
@@ -1004,22 +1076,47 @@ function App() {
                     </ul>
                   </div>
 
-                  <div className="mt-5 border-t border-stone-200 dark:border-neutral-800/80 pt-4 flex flex-wrap items-center justify-between gap-3">
-                    <div className="flex flex-wrap gap-1">
-                      {project.tags.slice(0, 4).map((tag) => (
-                        <span key={tag} className="rounded bg-stone-100 dark:bg-black border border-stone-200 dark:border-neutral-800 px-2 py-0.5 text-[9px] font-semibold text-slate-600 dark:text-neutral-400">
+                  {/* Footer & Action Buttons */}
+                  <div className="mt-6 pt-4 border-t border-stone-200 dark:border-neutral-800/80">
+                    <div className="flex flex-wrap gap-1 mb-4">
+                      {project.tags.map((tag) => (
+                        <span key={tag} className="rounded bg-stone-100 dark:bg-black border border-stone-200/60 dark:border-neutral-800 px-2 py-0.5 text-[9px] font-semibold text-slate-600 dark:text-neutral-400">
                           {tag}
                         </span>
                       ))}
                     </div>
 
-                    <button
-                      type="button"
-                      onClick={() => setSelectedProject(project)}
-                      className="w-full sm:w-auto inline-flex items-center justify-center gap-1 text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 hover:text-slate-950 dark:hover:text-white transition py-2"
-                    >
-                      View Details & Architecture →
-                    </button>
+                    <div className="grid grid-cols-2 gap-2">
+                      {project.liveUrl ? (
+                        <a
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                          className="col-span-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-amber-500 via-[#D4AF37] to-yellow-500 py-2.5 px-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-950 hover:brightness-110 shadow-md transition text-center min-h-[38px]"
+                        >
+                          <span>🚀 Visit Live Site</span>
+                        </a>
+                      ) : null}
+
+                      <button
+                        type="button"
+                        onClick={() => setSelectedProject(project)}
+                        className="col-span-1 inline-flex items-center justify-center gap-1 rounded-xl border border-stone-300 dark:border-neutral-700 bg-white/80 dark:bg-neutral-900/80 py-2.5 px-3 text-[10px] font-bold uppercase tracking-wider text-slate-800 dark:text-neutral-200 hover:border-amber-500 hover:text-white transition text-center min-h-[38px]"
+                      >
+                        <span>🔍 Insights</span>
+                      </button>
+                    </div>
+
+                    {project.githubUrl && (
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        className="mt-2 block w-full text-center text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-neutral-400 hover:text-amber-400 transition py-1"
+                      >
+                        View Source Code on GitHub →
+                      </a>
+                    )}
                   </div>
                 </article>
               );
@@ -1047,6 +1144,23 @@ function App() {
               </div>
 
               <div className="space-y-4 text-xs sm:text-sm text-neutral-300">
+                {selectedProject.liveUrl && (
+                  <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Live Hosted Platform Address</p>
+                      <p className="font-mono text-xs font-bold text-white break-all">{selectedProject.liveUrl}</p>
+                    </div>
+                    <a
+                      href={selectedProject.liveUrl}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="inline-flex items-center justify-center rounded-lg bg-emerald-500 px-4 py-2 text-[10px] font-bold uppercase text-slate-950 hover:bg-emerald-400 shrink-0"
+                    >
+                      Open Live Site ↗
+                    </a>
+                  </div>
+                )}
+
                 <div>
                   <h4 className="font-bold text-amber-400 uppercase tracking-wider text-[11px]">Overview</h4>
                   <p className="mt-1 leading-relaxed">{selectedProject.fullDescription}</p>
