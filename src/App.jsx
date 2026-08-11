@@ -145,24 +145,54 @@ const education = [
   }
 ];
 
-const certifications = [
+const certificationsList = [
   {
+    id: "english-proficiency",
+    title: "English Proficiency Certificate",
+    issuer: "Adventist University of Central Africa (AUCA)",
+    date: "Certified 2026",
+    category: "Language & Communication",
+    type: "pdf",
+    fileUrl: "/assets/English-Certificate.pdf",
+    badge: "Official Certificate",
+    description: "Official academic certification confirming fluent professional command of spoken, written, and technical English for global software engineering collaboration.",
+    details: "Issued by AUCA upon rigorous language evaluation for professional academic and engineering standards."
+  },
+  {
+    id: "harambe-cert",
+    title: "Harambe Alliance Tech & Entrepreneurship Certificate",
+    issuer: "Harambe Alliance Forum",
+    date: "Certified 2026",
+    category: "Leadership & Tech Entrepreneurship",
+    type: "image",
+    fileUrl: "/assets/Harambe-Certificate.jpeg",
+    badge: "Official Certificate",
+    description: "Certificate of participation and distinction in technology innovation, leadership, and digital solutions for African software growth.",
+    details: "Recognizes high-impact project development, strategic software problem-solving, and tech venture innovation."
+  },
+  {
+    id: "auca-capstone",
     title: "Software Engineering Capstone Distinction",
-    issuer: "Adventist University of Central Africa",
-    year: "2025 - 2026",
-    description: "Awarded for exceptional software design, architectural rigor, and practical utility in the GeoSmart Manager GIS platform."
+    issuer: "AUCA Department of Software Engineering",
+    date: "2025 - 2026",
+    category: "Academic Distinction",
+    type: "milestone",
+    fileUrl: null,
+    badge: "Academic Honor",
+    description: "Awarded for exceptional software design, architectural rigor, and practical utility in the GeoSmart Manager GIS land management platform.",
+    details: "Recognizes top-tier system design, spatial algorithm implementation, and digital report generation."
   },
   {
-    title: "Full-Stack Web & API Engineering",
-    issuer: "Self-Directed / Academic Track",
-    year: "2024",
-    description: "Comprehensive practical mastery of React, RESTful API design, Spring Boot, and database modeling."
-  },
-  {
-    title: "Database Management & SQL Systems",
-    issuer: "AUCA Department of Computer Science",
-    year: "2023",
-    description: "Advanced relational schema design, query optimization, indexing, and PostgreSQL transaction integrity."
+    id: "fullstack-cert",
+    title: "Full-Stack Web & API Engineering Mastery",
+    issuer: "Academic & Professional Track",
+    date: "2024",
+    category: "Technical Specialty",
+    type: "milestone",
+    fileUrl: null,
+    badge: "Technical Skill",
+    description: "Comprehensive practical mastery of React, RESTful API design, Spring Boot, PostgreSQL, and modern web deployment.",
+    details: "Demonstrates proven capability to architect production web systems from backend services to responsive frontend UIs."
   }
 ];
 
@@ -218,7 +248,7 @@ function DeveloperTerminal() {
     switch (cmd) {
       case "help":
         newLogs.push({
-          text: "Available commands: about | skills | projects | education | contact | status | clear",
+          text: "Available commands: about | skills | projects | education | certs | contact | status | clear",
           type: "output"
         });
         break;
@@ -237,6 +267,12 @@ function DeveloperTerminal() {
       case "projects":
         newLogs.push({
           text: "1. Volcano Art Center (Live Hosted Hub)\n2. GeoSmart Manager (Live Hosted GIS Platform)\n3. Personal Portfolio (Live Production)",
+          type: "output"
+        });
+        break;
+      case "certs":
+        newLogs.push({
+          text: "Certificates: English Proficiency Certificate, Harambe Alliance Tech Certificate, AUCA Capstone Distinction.",
           type: "output"
         });
         break;
@@ -322,7 +358,7 @@ function DeveloperTerminal() {
       {/* Preset Command Buttons */}
       <div className="bg-[#121212] px-2.5 py-2 border-t border-neutral-800 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
         <span className="text-[9px] uppercase text-neutral-500 font-bold shrink-0">Presets:</span>
-        {["about", "skills", "projects", "status", "contact", "clear"].map((preset) => (
+        {["about", "skills", "projects", "certs", "status", "contact", "clear"].map((preset) => (
           <button
             key={preset}
             type="button"
@@ -351,6 +387,7 @@ function DeveloperTerminal() {
 }
 
 function App() {
+  const [currentPage, setCurrentPage] = useState("home");
   const [themePreference, setThemePreference] = useState(() => {
     if (typeof window !== "undefined") {
       try {
@@ -377,10 +414,11 @@ function App() {
   // Interactive Project Filter
   const [projectCategoryFilter, setProjectCategoryFilter] = useState("All");
 
-  // Interactive Project Modal
+  // Modals State
   const [selectedProject, setSelectedProject] = useState(null);
+  const [selectedCert, setSelectedCert] = useState(null);
 
-  // Interactive Contact Form state & validation
+  // Contact Form State
   const [contactForm, setContactForm] = useState({
     name: "",
     email: "",
@@ -393,6 +431,37 @@ function App() {
 
   const currentYear = new Date().getFullYear();
   const sectionIds = useMemo(() => navigation.map((item) => item.href.replace("#", "")), []);
+
+  // Handle URL hash changes for Certifications page
+  useEffect(() => {
+    const handleHash = () => {
+      if (window.location.hash === "#certifications-page") {
+        setCurrentPage("certifications");
+      } else if (currentPage === "certifications" && window.location.hash !== "#certifications-page") {
+        setCurrentPage("home");
+      }
+    };
+
+    handleHash();
+    window.addEventListener("hashchange", handleHash);
+    return () => window.removeEventListener("hashchange", handleHash);
+  }, [currentPage]);
+
+  const navigateToPage = (pageName, targetHash = null) => {
+    setCurrentPage(pageName);
+    setMobileMenuOpen(false);
+    if (pageName === "certifications") {
+      window.location.hash = "#certifications-page";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      if (targetHash) {
+        window.location.hash = targetHash;
+      } else {
+        window.location.hash = "#home";
+      }
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
@@ -423,6 +492,8 @@ function App() {
   }, [themePreference]);
 
   useEffect(() => {
+    if (currentPage !== "home") return undefined;
+
     const sections = sectionIds
       .map((id) => document.getElementById(id))
       .filter((element) => Boolean(element));
@@ -444,7 +515,7 @@ function App() {
 
     sections.forEach((section) => observer.observe(section));
     return () => observer.disconnect();
-  }, [sectionIds]);
+  }, [sectionIds, currentPage]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -559,23 +630,33 @@ function App() {
       {/* Navigation Header */}
       <header className="sticky top-0 z-50 border-b border-stone-200/60 dark:border-neutral-900 bg-[#FAF9F6]/90 dark:bg-[#000000]/90 backdrop-blur-lg transition-all duration-300 shadow-sm dark:shadow-none">
         <div className="mx-auto flex h-14 sm:h-16 w-full max-w-[1280px] items-center justify-between gap-3 px-3.5 sm:px-6 lg:px-10 xl:px-12">
-          <a
-            href="#home"
+          <button
+            type="button"
+            onClick={() => navigateToPage("home", "#home")}
             className="font-display text-[10px] sm:text-xs font-black tracking-widest text-slate-800 dark:text-white transition hover:text-[#D4AF37] flex items-center gap-1.5 uppercase select-none shrink-0"
           >
             <span className="h-2 w-2 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 animate-pulse" />
             IRANKUNDA BADAGA Steven
-          </a>
+          </button>
 
           {/* Desktop Navigation Menu */}
           <nav aria-label="Primary navigation" className="hidden md:block">
             <ul className="flex items-center gap-1">
               {navigation.map((item) => {
-                const isActive = activeSection === item.href;
+                const isCertPage = item.href === "#certifications" && currentPage === "certifications";
+                const isActive = (currentPage === "home" && activeSection === item.href) || isCertPage;
+
                 return (
                   <li key={item.href}>
-                    <a
-                      href={item.href}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (item.href === "#certifications") {
+                          navigateToPage("certifications");
+                        } else {
+                          navigateToPage("home", item.href);
+                        }
+                      }}
                       className={`inline-flex rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all duration-300 ${
                         isActive
                           ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 shadow-sm shadow-amber-500/10 font-black"
@@ -583,7 +664,7 @@ function App() {
                       }`}
                     >
                       {item.label}
-                    </a>
+                    </button>
                   </li>
                 );
               })}
@@ -655,13 +736,20 @@ function App() {
               <p className="text-[10px] font-bold uppercase tracking-widest text-amber-500 mb-3">Navigation Menu</p>
               <ul className="grid gap-2">
                 {navigation.map((item) => {
-                  const isActive = activeSection === item.href;
+                  const isCertPage = item.href === "#certifications" && currentPage === "certifications";
+                  const isActive = (currentPage === "home" && activeSection === item.href) || isCertPage;
                   return (
                     <li key={item.href}>
-                      <a
-                        href={item.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className={`flex items-center justify-between rounded-xl px-4 py-3 text-xs font-bold uppercase tracking-wider transition-all ${
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (item.href === "#certifications") {
+                            navigateToPage("certifications");
+                          } else {
+                            navigateToPage("home", item.href);
+                          }
+                        }}
+                        className={`w-full flex items-center justify-between rounded-xl px-4 py-3 text-xs font-bold uppercase tracking-wider transition-all ${
                           isActive
                             ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 font-black shadow-md"
                             : "bg-stone-100/70 dark:bg-neutral-900/80 text-slate-700 dark:text-neutral-300 hover:bg-stone-200 dark:hover:bg-neutral-800"
@@ -669,7 +757,7 @@ function App() {
                       >
                         <span>{item.label}</span>
                         {isActive && <span className="h-2 w-2 rounded-full bg-slate-950" />}
-                      </a>
+                      </button>
                     </li>
                   );
                 })}
@@ -684,811 +772,928 @@ function App() {
         )}
       </header>
 
-      {/* Main Content Area */}
+      {/* Main Content Render */}
       <main id="main" className="relative mx-auto w-full max-w-[1280px] px-3.5 sm:px-6 lg:px-10 pt-10 sm:pt-16 xl:px-12">
-        {/* HERO SECTION */}
-        <section id="home" className="grid gap-6 pb-12 sm:pb-16 md:grid-cols-[1.35fr_minmax(290px,0.95fr)] md:items-stretch lg:gap-8 xl:grid-cols-[1.5fr_minmax(320px,0.88fr)]">
-          <article className="relative animate-rise overflow-hidden rounded-[1.6rem] sm:rounded-[2.2rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-5 sm:p-9 lg:p-10 xl:p-12 transition-all duration-300 flex flex-col justify-between">
-            <div className="pointer-events-none absolute -right-20 -top-20 h-60 w-60 rounded-full bg-amber-500/10 blur-[80px]" />
-            <div className="pointer-events-none absolute -left-20 -bottom-20 h-60 w-60 rounded-full bg-teal-500/10 blur-[80px]" />
-
-            <div>
-              <div className="mb-4 flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  Available for Software Engineering Roles
-                </span>
-                <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
-                  AUCA Class of 2026
-                </span>
-              </div>
-
-              <p className="text-xs font-bold uppercase tracking-[0.25em] text-amber-600 dark:text-[#D4AF37]">
-                Full-Stack & Systems Engineering
-              </p>
-
-              <h1 className="mt-3 font-display text-2xl sm:text-4xl md:text-5xl xl:text-[3.5rem] font-extrabold leading-tight text-slate-900 dark:text-white tracking-tight">
-                Architecting reliable software products from <span className="bg-gradient-to-r from-amber-600 via-amber-500 to-teal-600 dark:from-amber-400 dark:via-yellow-200 dark:to-teal-400 bg-clip-text text-transparent">backend to frontend</span>.
-              </h1>
-
-              <p className="mt-4 sm:mt-5 max-w-2xl text-sm sm:text-base lg:text-lg text-slate-600 dark:text-neutral-300 leading-relaxed">
-                Final-year Software Engineering student at Adventist University of Central Africa (AUCA).
-                Experienced in full-stack web platforms, Spring Boot backend services, GIS mapping systems, and high-availability database architectures.
-              </p>
-
-              <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3">
-                <a
-                  href="#contact"
-                  className="w-full sm:w-auto inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-500 via-[#D4AF37] to-yellow-500 px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-slate-950 transition-all duration-300 hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] text-center min-h-[44px]"
-                >
-                  Contact Me
-                </a>
-                <a
-                  href="#projects"
-                  className="w-full sm:w-auto inline-flex items-center justify-center rounded-full border border-stone-300 dark:border-neutral-700 bg-white/80 dark:bg-neutral-900/60 px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-neutral-200 transition-all duration-300 hover:bg-stone-100 dark:hover:bg-neutral-800 text-center min-h-[44px]"
-                >
-                  View Live Projects
-                </a>
-                <a
-                  href="/assets/Irankunda-Badaga-Steven-CV.docx"
-                  download
-                  className="w-full sm:w-auto inline-flex items-center justify-center rounded-full border border-amber-600/50 dark:border-[#D4AF37]/45 bg-transparent px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-[#D4AF37] transition-all duration-300 hover:bg-amber-500/10 text-center min-h-[44px]"
-                >
-                  <svg className="mr-2 h-4 w-4 fill-current" viewBox="0 0 20 20">
-                    <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
-                  </svg>
-                  Download CV
-                </a>
-              </div>
-            </div>
-
-            {/* Quick Stats Grid */}
-            <div className="mt-8 sm:mt-10 grid grid-cols-3 gap-2 sm:gap-3 border-t border-stone-200 dark:border-neutral-800/80 pt-5 sm:pt-6">
-              {quickStats.map((stat) => (
-                <div
-                  key={stat.label}
-                  className="group rounded-xl sm:rounded-2xl border border-stone-200/80 dark:border-neutral-800/80 bg-white/60 dark:bg-black/50 p-3 sm:p-4 text-center sm:text-left transition-all duration-300 hover:border-amber-500/40"
-                >
-                  <p className="font-display text-xl sm:text-3xl font-extrabold leading-none text-slate-900 dark:text-white group-hover:text-amber-500 transition-colors">
-                    {stat.value}
-                  </p>
-                  <p className="mt-1 sm:mt-1.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-neutral-400">
-                    {stat.label}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </article>
-
-          {/* Profile & Interactive CLI Sidebar */}
-          <aside className="animate-rise space-y-5 sm:space-y-6 [animation-delay:120ms]">
-            {/* Profile Card */}
-            <div className="rounded-[1.6rem] sm:rounded-[1.8rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-4 sm:p-5 shadow-xl backdrop-blur-md">
-              <div className="relative group overflow-hidden rounded-2xl border border-stone-200 dark:border-neutral-800">
-                <img
-                  src="/assets/steven-badaga.jpg"
-                  alt="Portrait of IRANKUNDA BADAGA Steven"
-                  className="h-52 sm:h-64 md:aspect-[4/5] md:h-auto w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-85" />
-                <div className="absolute bottom-3 left-3 right-3 text-white">
-                  <p className="text-[10px] sm:text-xs font-bold text-amber-400 uppercase tracking-widest">Kigali, Rwanda</p>
-                  <h3 className="font-display text-base sm:text-lg font-bold">IRANKUNDA BADAGA Steven</h3>
-                </div>
-              </div>
-
-              <div className="mt-4 space-y-2 text-xs">
-                <div className="rounded-xl border border-stone-200 dark:border-neutral-800 bg-white/50 dark:bg-black/60 px-3 py-2.5 flex items-center justify-between">
-                  <span className="text-slate-500 dark:text-neutral-400 font-medium">Email</span>
-                  <a href="mailto:badagaclass@gmail.com" className="font-bold text-slate-800 dark:text-white hover:text-amber-500 break-all text-right">badagaclass@gmail.com</a>
-                </div>
-                <div className="rounded-xl border border-stone-200 dark:border-neutral-800 bg-white/50 dark:bg-black/60 px-3 py-2.5 flex items-center justify-between">
-                  <span className="text-slate-500 dark:text-neutral-400 font-medium">Phone</span>
-                  <a href="tel:+250788883986" className="font-bold text-slate-800 dark:text-white hover:text-amber-500">+250 788 883 986</a>
-                </div>
-              </div>
-
-              <div className="mt-4 flex gap-2 text-[10px] font-bold uppercase tracking-wider">
-                <a
-                  href="https://www.linkedin.com/in/steven-irankunda-badaga-54b7a62b2/"
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="flex-1 text-center rounded-xl border border-stone-200 dark:border-neutral-800 bg-white/50 dark:bg-black/60 py-2.5 text-slate-700 dark:text-neutral-300 hover:border-amber-500 hover:text-amber-500 transition"
-                >
-                  LinkedIn
-                </a>
-                <a
-                  href="https://github.com/stevenbadaga"
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="flex-1 text-center rounded-xl border border-stone-200 dark:border-neutral-800 bg-white/50 dark:bg-black/60 py-2.5 text-slate-700 dark:text-neutral-300 hover:border-amber-500 hover:text-amber-500 transition"
-                >
-                  GitHub
-                </a>
-              </div>
-            </div>
-
-            {/* Interactive Terminal */}
-            <DeveloperTerminal />
-          </aside>
-        </section>
-
-        {/* SUMMARY & PHILOSOPHY SECTION */}
-        <section id="summary" className="pb-12 sm:pb-16">
-          <div className="grid gap-6 xl:grid-cols-[1.6fr_1fr]">
-            <article className="rounded-[1.6rem] sm:rounded-[1.8rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-5 sm:p-8 lg:p-10">
-              <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
-                Professional Summary
-              </h2>
-              <div className="mt-2.5 h-1 w-20 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
-
-              <p className="mt-5 text-sm sm:text-[15px] leading-relaxed text-slate-600 dark:text-neutral-300">
-                Final-year Software Engineering student with practical experience designing and building full-stack web applications, backend services, database-driven systems, and responsive user interfaces. Skilled in translating project requirements into clean architecture, maintainable code, and deployment-ready solutions. My work includes portfolio platforms, dashboard interfaces, GIS-style land management workflows, and web systems that support real operational needs. I am focused on building reliable software products that are scalable, user-friendly, and ready for real-world use.
-              </p>
-
-              <div className="mt-6 sm:mt-8 grid gap-3 sm:grid-cols-2">
-                {engineeringPrinciples.map((principle) => (
-                  <div
-                    key={principle.title}
-                    className="rounded-2xl border border-stone-200 dark:border-neutral-800 bg-white/40 dark:bg-black/50 p-4 transition hover:border-amber-500/40"
-                  >
-                    <span className="text-2xl">{principle.icon}</span>
-                    <h3 className="mt-1.5 font-display text-sm font-bold text-slate-900 dark:text-white">
-                      {principle.title}
-                    </h3>
-                    <p className="mt-1 text-xs text-slate-500 dark:text-neutral-400 leading-relaxed">
-                      {principle.description}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </article>
-
-            {/* Core Competencies Badge Grid */}
-            <article className="rounded-[1.6rem] sm:rounded-[1.8rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-5 sm:p-8 flex flex-col justify-between">
+        {currentPage === "certifications" ? (
+          /* DEDICATED CERTIFICATIONS PAGE */
+          <div className="pb-16 animate-modal">
+            {/* Top Navigation Back Action */}
+            <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-200 dark:border-neutral-800 pb-6">
               <div>
-                <h3 className="font-display text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-                  Core Engineering Competencies
-                </h3>
-                <div className="mt-2.5 h-1 w-14 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
-                
-                <p className="mt-3 text-xs text-slate-500 dark:text-neutral-400">
-                  Key technological areas mastered throughout degree coursework and practical software delivery.
-                </p>
-
-                <div className="mt-5 flex flex-wrap gap-1.5 sm:gap-2">
-                  {[
-                    "Full-Stack React",
-                    "Spring Boot & Java",
-                    "REST API Architecture",
-                    "PostgreSQL & SQL",
-                    "GIS & Parcel Systems",
-                    "Tailwind CSS & UI/UX",
-                    "Linux CLI & Git",
-                    "Deployments & Netlify",
-                    "Clean Code Practices",
-                    "Database Optimization",
-                    "C# & .NET Basics",
-                    "System Debugging"
-                  ].map((item) => (
-                    <span
-                      key={item}
-                      className="rounded-xl border border-stone-200 dark:border-neutral-800 bg-stone-100/70 dark:bg-black/70 px-2.5 py-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-700 dark:text-neutral-300 shadow-sm transition hover:border-amber-500 hover:text-amber-500"
-                    >
-                      {item}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mt-6 rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400">
-                  Academic Excellence
-                </p>
-                <p className="mt-1 text-xs text-slate-600 dark:text-neutral-300 leading-relaxed">
-                  Adventist University of Central Africa (AUCA) • Software Engineering Program. Expected Graduation: 2026.
-                </p>
-              </div>
-            </article>
-          </div>
-        </section>
-
-        {/* SKILLS SECTION WITH INTERACTIVE FILTERING & SEARCH */}
-        <section id="skills" className="pb-12 sm:pb-16">
-          <div className="mb-5 sm:mb-6 flex flex-col md:flex-row md:items-end justify-between gap-3 border-b border-stone-200 dark:border-neutral-800 pb-4">
-            <div>
-              <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Skills & Capabilities</h2>
-              <div className="mt-2.5 h-1 w-20 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
-            </div>
-
-            {/* Interactive Search Input */}
-            <div className="relative w-full md:w-72">
-              <input
-                type="text"
-                value={skillSearchQuery}
-                onChange={(e) => setSkillSearchQuery(e.target.value)}
-                placeholder="Search skills (e.g. React, SQL)..."
-                className="w-full rounded-full border border-stone-300 dark:border-neutral-800 bg-white dark:bg-black px-4 py-2 text-xs font-medium text-slate-800 dark:text-white focus:border-amber-500 focus:outline-none placeholder-stone-400 shadow-sm"
-              />
-              {skillSearchQuery && (
                 <button
                   type="button"
-                  onClick={() => setSkillSearchQuery("")}
-                  className="absolute right-3 top-2.5 text-xs text-stone-400 hover:text-stone-600 dark:hover:text-white"
+                  onClick={() => navigateToPage("home", "#home")}
+                  className="inline-flex items-center gap-2 rounded-full border border-stone-300 dark:border-neutral-800 bg-stone-100 dark:bg-neutral-900 px-4 py-2 text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-neutral-300 hover:border-amber-500 hover:text-amber-400 transition"
                 >
-                  ✕
+                  ← Back to Portfolio Home
                 </button>
-              )}
-            </div>
-          </div>
+                <h1 className="mt-4 font-display text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                  Official Certifications & Diplomas
+                </h1>
+                <p className="mt-2 text-xs sm:text-sm text-slate-600 dark:text-neutral-400 max-w-2xl leading-relaxed">
+                  Verified academic distinctions, language proficiencies, and software engineering credentials earned by IRANKUNDA BADAGA Steven.
+                </p>
+              </div>
 
-          {/* Mobile Horizontally Scrollable Category Pills */}
-          <div className="mb-6 flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1.5 sm:pb-0 sm:flex-wrap">
-            {["All", "Frontend", "Backend & APIs", "Databases", "Infrastructure & Systems", "GIS & Land", "UI/UX & Product", "Engineering Practices"].map((cat) => (
-              <button
-                key={cat}
-                type="button"
-                onClick={() => setSkillCategoryFilter(cat)}
-                className={`rounded-full px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-wider transition-all shrink-0 ${
-                  skillCategoryFilter === cat
-                    ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 shadow-md shadow-amber-500/10 font-black"
-                    : "border border-stone-200 dark:border-neutral-800 bg-white/60 dark:bg-[#0D0D0D] text-slate-600 dark:text-neutral-400 hover:border-stone-400 dark:hover:border-neutral-700 hover:text-slate-900 dark:hover:text-white"
-                }`}
+              <a
+                href="/assets/CV.pdf"
+                download="IRANKUNDA_BADAGA_Steven_CV.pdf"
+                className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-500 via-[#D4AF37] to-yellow-500 px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-slate-950 shadow-md hover:brightness-105 transition min-h-[44px] shrink-0"
               >
-                {cat}
-              </button>
-            ))}
-          </div>
-
-          {/* Skill Cards Grid */}
-          {filteredSkillGroups.length === 0 ? (
-            <div className="rounded-2xl border border-stone-200 dark:border-neutral-800 p-8 text-center text-slate-500 text-xs sm:text-sm">
-              No skills found matching &quot;{skillSearchQuery}&quot; in category &quot;{skillCategoryFilter}&quot;.
+                <svg className="mr-2 h-4 w-4 fill-current" viewBox="0 0 20 20">
+                  <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
+                </svg>
+                Download Updated CV (PDF)
+              </a>
             </div>
-          ) : (
-            <div className="grid gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
-              {filteredSkillGroups.map((group) => (
+
+            {/* Certifications Showcase Grid */}
+            <div className="grid gap-6 md:grid-cols-2">
+              {certificationsList.map((cert) => (
                 <article
-                  key={group.title}
-                  className="group rounded-[1.5rem] sm:rounded-[1.8rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-5 sm:p-6 shadow-xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-amber-500/50 flex flex-col justify-between"
+                  key={cert.id}
+                  className="group relative flex flex-col justify-between overflow-hidden rounded-[1.8rem] border border-stone-200 dark:border-neutral-800 bg-white/80 dark:bg-[#0D0D0D] p-6 shadow-2xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-amber-500/50"
                 >
                   <div>
-                    <div className="mb-3 h-1.5 w-10 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400 transition-all duration-300 group-hover:w-16" />
-                    <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400">{group.category}</span>
-                    <h3 className="mt-0.5 font-display text-base sm:text-lg font-bold text-slate-900 dark:text-white group-hover:text-amber-500 transition-colors">
-                      {group.title}
-                    </h3>
-                    <p className="mt-2 text-xs text-slate-500 dark:text-neutral-400 leading-relaxed">
-                      {group.description}
+                    <div className="mb-4 flex items-center justify-between gap-2">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-amber-500">
+                        {cert.category}
+                      </span>
+                      <span className="inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+                        ✓ {cert.badge}
+                      </span>
+                    </div>
+
+                    <h2 className="font-display text-xl font-bold text-slate-900 dark:text-white group-hover:text-amber-400 transition-colors">
+                      {cert.title}
+                    </h2>
+                    <p className="text-xs font-semibold text-slate-500 dark:text-neutral-400 mt-1">
+                      Issued by: <strong className="text-slate-800 dark:text-white">{cert.issuer}</strong> ({cert.date})
                     </p>
+
+                    <p className="mt-4 text-xs text-slate-600 dark:text-neutral-300 leading-relaxed">
+                      {cert.description}
+                    </p>
+
+                    {/* Image Preview for Harambe certificate */}
+                    {cert.type === "image" && cert.fileUrl && (
+                      <div className="mt-5 relative overflow-hidden rounded-2xl border border-neutral-800 group/img cursor-pointer" onClick={() => setSelectedCert(cert)}>
+                        <img
+                          src={cert.fileUrl}
+                          alt={cert.title}
+                          className="h-48 w-full object-cover transition-transform duration-500 group-hover/img:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+                          <span className="rounded-full bg-amber-500 px-4 py-2 text-xs font-bold text-slate-950 uppercase tracking-wider">
+                            🔍 Click to View Full Image
+                          </span>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
-                  <div className="mt-4 flex flex-wrap gap-1.5">
-                    {group.skills.map((skillItem) => (
-                      <span
-                        key={skillItem}
-                        className="rounded-lg bg-stone-100 dark:bg-black/70 border border-stone-200/60 dark:border-neutral-800 px-2 py-0.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-700 dark:text-neutral-300 shadow-sm"
+                  <div className="mt-6 pt-4 border-t border-stone-200 dark:border-neutral-800/80 flex flex-wrap items-center justify-between gap-3">
+                    <p className="text-[10px] font-medium text-slate-400 dark:text-neutral-500">
+                      {cert.details}
+                    </p>
+
+                    <div className="flex items-center gap-2 w-full sm:w-auto">
+                      {cert.fileUrl && (
+                        <a
+                          href={cert.fileUrl}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                          className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-950 hover:brightness-110 transition text-center"
+                        >
+                          View Document ↗
+                        </a>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => setSelectedCert(cert)}
+                        className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1 rounded-xl border border-stone-300 dark:border-neutral-800 bg-stone-100 dark:bg-neutral-900 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-neutral-300 hover:border-amber-500 hover:text-white transition"
                       >
-                        {skillItem}
-                      </span>
-                    ))}
+                        Inspect Details
+                      </button>
+                    </div>
                   </div>
                 </article>
               ))}
             </div>
-          )}
-        </section>
-
-        {/* HOSTED PROJECTS SHOWCASE SECTION */}
-        <section id="projects" className="pb-12 sm:pb-16">
-          <div className="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-3 border-b border-stone-200 dark:border-neutral-800 pb-4">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-500">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  Live Hosted Systems
-                </span>
-              </div>
-              <h2 className="font-display text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-                Featured Hosted Projects
-              </h2>
-              <div className="mt-2.5 h-1 w-20 rounded-full bg-gradient-to-r from-amber-500 via-[#D4AF37] to-emerald-400" />
-            </div>
-
-            {/* Filter Buttons */}
-            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-              {[
-                { label: "All Projects", key: "All" },
-                { label: "⚡ Live Hosted", key: "Live" },
-                { label: "🏛️ Full-Stack", key: "Full-Stack" },
-                { label: "🗺️ GIS & Spatial", key: "GIS" }
-              ].map((tab) => (
-                <button
-                  key={tab.key}
-                  type="button"
-                  onClick={() => setProjectCategoryFilter(tab.key)}
-                  className={`rounded-full px-3.5 py-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider transition-all shrink-0 ${
-                    projectCategoryFilter === tab.key
-                      ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 font-black shadow-md"
-                      : "border border-stone-200 dark:border-neutral-800 bg-white/60 dark:bg-neutral-900/60 text-slate-600 dark:text-neutral-400 hover:text-white"
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
           </div>
+        ) : (
+          /* MAIN PORTFOLIO HOME PAGE */
+          <>
+            {/* HERO SECTION */}
+            <section id="home" className="grid gap-6 pb-12 sm:pb-16 md:grid-cols-[1.35fr_minmax(290px,0.95fr)] md:items-stretch lg:gap-8 xl:grid-cols-[1.5fr_minmax(320px,0.88fr)]">
+              <article className="relative animate-rise overflow-hidden rounded-[1.6rem] sm:rounded-[2.2rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-5 sm:p-9 lg:p-10 xl:p-12 transition-all duration-300 flex flex-col justify-between">
+                <div className="pointer-events-none absolute -right-20 -top-20 h-60 w-60 rounded-full bg-amber-500/10 blur-[80px]" />
+                <div className="pointer-events-none absolute -left-20 -bottom-20 h-60 w-60 rounded-full bg-teal-500/10 blur-[80px]" />
 
-          {/* Hosted Projects Cards Container */}
-          <div className="grid gap-6 lg:grid-cols-3">
-            {filteredProjects.map((project) => {
-              return (
-                <article
-                  key={project.id}
-                  className="group relative flex flex-col justify-between overflow-hidden rounded-[1.8rem] border border-stone-200 dark:border-neutral-800 bg-white/80 dark:bg-[#0D0D0D] p-5 sm:p-6 shadow-2xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 hover:border-amber-500/60"
-                >
-                  {/* Glowing ambient light */}
-                  <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-amber-500/10 blur-2xl group-hover:bg-amber-500/20 transition-all" />
-
-                  <div>
-                    {/* Simulated Browser Frame Bar for Hosted Projects */}
-                    <div className="mb-4 rounded-xl border border-stone-200 dark:border-neutral-800/80 bg-stone-100/80 dark:bg-black/80 px-3 py-2 flex items-center justify-between font-mono text-[10px]">
-                      <div className="flex items-center gap-1.5">
-                        <span className="h-2 w-2 rounded-full bg-rose-500/80 inline-block" />
-                        <span className="h-2 w-2 rounded-full bg-yellow-500/80 inline-block" />
-                        <span className="h-2 w-2 rounded-full bg-emerald-500/80 inline-block" />
-                      </div>
-                      <div className="flex items-center gap-1.5 text-slate-500 dark:text-neutral-400 truncate max-w-[170px] sm:max-w-[200px]">
-                        <span className="text-emerald-400 font-bold">🔒 https://</span>
-                        <span className="truncate text-amber-300 font-semibold">{project.displayUrl}</span>
-                      </div>
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    </div>
-
-                    {/* Header Row */}
-                    <div className="mb-3 flex items-start justify-between gap-2">
-                      <div>
-                        <h3 className="font-display text-xl font-bold text-slate-900 dark:text-white group-hover:text-amber-400 transition-colors">
-                          {project.name}
-                        </h3>
-                        <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400 mt-0.5">
-                          {project.category}
-                        </p>
-                      </div>
-                      <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 shrink-0">
-                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                        LIVE
-                      </span>
-                    </div>
-
-                    <p className="text-xs text-slate-600 dark:text-neutral-300 leading-relaxed mt-3">
-                      {project.shortDescription}
-                    </p>
-
-                    {/* Bullet Highlights */}
-                    <ul className="mt-4 space-y-2 text-xs text-slate-500 dark:text-neutral-400">
-                      {project.points.map((pt, pIdx) => (
-                        <li key={pIdx} className="flex items-start gap-2">
-                          <span className="mt-1 h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0" />
-                          <span className="leading-relaxed">{pt}</span>
-                        </li>
-                      ))}
-                    </ul>
+                <div>
+                  <div className="mb-4 flex flex-wrap items-center gap-2">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      Available for Software Engineering Roles
+                    </span>
+                    <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
+                      AUCA Class of 2026
+                    </span>
                   </div>
 
-                  {/* Footer & Action Buttons */}
-                  <div className="mt-6 pt-4 border-t border-stone-200 dark:border-neutral-800/80">
-                    <div className="flex flex-wrap gap-1 mb-4">
-                      {project.tags.map((tag) => (
-                        <span key={tag} className="rounded bg-stone-100 dark:bg-black border border-stone-200/60 dark:border-neutral-800 px-2 py-0.5 text-[9px] font-semibold text-slate-600 dark:text-neutral-400">
-                          {tag}
+                  <p className="text-xs font-bold uppercase tracking-[0.25em] text-amber-600 dark:text-[#D4AF37]">
+                    Full-Stack & Systems Engineering
+                  </p>
+
+                  <h1 className="mt-3 font-display text-2xl sm:text-4xl md:text-5xl xl:text-[3.5rem] font-extrabold leading-tight text-slate-900 dark:text-white tracking-tight">
+                    Architecting reliable software products from <span className="bg-gradient-to-r from-amber-600 via-amber-500 to-teal-600 dark:from-amber-400 dark:via-yellow-200 dark:to-teal-400 bg-clip-text text-transparent">backend to frontend</span>.
+                  </h1>
+
+                  <p className="mt-4 sm:mt-5 max-w-2xl text-sm sm:text-base lg:text-lg text-slate-600 dark:text-neutral-300 leading-relaxed">
+                    Final-year Software Engineering student at Adventist University of Central Africa (AUCA).
+                    Experienced in full-stack web platforms, Spring Boot backend services, GIS mapping systems, and high-availability database architectures.
+                  </p>
+
+                  <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3">
+                    <a
+                      href="#contact"
+                      className="w-full sm:w-auto inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-500 via-[#D4AF37] to-yellow-500 px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-slate-950 transition-all duration-300 hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] text-center min-h-[44px]"
+                    >
+                      Contact Me
+                    </a>
+                    <a
+                      href="#projects"
+                      className="w-full sm:w-auto inline-flex items-center justify-center rounded-full border border-stone-300 dark:border-neutral-700 bg-white/80 dark:bg-neutral-900/60 px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-neutral-200 transition-all duration-300 hover:bg-stone-100 dark:hover:bg-neutral-800 text-center min-h-[44px]"
+                    >
+                      View Live Projects
+                    </a>
+                    <a
+                      href="/assets/CV.pdf"
+                      download="IRANKUNDA_BADAGA_Steven_CV.pdf"
+                      className="w-full sm:w-auto inline-flex items-center justify-center rounded-full border border-amber-600/50 dark:border-[#D4AF37]/45 bg-transparent px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-[#D4AF37] transition-all duration-300 hover:bg-amber-500/10 text-center min-h-[44px]"
+                    >
+                      <svg className="mr-2 h-4 w-4 fill-current" viewBox="0 0 20 20">
+                        <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
+                      </svg>
+                      Download CV (PDF)
+                    </a>
+                  </div>
+                </div>
+
+                {/* Quick Stats Grid */}
+                <div className="mt-8 sm:mt-10 grid grid-cols-3 gap-2 sm:gap-3 border-t border-stone-200 dark:border-neutral-800/80 pt-5 sm:pt-6">
+                  {quickStats.map((stat) => (
+                    <div
+                      key={stat.label}
+                      className="group rounded-xl sm:rounded-2xl border border-stone-200/80 dark:border-neutral-800/80 bg-white/60 dark:bg-black/50 p-3 sm:p-4 text-center sm:text-left transition-all duration-300 hover:border-amber-500/40"
+                    >
+                      <p className="font-display text-xl sm:text-3xl font-extrabold leading-none text-slate-900 dark:text-white group-hover:text-amber-500 transition-colors">
+                        {stat.value}
+                      </p>
+                      <p className="mt-1 sm:mt-1.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-neutral-400">
+                        {stat.label}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </article>
+
+              {/* Profile & Interactive CLI Sidebar */}
+              <aside className="animate-rise space-y-5 sm:space-y-6 [animation-delay:120ms]">
+                {/* Profile Card */}
+                <div className="rounded-[1.6rem] sm:rounded-[1.8rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-4 sm:p-5 shadow-xl backdrop-blur-md">
+                  <div className="relative group overflow-hidden rounded-2xl border border-stone-200 dark:border-neutral-800">
+                    <img
+                      src="/assets/steven-badaga.jpg"
+                      alt="Portrait of IRANKUNDA BADAGA Steven"
+                      className="h-52 sm:h-64 md:aspect-[4/5] md:h-auto w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-85" />
+                    <div className="absolute bottom-3 left-3 right-3 text-white">
+                      <p className="text-[10px] sm:text-xs font-bold text-amber-400 uppercase tracking-widest">Kigali, Rwanda</p>
+                      <h3 className="font-display text-base sm:text-lg font-bold">IRANKUNDA BADAGA Steven</h3>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 space-y-2 text-xs">
+                    <div className="rounded-xl border border-stone-200 dark:border-neutral-800 bg-white/50 dark:bg-black/60 px-3 py-2.5 flex items-center justify-between">
+                      <span className="text-slate-500 dark:text-neutral-400 font-medium">Email</span>
+                      <a href="mailto:badagaclass@gmail.com" className="font-bold text-slate-800 dark:text-white hover:text-amber-500 break-all text-right">badagaclass@gmail.com</a>
+                    </div>
+                    <div className="rounded-xl border border-stone-200 dark:border-neutral-800 bg-white/50 dark:bg-black/60 px-3 py-2.5 flex items-center justify-between">
+                      <span className="text-slate-500 dark:text-neutral-400 font-medium">Phone</span>
+                      <a href="tel:+250788883986" className="font-bold text-slate-800 dark:text-white hover:text-amber-500">+250 788 883 986</a>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 flex gap-2 text-[10px] font-bold uppercase tracking-wider">
+                    <a
+                      href="https://www.linkedin.com/in/steven-irankunda-badaga-54b7a62b2/"
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="flex-1 text-center rounded-xl border border-stone-200 dark:border-neutral-800 bg-white/50 dark:bg-black/60 py-2.5 text-slate-700 dark:text-neutral-300 hover:border-amber-500 hover:text-amber-500 transition"
+                    >
+                      LinkedIn
+                    </a>
+                    <a
+                      href="https://github.com/stevenbadaga"
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="flex-1 text-center rounded-xl border border-stone-200 dark:border-neutral-800 bg-white/50 dark:bg-black/60 py-2.5 text-slate-700 dark:text-neutral-300 hover:border-amber-500 hover:text-amber-500 transition"
+                    >
+                      GitHub
+                    </a>
+                  </div>
+                </div>
+
+                {/* Interactive Terminal */}
+                <DeveloperTerminal />
+              </aside>
+            </section>
+
+            {/* SUMMARY & PHILOSOPHY SECTION */}
+            <section id="summary" className="pb-12 sm:pb-16">
+              <div className="grid gap-6 xl:grid-cols-[1.6fr_1fr]">
+                <article className="rounded-[1.6rem] sm:rounded-[1.8rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-5 sm:p-8 lg:p-10">
+                  <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
+                    Professional Summary
+                  </h2>
+                  <div className="mt-2.5 h-1 w-20 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
+
+                  <p className="mt-5 text-sm sm:text-[15px] leading-relaxed text-slate-600 dark:text-neutral-300">
+                    Final-year Software Engineering student with practical experience designing and building full-stack web applications, backend services, database-driven systems, and responsive user interfaces. Skilled in translating project requirements into clean architecture, maintainable code, and deployment-ready solutions. My work includes portfolio platforms, dashboard interfaces, GIS-style land management workflows, and web systems that support real operational needs. I am focused on building reliable software products that are scalable, user-friendly, and ready for real-world use.
+                  </p>
+
+                  <div className="mt-6 sm:mt-8 grid gap-3 sm:grid-cols-2">
+                    {engineeringPrinciples.map((principle) => (
+                      <div
+                        key={principle.title}
+                        className="rounded-2xl border border-stone-200 dark:border-neutral-800 bg-white/40 dark:bg-black/50 p-4 transition hover:border-amber-500/40"
+                      >
+                        <span className="text-2xl">{principle.icon}</span>
+                        <h3 className="mt-1.5 font-display text-sm font-bold text-slate-900 dark:text-white">
+                          {principle.title}
+                        </h3>
+                        <p className="mt-1 text-xs text-slate-500 dark:text-neutral-400 leading-relaxed">
+                          {principle.description}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </article>
+
+                {/* Core Competencies Badge Grid */}
+                <article className="rounded-[1.6rem] sm:rounded-[1.8rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-5 sm:p-8 flex flex-col justify-between">
+                  <div>
+                    <h3 className="font-display text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+                      Core Engineering Competencies
+                    </h3>
+                    <div className="mt-2.5 h-1 w-14 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
+                    
+                    <p className="mt-3 text-xs text-slate-500 dark:text-neutral-400">
+                      Key technological areas mastered throughout degree coursework and practical software delivery.
+                    </p>
+
+                    <div className="mt-5 flex flex-wrap gap-1.5 sm:gap-2">
+                      {[
+                        "Full-Stack React",
+                        "Spring Boot & Java",
+                        "REST API Architecture",
+                        "PostgreSQL & SQL",
+                        "GIS & Parcel Systems",
+                        "Tailwind CSS & UI/UX",
+                        "Linux CLI & Git",
+                        "Deployments & Netlify",
+                        "Clean Code Practices",
+                        "Database Optimization",
+                        "C# & .NET Basics",
+                        "System Debugging"
+                      ].map((item) => (
+                        <span
+                          key={item}
+                          className="rounded-xl border border-stone-200 dark:border-neutral-800 bg-stone-100/70 dark:bg-black/70 px-2.5 py-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-700 dark:text-neutral-300 shadow-sm transition hover:border-amber-500 hover:text-amber-500"
+                        >
+                          {item}
                         </span>
                       ))}
                     </div>
+                  </div>
 
-                    <div className="grid grid-cols-2 gap-2">
-                      {project.liveUrl ? (
-                        <a
-                          href={project.liveUrl}
-                          target="_blank"
-                          rel="noreferrer noopener"
-                          className="col-span-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-amber-500 via-[#D4AF37] to-yellow-500 py-2.5 px-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-950 hover:brightness-110 shadow-md transition text-center min-h-[38px]"
-                        >
-                          <span>🚀 Visit Live Site</span>
-                        </a>
-                      ) : null}
-
-                      <button
-                        type="button"
-                        onClick={() => setSelectedProject(project)}
-                        className="col-span-1 inline-flex items-center justify-center gap-1 rounded-xl border border-stone-300 dark:border-neutral-700 bg-white/80 dark:bg-neutral-900/80 py-2.5 px-3 text-[10px] font-bold uppercase tracking-wider text-slate-800 dark:text-neutral-200 hover:border-amber-500 hover:text-white transition text-center min-h-[38px]"
-                      >
-                        <span>🔍 Insights</span>
-                      </button>
-                    </div>
-
-                    {project.githubUrl && (
-                      <a
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noreferrer noopener"
-                        className="mt-2 block w-full text-center text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-neutral-400 hover:text-amber-400 transition py-1"
-                      >
-                        View Source Code on GitHub →
-                      </a>
-                    )}
+                  <div className="mt-6 rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400">
+                      Academic Excellence
+                    </p>
+                    <p className="mt-1 text-xs text-slate-600 dark:text-neutral-300 leading-relaxed">
+                      Adventist University of Central Africa (AUCA) • Software Engineering Program. Expected Graduation: 2026.
+                    </p>
                   </div>
                 </article>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* PROJECT DETAIL MODAL (Pure Black Theme) */}
-        {selectedProject && (
-          <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/85 backdrop-blur-md animate-modal">
-            <div className="relative w-full max-w-2xl max-h-[92vh] sm:max-h-[90vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl border border-amber-500/30 bg-[#0A0A0A] p-5 sm:p-8 text-white shadow-2xl">
-              <div className="sticky top-0 z-10 flex items-center justify-between pb-3 mb-4 border-b border-neutral-800 bg-[#0A0A0A]">
-                <div>
-                  <span className="text-[9px] font-bold uppercase tracking-widest text-amber-400">{selectedProject.badge}</span>
-                  <h3 className="font-display text-lg sm:text-2xl font-extrabold text-white">{selectedProject.name}</h3>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setSelectedProject(null)}
-                  className="h-8 w-8 rounded-full border border-neutral-700 bg-neutral-900 text-neutral-400 hover:text-white hover:border-amber-400 flex items-center justify-center transition shrink-0"
-                  aria-label="Close modal"
-                >
-                  ✕
-                </button>
               </div>
+            </section>
 
-              <div className="space-y-4 text-xs sm:text-sm text-neutral-300">
-                {selectedProject.liveUrl && (
-                  <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                    <div>
-                      <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Live Hosted Platform Address</p>
-                      <p className="font-mono text-xs font-bold text-white break-all">{selectedProject.liveUrl}</p>
-                    </div>
-                    <a
-                      href={selectedProject.liveUrl}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      className="inline-flex items-center justify-center rounded-lg bg-emerald-500 px-4 py-2 text-[10px] font-bold uppercase text-slate-950 hover:bg-emerald-400 shrink-0"
-                    >
-                      Open Live Site ↗
-                    </a>
-                  </div>
-                )}
-
+            {/* SKILLS SECTION WITH INTERACTIVE FILTERING & SEARCH */}
+            <section id="skills" className="pb-12 sm:pb-16">
+              <div className="mb-5 sm:mb-6 flex flex-col md:flex-row md:items-end justify-between gap-3 border-b border-stone-200 dark:border-neutral-800 pb-4">
                 <div>
-                  <h4 className="font-bold text-amber-400 uppercase tracking-wider text-[11px]">Overview</h4>
-                  <p className="mt-1 leading-relaxed">{selectedProject.fullDescription}</p>
+                  <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Skills & Capabilities</h2>
+                  <div className="mt-2.5 h-1 w-20 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
                 </div>
 
-                <div>
-                  <h4 className="font-bold text-teal-400 uppercase tracking-wider text-[11px]">System Architecture</h4>
-                  <p className="mt-1 leading-relaxed bg-black border border-neutral-800 p-3 rounded-xl font-mono text-[11px] sm:text-xs text-neutral-300">
-                    {selectedProject.architecture}
-                  </p>
-                </div>
-
-                <div>
-                  <h4 className="font-bold text-amber-400 uppercase tracking-wider text-[11px]">Key Problem Solved</h4>
-                  <p className="mt-1 leading-relaxed">{selectedProject.keySolution}</p>
-                </div>
-
-                <div>
-                  <h4 className="font-bold text-neutral-400 uppercase tracking-wider text-[11px] mb-2">Technologies Used</h4>
-                  <div className="flex flex-wrap gap-1.5">
-                    {selectedProject.tags.map((tag) => (
-                      <span key={tag} className="rounded-lg bg-amber-500/10 border border-amber-500/30 px-2.5 py-1 text-[10px] sm:text-xs font-bold text-amber-300">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-6 flex justify-end">
-                <button
-                  type="button"
-                  onClick={() => setSelectedProject(null)}
-                  className="w-full sm:w-auto rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 px-6 py-3 text-xs font-bold uppercase tracking-wider text-slate-950 hover:brightness-110"
-                >
-                  Close Insights
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* EXPERIENCE & EDUCATION SECTION */}
-        <section id="education" className="pb-12 sm:pb-16">
-          <div className="mb-5 sm:mb-6">
-            <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Academic Journey & Education</h2>
-            <div className="mt-2.5 h-1 w-20 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
-          </div>
-
-          <div className="grid gap-5 sm:gap-6 md:grid-cols-2">
-            {education.map((item) => (
-              <article
-                key={item.school}
-                className="rounded-[1.5rem] sm:rounded-[1.8rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-5 sm:p-6 shadow-xl backdrop-blur-md border-l-4 border-l-amber-500"
-              >
-                <span className="inline-block rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-0.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 mb-2">
-                  {item.date}
-                </span>
-                <h3 className="font-display text-lg sm:text-xl font-bold text-slate-900 dark:text-white">{item.school}</h3>
-                <p className="text-xs font-semibold text-slate-500 dark:text-neutral-400 mt-0.5">{item.location}</p>
-                <p className="mt-2 text-xs sm:text-sm font-bold text-amber-600 dark:text-amber-400">{item.degree}</p>
-
-                <ul className="mt-3 space-y-1.5 text-xs text-slate-600 dark:text-neutral-300">
-                  {item.achievements.map((ach, aIdx) => (
-                    <li key={aIdx} className="flex items-start gap-2">
-                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0" />
-                      <span className="leading-relaxed">{ach}</span>
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        {/* CERTIFICATIONS & MILESTONES SECTION */}
-        <section id="certifications" className="pb-12 sm:pb-16">
-          <div className="mb-5 sm:mb-6">
-            <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Certifications & Milestones</h2>
-            <div className="mt-2.5 h-1 w-20 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
-          </div>
-
-          <div className="grid gap-4 sm:gap-5 md:grid-cols-3">
-            {certifications.map((cert) => (
-              <article
-                key={cert.title}
-                className="rounded-[1.5rem] sm:rounded-[1.8rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-5 sm:p-6 shadow-xl backdrop-blur-md flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center justify-between text-[9px] sm:text-[10px] font-bold uppercase text-amber-600 dark:text-amber-400 mb-2">
-                    <span>{cert.issuer}</span>
-                    <span>{cert.year}</span>
-                  </div>
-                  <h3 className="font-display text-base sm:text-lg font-bold text-slate-900 dark:text-white">{cert.title}</h3>
-                  <p className="mt-2 text-xs text-slate-500 dark:text-neutral-400 leading-relaxed">
-                    {cert.description}
-                  </p>
-                </div>
-                <div className="mt-4 pt-3 border-t border-stone-200 dark:border-neutral-800/80 flex items-center gap-1 text-[10px] font-bold text-emerald-500 uppercase tracking-wider">
-                  <span>✓ Verified Distinction</span>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        {/* LANGUAGES SECTION */}
-        <section id="languages" className="pb-12 sm:pb-16">
-          <div className="mb-5 sm:mb-6">
-            <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Language Proficiency</h2>
-            <div className="mt-2.5 h-1 w-20 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
-          </div>
-
-          <div className="grid gap-3.5 sm:gap-4 grid-cols-2 lg:grid-cols-4">
-            {languages.map((language) => (
-              <article
-                key={language.name}
-                className="rounded-[1.5rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-4 sm:p-5 shadow-xl backdrop-blur-md"
-              >
-                <div className="mb-2 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-                  <h3 className="font-display text-sm sm:text-lg font-bold text-slate-900 dark:text-white">{language.name}</h3>
-                  <span className="text-[10px] sm:text-xs font-bold text-amber-600 dark:text-amber-400">{language.level}</span>
-                </div>
-                <div className="h-1.5 sm:h-2 overflow-hidden rounded-full bg-stone-200 dark:bg-neutral-900">
-                  <div
-                    className="h-full rounded-full bg-gradient-to-r from-amber-500 to-yellow-400"
-                    style={{ width: language.width }}
+                {/* Interactive Search Input */}
+                <div className="relative w-full md:w-72">
+                  <input
+                    type="text"
+                    value={skillSearchQuery}
+                    onChange={(e) => setSkillSearchQuery(e.target.value)}
+                    placeholder="Search skills (e.g. React, SQL)..."
+                    className="w-full rounded-full border border-stone-300 dark:border-neutral-800 bg-white dark:bg-black px-4 py-2 text-xs font-medium text-slate-800 dark:text-white focus:border-amber-500 focus:outline-none placeholder-stone-400 shadow-sm"
                   />
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        {/* CONTACT SECTION WITH INTERACTIVE VALIDATED FORM */}
-        <section id="contact" className="pb-12">
-          <div className="grid gap-6 xl:grid-cols-[1.5fr_1fr]">
-            {/* Interactive Contact Form (Netlify Form Ready) */}
-            <article className="rounded-[1.6rem] sm:rounded-[1.8rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-5 sm:p-8 lg:p-10">
-              <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Get In Touch</h2>
-              <div className="mt-2.5 h-1 w-14 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
-
-              <p className="mt-3 sm:mt-4 text-xs sm:text-sm leading-relaxed text-slate-600 dark:text-neutral-300">
-                Send a direct message regarding software engineering roles, project inquiries, or technical consultations.
-              </p>
-
-              {formSubmitted ? (
-                <div className="mt-6 sm:mt-8 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-6 text-center text-emerald-600 dark:text-emerald-400 animate-modal">
-                  <span className="text-4xl">🎉</span>
-                  <h3 className="mt-3 font-display text-lg sm:text-xl font-bold">Message Sent Successfully!</h3>
-                  <p className="mt-2 text-xs text-slate-600 dark:text-neutral-300">
-                    Thank you for reaching out, Steven will review your message and reply promptly to <strong className="text-slate-900 dark:text-white">{contactForm.email}</strong>.
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setFormSubmitted(false);
-                      setContactForm({ name: "", email: "", subject: "", service: "Full-Stack Engineering", message: "" });
-                    }}
-                    className="mt-5 rounded-full bg-emerald-500 px-6 py-2.5 text-xs font-bold text-slate-950 uppercase tracking-wider hover:bg-emerald-400"
-                  >
-                    Send Another Message
-                  </button>
-                </div>
-              ) : (
-                <form
-                  name="contact"
-                  method="POST"
-                  data-netlify="true"
-                  onSubmit={handleFormSubmit}
-                  className="mt-5 sm:mt-6 space-y-3.5 sm:space-y-4"
-                >
-                  <input type="hidden" name="form-name" value="contact" />
-
-                  <div className="grid gap-3.5 sm:gap-4 sm:grid-cols-2">
-                    <div>
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-neutral-400 mb-1">
-                        Your Name *
-                      </label>
-                      <input
-                        type="text"
-                        name="name"
-                        value={contactForm.name}
-                        onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
-                        placeholder="John Doe"
-                        className={`w-full rounded-xl border ${
-                          formErrors.name ? "border-rose-500" : "border-stone-300 dark:border-neutral-800"
-                        } bg-white dark:bg-black px-3.5 py-3 text-xs text-slate-900 dark:text-white focus:border-amber-500 focus:outline-none`}
-                      />
-                      {formErrors.name && <p className="mt-1 text-[10px] text-rose-500 font-bold">{formErrors.name}</p>}
-                    </div>
-
-                    <div>
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-neutral-400 mb-1">
-                        Your Email *
-                      </label>
-                      <input
-                        type="email"
-                        name="email"
-                        value={contactForm.email}
-                        onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
-                        placeholder="john@example.com"
-                        className={`w-full rounded-xl border ${
-                          formErrors.email ? "border-rose-500" : "border-stone-300 dark:border-neutral-800"
-                        } bg-white dark:bg-black px-3.5 py-3 text-xs text-slate-900 dark:text-white focus:border-amber-500 focus:outline-none`}
-                      />
-                      {formErrors.email && <p className="mt-1 text-[10px] text-rose-500 font-bold">{formErrors.email}</p>}
-                    </div>
-                  </div>
-
-                  <div className="grid gap-3.5 sm:gap-4 sm:grid-cols-2">
-                    <div>
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-neutral-400 mb-1">
-                        Subject *
-                      </label>
-                      <input
-                        type="text"
-                        name="subject"
-                        value={contactForm.subject}
-                        onChange={(e) => setContactForm({ ...contactForm, subject: e.target.value })}
-                        placeholder="Software Developer Role Inquiry"
-                        className={`w-full rounded-xl border ${
-                          formErrors.subject ? "border-rose-500" : "border-stone-300 dark:border-neutral-800"
-                        } bg-white dark:bg-black px-3.5 py-3 text-xs text-slate-900 dark:text-white focus:border-amber-500 focus:outline-none`}
-                      />
-                      {formErrors.subject && <p className="mt-1 text-[10px] text-rose-500 font-bold">{formErrors.subject}</p>}
-                    </div>
-
-                    <div>
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-neutral-400 mb-1">
-                        Area of Interest
-                      </label>
-                      <select
-                        name="service"
-                        value={contactForm.service}
-                        onChange={(e) => setContactForm({ ...contactForm, service: e.target.value })}
-                        className="w-full rounded-xl border border-stone-300 dark:border-neutral-800 bg-white dark:bg-black px-3.5 py-3 text-xs text-slate-900 dark:text-white focus:border-amber-500 focus:outline-none"
-                      >
-                        <option value="Full-Stack Engineering">Full-Stack Development</option>
-                        <option value="Backend Services">Backend Services & REST APIs</option>
-                        <option value="GIS & Land Systems">GIS & Spatial Applications</option>
-                        <option value="UI/UX & Web Apps">UI/UX & Web App Design</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-neutral-400 mb-1">
-                      Message *
-                    </label>
-                    <textarea
-                      name="message"
-                      rows={4}
-                      value={contactForm.message}
-                      onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
-                      placeholder="Share project details or opportunity requirements..."
-                      className={`w-full rounded-xl border ${
-                        formErrors.message ? "border-rose-500" : "border-stone-300 dark:border-neutral-800"
-                      } bg-white dark:bg-black px-3.5 py-3 text-xs text-slate-900 dark:text-white focus:border-amber-500 focus:outline-none`}
-                    />
-                    {formErrors.message && <p className="mt-1 text-[10px] text-rose-500 font-bold">{formErrors.message}</p>}
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="w-full rounded-full bg-gradient-to-r from-amber-500 via-[#D4AF37] to-yellow-500 py-3.5 text-xs font-bold uppercase tracking-wider text-slate-950 hover:brightness-105 shadow-md transition min-h-[44px]"
-                  >
-                    Submit Message
-                  </button>
-                </form>
-              )}
-            </article>
-
-            {/* Quick Actions & Contact Details Sidebar */}
-            <article className="rounded-[1.6rem] sm:rounded-[1.8rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-5 sm:p-6 flex flex-col justify-between">
-              <div>
-                <h3 className="font-display text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Direct Reach</h3>
-                <div className="mt-2.5 h-1 w-14 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
-
-                <div className="mt-5 space-y-3">
-                  <a
-                    href="mailto:badagaclass@gmail.com"
-                    className="block rounded-2xl border border-stone-200 dark:border-neutral-800 bg-white/50 dark:bg-black/60 p-4 transition hover:border-amber-500"
-                  >
-                    <span className="text-[9px] font-bold uppercase text-amber-500">Email Address</span>
-                    <p className="mt-1 font-display text-xs sm:text-sm font-bold text-slate-900 dark:text-white break-all">badagaclass@gmail.com</p>
-                  </a>
-
-                  <a
-                    href="tel:+250788883986"
-                    className="block rounded-2xl border border-stone-200 dark:border-neutral-800 bg-white/50 dark:bg-black/60 p-4 transition hover:border-amber-500"
-                  >
-                    <span className="text-[9px] font-bold uppercase text-amber-500">Phone Number</span>
-                    <p className="mt-1 font-display text-xs sm:text-sm font-bold text-slate-900 dark:text-white">+250 788 883 986</p>
-                  </a>
-                </div>
-
-                <div className="mt-5 space-y-2">
-                  <button
-                    type="button"
-                    onClick={() => handleCopy("badagaclass@gmail.com", "Email copied to clipboard!")}
-                    className="w-full rounded-xl border border-stone-200 dark:border-neutral-800 bg-stone-100/70 dark:bg-black/70 py-3 text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-neutral-300 hover:border-amber-500 hover:text-amber-500 transition min-h-[44px]"
-                  >
-                    Copy Email
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleCopy("+250788883986", "Phone copied to clipboard!")}
-                    className="w-full rounded-xl border border-stone-200 dark:border-neutral-800 bg-stone-100/70 dark:bg-black/70 py-3 text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-neutral-300 hover:border-amber-500 hover:text-amber-500 transition min-h-[44px]"
-                  >
-                    Copy Phone
-                  </button>
-                  {copyMessage && (
-                    <p className="mt-2 text-center text-xs font-bold text-amber-500 animate-pulse">{copyMessage}</p>
+                  {skillSearchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setSkillSearchQuery("")}
+                      className="absolute right-3 top-2.5 text-xs text-stone-400 hover:text-stone-600 dark:hover:text-white"
+                    >
+                      ✕
+                    </button>
                   )}
                 </div>
               </div>
 
-              <div className="mt-6 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-4">
-                <p className="text-[9px] font-bold uppercase tracking-widest text-emerald-500">Current Availability</p>
-                <p className="mt-1 text-xs text-slate-600 dark:text-neutral-300">
-                  Open to full-time roles, software engineering internships, and technical contracts in Rwanda or remote worldwide.
-                </p>
+              {/* Mobile Horizontally Scrollable Category Pills */}
+              <div className="mb-6 flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1.5 sm:pb-0 sm:flex-wrap">
+                {["All", "Frontend", "Backend & APIs", "Databases", "Infrastructure & Systems", "GIS & Land", "UI/UX & Product", "Engineering Practices"].map((cat) => (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => setSkillCategoryFilter(cat)}
+                    className={`rounded-full px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-wider transition-all shrink-0 ${
+                      skillCategoryFilter === cat
+                        ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 shadow-md shadow-amber-500/10 font-black"
+                        : "border border-stone-200 dark:border-neutral-800 bg-white/60 dark:bg-[#0D0D0D] text-slate-600 dark:text-neutral-400 hover:border-stone-400 dark:hover:border-neutral-700 hover:text-slate-900 dark:hover:text-white"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
               </div>
-            </article>
-          </div>
-        </section>
+
+              {/* Skill Cards Grid */}
+              {filteredSkillGroups.length === 0 ? (
+                <div className="rounded-2xl border border-stone-200 dark:border-neutral-800 p-8 text-center text-slate-500 text-xs sm:text-sm">
+                  No skills found matching &quot;{skillSearchQuery}&quot; in category &quot;{skillCategoryFilter}&quot;.
+                </div>
+              ) : (
+                <div className="grid gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
+                  {filteredSkillGroups.map((group) => (
+                    <article
+                      key={group.title}
+                      className="group rounded-[1.5rem] sm:rounded-[1.8rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-5 sm:p-6 shadow-xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-amber-500/50 flex flex-col justify-between"
+                    >
+                      <div>
+                        <div className="mb-3 h-1.5 w-10 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400 transition-all duration-300 group-hover:w-16" />
+                        <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400">{group.category}</span>
+                        <h3 className="mt-0.5 font-display text-base sm:text-lg font-bold text-slate-900 dark:text-white group-hover:text-amber-500 transition-colors">
+                          {group.title}
+                        </h3>
+                        <p className="mt-2 text-xs text-slate-500 dark:text-neutral-400 leading-relaxed">
+                          {group.description}
+                        </p>
+                      </div>
+
+                      <div className="mt-4 flex flex-wrap gap-1.5">
+                        {group.skills.map((skillItem) => (
+                          <span
+                            key={skillItem}
+                            className="rounded-lg bg-stone-100 dark:bg-black/70 border border-stone-200/60 dark:border-neutral-800 px-2 py-0.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-700 dark:text-neutral-300 shadow-sm"
+                          >
+                            {skillItem}
+                          </span>
+                        ))}
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              )}
+            </section>
+
+            {/* HOSTED PROJECTS SHOWCASE SECTION */}
+            <section id="projects" className="pb-12 sm:pb-16">
+              <div className="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-3 border-b border-stone-200 dark:border-neutral-800 pb-4">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-500">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      Live Hosted Systems
+                    </span>
+                  </div>
+                  <h2 className="font-display text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                    Featured Hosted Projects
+                  </h2>
+                  <div className="mt-2.5 h-1 w-20 rounded-full bg-gradient-to-r from-amber-500 via-[#D4AF37] to-emerald-400" />
+                </div>
+
+                {/* Filter Buttons */}
+                <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+                  {[
+                    { label: "All Projects", key: "All" },
+                    { label: "⚡ Live Hosted", key: "Live" },
+                    { label: "🏛️ Full-Stack", key: "Full-Stack" },
+                    { label: "🗺️ GIS & Spatial", key: "GIS" }
+                  ].map((tab) => (
+                    <button
+                      key={tab.key}
+                      type="button"
+                      onClick={() => setProjectCategoryFilter(tab.key)}
+                      className={`rounded-full px-3.5 py-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider transition-all shrink-0 ${
+                        projectCategoryFilter === tab.key
+                          ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 font-black shadow-md"
+                          : "border border-stone-200 dark:border-neutral-800 bg-white/60 dark:bg-neutral-900/60 text-slate-600 dark:text-neutral-400 hover:text-white"
+                      }`}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Hosted Projects Cards Container */}
+              <div className="grid gap-6 lg:grid-cols-3">
+                {filteredProjects.map((project) => {
+                  return (
+                    <article
+                      key={project.id}
+                      className="group relative flex flex-col justify-between overflow-hidden rounded-[1.8rem] border border-stone-200 dark:border-neutral-800 bg-white/80 dark:bg-[#0D0D0D] p-5 sm:p-6 shadow-2xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 hover:border-amber-500/60"
+                    >
+                      {/* Glowing ambient light */}
+                      <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-amber-500/10 blur-2xl group-hover:bg-amber-500/20 transition-all" />
+
+                      <div>
+                        {/* Simulated Browser Frame Bar for Hosted Projects */}
+                        <div className="mb-4 rounded-xl border border-stone-200 dark:border-neutral-800/80 bg-stone-100/80 dark:bg-black/80 px-3 py-2 flex items-center justify-between font-mono text-[10px]">
+                          <div className="flex items-center gap-1.5">
+                            <span className="h-2 w-2 rounded-full bg-rose-500/80 inline-block" />
+                            <span className="h-2 w-2 rounded-full bg-yellow-500/80 inline-block" />
+                            <span className="h-2 w-2 rounded-full bg-emerald-500/80 inline-block" />
+                          </div>
+                          <div className="flex items-center gap-1.5 text-slate-500 dark:text-neutral-400 truncate max-w-[170px] sm:max-w-[200px]">
+                            <span className="text-emerald-400 font-bold">🔒 https://</span>
+                            <span className="truncate text-amber-300 font-semibold">{project.displayUrl}</span>
+                          </div>
+                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        </div>
+
+                        {/* Header Row */}
+                        <div className="mb-3 flex items-start justify-between gap-2">
+                          <div>
+                            <h3 className="font-display text-xl font-bold text-slate-900 dark:text-white group-hover:text-amber-400 transition-colors">
+                              {project.name}
+                            </h3>
+                            <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400 mt-0.5">
+                              {project.category}
+                            </p>
+                          </div>
+                          <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 shrink-0">
+                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                            LIVE
+                          </span>
+                        </div>
+
+                        <p className="text-xs text-slate-600 dark:text-neutral-300 leading-relaxed mt-3">
+                          {project.shortDescription}
+                        </p>
+
+                        {/* Bullet Highlights */}
+                        <ul className="mt-4 space-y-2 text-xs text-slate-500 dark:text-neutral-400">
+                          {project.points.map((pt, pIdx) => (
+                            <li key={pIdx} className="flex items-start gap-2">
+                              <span className="mt-1 h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0" />
+                              <span className="leading-relaxed">{pt}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* Footer & Action Buttons */}
+                      <div className="mt-6 pt-4 border-t border-stone-200 dark:border-neutral-800/80">
+                        <div className="flex flex-wrap gap-1 mb-4">
+                          {project.tags.map((tag) => (
+                            <span key={tag} className="rounded bg-stone-100 dark:bg-black border border-stone-200/60 dark:border-neutral-800 px-2 py-0.5 text-[9px] font-semibold text-slate-600 dark:text-neutral-400">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-2">
+                          {project.liveUrl ? (
+                            <a
+                              href={project.liveUrl}
+                              target="_blank"
+                              rel="noreferrer noopener"
+                              className="col-span-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-amber-500 via-[#D4AF37] to-yellow-500 py-2.5 px-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-950 hover:brightness-110 shadow-md transition text-center min-h-[38px]"
+                            >
+                              <span>🚀 Visit Live Site</span>
+                            </a>
+                          ) : null}
+
+                          <button
+                            type="button"
+                            onClick={() => setSelectedProject(project)}
+                            className="col-span-1 inline-flex items-center justify-center gap-1 rounded-xl border border-stone-300 dark:border-neutral-700 bg-white/80 dark:bg-neutral-900/80 py-2.5 px-3 text-[10px] font-bold uppercase tracking-wider text-slate-800 dark:text-neutral-200 hover:border-amber-500 hover:text-white transition text-center min-h-[38px]"
+                          >
+                            <span>🔍 Insights</span>
+                          </button>
+                        </div>
+
+                        {project.githubUrl && (
+                          <a
+                            href={project.githubUrl}
+                            target="_blank"
+                            rel="noreferrer noopener"
+                            className="mt-2 block w-full text-center text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-neutral-400 hover:text-amber-400 transition py-1"
+                          >
+                            View Source Code on GitHub →
+                          </a>
+                        )}
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            </section>
+
+            {/* EXPERIENCE & EDUCATION SECTION */}
+            <section id="education" className="pb-12 sm:pb-16">
+              <div className="mb-5 sm:mb-6">
+                <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Academic Journey & Education</h2>
+                <div className="mt-2.5 h-1 w-20 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
+              </div>
+
+              <div className="grid gap-5 sm:gap-6 md:grid-cols-2">
+                {education.map((item) => (
+                  <article
+                    key={item.school}
+                    className="rounded-[1.5rem] sm:rounded-[1.8rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-5 sm:p-6 shadow-xl backdrop-blur-md border-l-4 border-l-amber-500"
+                  >
+                    <span className="inline-block rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-0.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 mb-2">
+                      {item.date}
+                    </span>
+                    <h3 className="font-display text-lg sm:text-xl font-bold text-slate-900 dark:text-white">{item.school}</h3>
+                    <p className="text-xs font-semibold text-slate-500 dark:text-neutral-400 mt-0.5">{item.location}</p>
+                    <p className="mt-2 text-xs sm:text-sm font-bold text-amber-600 dark:text-amber-400">{item.degree}</p>
+
+                    <ul className="mt-3 space-y-1.5 text-xs text-slate-600 dark:text-neutral-300">
+                      {item.achievements.map((ach, aIdx) => (
+                        <li key={aIdx} className="flex items-start gap-2">
+                          <span className="mt-1 h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0" />
+                          <span className="leading-relaxed">{ach}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </article>
+                ))}
+              </div>
+            </section>
+
+            {/* CERTIFICATIONS HOMEPAGE TEASER SECTION */}
+            <section id="certifications" className="pb-12 sm:pb-16">
+              <div className="mb-5 sm:mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-stone-200 dark:border-neutral-800 pb-4">
+                <div>
+                  <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Certifications & Credentials</h2>
+                  <div className="mt-2.5 h-1 w-20 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => navigateToPage("certifications")}
+                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-amber-500 hover:text-white transition"
+                >
+                  Explore Dedicated Certifications Page →
+                </button>
+              </div>
+
+              <div className="grid gap-4 sm:gap-5 md:grid-cols-2">
+                {certificationsList.slice(0, 2).map((cert) => (
+                  <article
+                    key={cert.id}
+                    className="rounded-[1.5rem] sm:rounded-[1.8rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-5 sm:p-6 shadow-xl backdrop-blur-md flex flex-col justify-between"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between text-[9px] sm:text-[10px] font-bold uppercase text-amber-600 dark:text-amber-400 mb-2">
+                        <span>{cert.issuer}</span>
+                        <span>{cert.date}</span>
+                      </div>
+                      <h3 className="font-display text-base sm:text-lg font-bold text-slate-900 dark:text-white">{cert.title}</h3>
+                      <p className="mt-2 text-xs text-slate-500 dark:text-neutral-400 leading-relaxed">
+                        {cert.description}
+                      </p>
+                    </div>
+                    <div className="mt-4 pt-3 border-t border-stone-200 dark:border-neutral-800/80 flex items-center justify-between gap-2">
+                      <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">✓ Verified Document</span>
+                      {cert.fileUrl && (
+                        <a
+                          href={cert.fileUrl}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                          className="text-xs font-bold uppercase text-amber-400 hover:text-white transition"
+                        >
+                          View Document ↗
+                        </a>
+                      )}
+                    </div>
+                  </article>
+                ))}
+              </div>
+
+              <div className="mt-6 text-center">
+                <button
+                  type="button"
+                  onClick={() => navigateToPage("certifications")}
+                  className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-500 via-[#D4AF37] to-yellow-500 px-8 py-3 text-xs font-bold uppercase tracking-wider text-slate-950 shadow-md hover:brightness-105 transition"
+                >
+                  View All Certifications & Diplomas →
+                </button>
+              </div>
+            </section>
+
+            {/* LANGUAGES SECTION */}
+            <section id="languages" className="pb-12 sm:pb-16">
+              <div className="mb-5 sm:mb-6">
+                <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Language Proficiency</h2>
+                <div className="mt-2.5 h-1 w-20 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
+              </div>
+
+              <div className="grid gap-3.5 sm:gap-4 grid-cols-2 lg:grid-cols-4">
+                {languages.map((language) => (
+                  <article
+                    key={language.name}
+                    className="rounded-[1.5rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-4 sm:p-5 shadow-xl backdrop-blur-md"
+                  >
+                    <div className="mb-2 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                      <h3 className="font-display text-sm sm:text-lg font-bold text-slate-900 dark:text-white">{language.name}</h3>
+                      <span className="text-[10px] sm:text-xs font-bold text-amber-600 dark:text-amber-400">{language.level}</span>
+                    </div>
+                    <div className="h-1.5 sm:h-2 overflow-hidden rounded-full bg-stone-200 dark:bg-neutral-900">
+                      <div
+                        className="h-full rounded-full bg-gradient-to-r from-amber-500 to-yellow-400"
+                        style={{ width: language.width }}
+                      />
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+
+            {/* CONTACT SECTION WITH INTERACTIVE VALIDATED FORM */}
+            <section id="contact" className="pb-12">
+              <div className="grid gap-6 xl:grid-cols-[1.5fr_1fr]">
+                {/* Interactive Contact Form (Netlify Form Ready) */}
+                <article className="rounded-[1.6rem] sm:rounded-[1.8rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-5 sm:p-8 lg:p-10">
+                  <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Get In Touch</h2>
+                  <div className="mt-2.5 h-1 w-14 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
+
+                  <p className="mt-3 sm:mt-4 text-xs sm:text-sm leading-relaxed text-slate-600 dark:text-neutral-300">
+                    Send a direct message regarding software engineering roles, project inquiries, or technical consultations.
+                  </p>
+
+                  {formSubmitted ? (
+                    <div className="mt-6 sm:mt-8 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-6 text-center text-emerald-600 dark:text-emerald-400 animate-modal">
+                      <span className="text-4xl">🎉</span>
+                      <h3 className="mt-3 font-display text-lg sm:text-xl font-bold">Message Sent Successfully!</h3>
+                      <p className="mt-2 text-xs text-slate-600 dark:text-neutral-300">
+                        Thank you for reaching out, Steven will review your message and reply promptly to <strong className="text-slate-900 dark:text-white">{contactForm.email}</strong>.
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFormSubmitted(false);
+                          setContactForm({ name: "", email: "", subject: "", service: "Full-Stack Engineering", message: "" });
+                        }}
+                        className="mt-5 rounded-full bg-emerald-500 px-6 py-2.5 text-xs font-bold text-slate-950 uppercase tracking-wider hover:bg-emerald-400"
+                      >
+                        Send Another Message
+                      </button>
+                    </div>
+                  ) : (
+                    <form
+                      name="contact"
+                      method="POST"
+                      data-netlify="true"
+                      onSubmit={handleFormSubmit}
+                      className="mt-5 sm:mt-6 space-y-3.5 sm:space-y-4"
+                    >
+                      <input type="hidden" name="form-name" value="contact" />
+
+                      <div className="grid gap-3.5 sm:gap-4 sm:grid-cols-2">
+                        <div>
+                          <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-neutral-400 mb-1">
+                            Your Name *
+                          </label>
+                          <input
+                            type="text"
+                            name="name"
+                            value={contactForm.name}
+                            onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
+                            placeholder="John Doe"
+                            className={`w-full rounded-xl border ${
+                              formErrors.name ? "border-rose-500" : "border-stone-300 dark:border-neutral-800"
+                            } bg-white dark:bg-black px-3.5 py-3 text-xs text-slate-900 dark:text-white focus:border-amber-500 focus:outline-none`}
+                          />
+                          {formErrors.name && <p className="mt-1 text-[10px] text-rose-500 font-bold">{formErrors.name}</p>}
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-neutral-400 mb-1">
+                            Your Email *
+                          </label>
+                          <input
+                            type="email"
+                            name="email"
+                            value={contactForm.email}
+                            onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
+                            placeholder="john@example.com"
+                            className={`w-full rounded-xl border ${
+                              formErrors.email ? "border-rose-500" : "border-stone-300 dark:border-neutral-800"
+                            } bg-white dark:bg-black px-3.5 py-3 text-xs text-slate-900 dark:text-white focus:border-amber-500 focus:outline-none`}
+                          />
+                          {formErrors.email && <p className="mt-1 text-[10px] text-rose-500 font-bold">{formErrors.email}</p>}
+                        </div>
+                      </div>
+
+                      <div className="grid gap-3.5 sm:gap-4 sm:grid-cols-2">
+                        <div>
+                          <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-neutral-400 mb-1">
+                            Subject *
+                          </label>
+                          <input
+                            type="text"
+                            name="subject"
+                            value={contactForm.subject}
+                            onChange={(e) => setContactForm({ ...contactForm, subject: e.target.value })}
+                            placeholder="Software Developer Role Inquiry"
+                            className={`w-full rounded-xl border ${
+                              formErrors.subject ? "border-rose-500" : "border-stone-300 dark:border-neutral-800"
+                            } bg-white dark:bg-black px-3.5 py-3 text-xs text-slate-900 dark:text-white focus:border-amber-500 focus:outline-none`}
+                          />
+                          {formErrors.subject && <p className="mt-1 text-[10px] text-rose-500 font-bold">{formErrors.subject}</p>}
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-neutral-400 mb-1">
+                            Area of Interest
+                          </label>
+                          <select
+                            name="service"
+                            value={contactForm.service}
+                            onChange={(e) => setContactForm({ ...contactForm, service: e.target.value })}
+                            className="w-full rounded-xl border border-stone-300 dark:border-neutral-800 bg-white dark:bg-black px-3.5 py-3 text-xs text-slate-900 dark:text-white focus:border-amber-500 focus:outline-none"
+                          >
+                            <option value="Full-Stack Engineering">Full-Stack Development</option>
+                            <option value="Backend Services">Backend Services & REST APIs</option>
+                            <option value="GIS & Land Systems">GIS & Spatial Applications</option>
+                            <option value="UI/UX & Web Apps">UI/UX & Web App Design</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-neutral-400 mb-1">
+                          Message *
+                        </label>
+                        <textarea
+                          name="message"
+                          rows={4}
+                          value={contactForm.message}
+                          onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
+                          placeholder="Share project details or opportunity requirements..."
+                          className={`w-full rounded-xl border ${
+                            formErrors.message ? "border-rose-500" : "border-stone-300 dark:border-neutral-800"
+                          } bg-white dark:bg-black px-3.5 py-3 text-xs text-slate-900 dark:text-white focus:border-amber-500 focus:outline-none`}
+                        />
+                        {formErrors.message && <p className="mt-1 text-[10px] text-rose-500 font-bold">{formErrors.message}</p>}
+                      </div>
+
+                      <button
+                        type="submit"
+                        className="w-full rounded-full bg-gradient-to-r from-amber-500 via-[#D4AF37] to-yellow-500 py-3.5 text-xs font-bold uppercase tracking-wider text-slate-950 hover:brightness-105 shadow-md transition min-h-[44px]"
+                      >
+                        Submit Message
+                      </button>
+                    </form>
+                  )}
+                </article>
+
+                {/* Quick Actions & Contact Details Sidebar */}
+                <article className="rounded-[1.6rem] sm:rounded-[1.8rem] border border-stone-200/80 dark:border-neutral-800 bg-white/70 dark:bg-[#0D0D0D]/90 p-5 sm:p-6 flex flex-col justify-between">
+                  <div>
+                    <h3 className="font-display text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Direct Reach</h3>
+                    <div className="mt-2.5 h-1 w-14 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
+
+                    <div className="mt-5 space-y-3">
+                      <a
+                        href="mailto:badagaclass@gmail.com"
+                        className="block rounded-2xl border border-stone-200 dark:border-neutral-800 bg-white/50 dark:bg-black/60 p-4 transition hover:border-amber-500"
+                      >
+                        <span className="text-[9px] font-bold uppercase text-amber-500">Email Address</span>
+                        <p className="mt-1 font-display text-xs sm:text-sm font-bold text-slate-900 dark:text-white break-all">badagaclass@gmail.com</p>
+                      </a>
+
+                      <a
+                        href="tel:+250788883986"
+                        className="block rounded-2xl border border-stone-200 dark:border-neutral-800 bg-white/50 dark:bg-black/60 p-4 transition hover:border-amber-500"
+                      >
+                        <span className="text-[9px] font-bold uppercase text-amber-500">Phone Number</span>
+                        <p className="mt-1 font-display text-xs sm:text-sm font-bold text-slate-900 dark:text-white">+250 788 883 986</p>
+                      </a>
+                    </div>
+
+                    <div className="mt-5 space-y-2">
+                      <button
+                        type="button"
+                        onClick={() => handleCopy("badagaclass@gmail.com", "Email copied to clipboard!")}
+                        className="w-full rounded-xl border border-stone-200 dark:border-neutral-800 bg-stone-100/70 dark:bg-black/70 py-3 text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-neutral-300 hover:border-amber-500 hover:text-amber-500 transition min-h-[44px]"
+                      >
+                        Copy Email
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleCopy("+250788883986", "Phone copied to clipboard!")}
+                        className="w-full rounded-xl border border-stone-200 dark:border-neutral-800 bg-stone-100/70 dark:bg-black/70 py-3 text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-neutral-300 hover:border-amber-500 hover:text-amber-500 transition min-h-[44px]"
+                      >
+                        Copy Phone
+                      </button>
+                      {copyMessage && (
+                        <p className="mt-2 text-center text-xs font-bold text-amber-500 animate-pulse">{copyMessage}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="mt-6 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-4">
+                    <p className="text-[9px] font-bold uppercase tracking-widest text-emerald-500">Current Availability</p>
+                    <p className="mt-1 text-xs text-slate-600 dark:text-neutral-300">
+                      Open to full-time roles, software engineering internships, and technical contracts in Rwanda or remote worldwide.
+                    </p>
+                  </div>
+                </article>
+              </div>
+            </section>
+          </>
+        )}
       </main>
+
+      {/* CERTIFICATE INSPECTOR MODAL */}
+      {selectedCert && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-modal">
+          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl border border-amber-500/40 bg-[#0C0C0C] p-6 text-white shadow-2xl">
+            <div className="flex items-center justify-between border-b border-neutral-800 pb-3 mb-4">
+              <div>
+                <span className="text-[9px] font-bold uppercase tracking-widest text-amber-400">{selectedCert.category}</span>
+                <h3 className="font-display text-xl font-bold text-white">{selectedCert.title}</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedCert(null)}
+                className="h-8 w-8 rounded-full border border-neutral-700 bg-neutral-900 text-neutral-400 hover:text-white flex items-center justify-center transition"
+                aria-label="Close modal"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-4 text-xs text-neutral-300">
+              <p className="leading-relaxed">{selectedCert.description}</p>
+              <div className="rounded-xl border border-neutral-800 bg-black p-3 font-mono text-[11px] text-neutral-400">
+                Issued by: {selectedCert.issuer} ({selectedCert.date})
+              </div>
+
+              {selectedCert.type === "image" && selectedCert.fileUrl && (
+                <div className="overflow-hidden rounded-xl border border-neutral-800 mt-3">
+                  <img src={selectedCert.fileUrl} alt={selectedCert.title} className="w-full object-contain max-h-96" />
+                </div>
+              )}
+            </div>
+
+            <div className="mt-6 flex items-center justify-between gap-3">
+              {selectedCert.fileUrl ? (
+                <a
+                  href={selectedCert.fileUrl}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="rounded-full bg-emerald-500 px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-950 hover:bg-emerald-400 transition"
+                >
+                  Open Full Document ↗
+                </a>
+              ) : <div />}
+              <button
+                type="button"
+                onClick={() => setSelectedCert(null)}
+                className="rounded-full border border-neutral-700 bg-neutral-900 px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white hover:border-amber-500"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Footer (Pure Black Theme) */}
       <footer className="border-t border-stone-200/60 dark:border-neutral-900 bg-stone-100/40 dark:bg-black py-6 text-center text-slate-500 dark:text-neutral-500 text-xs px-4">
