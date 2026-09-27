@@ -13,6 +13,7 @@ export default function Navbar({
     { label: "Home", href: "#home" },
     { label: "Selected Work", href: "#projects" },
     { label: "Skills", href: "#skills" },
+    { label: "Experience", href: "#experience" },
     { label: "Summary", href: "#summary" },
     { label: "Education", href: "#education" },
     { label: "Certifications", href: "#certifications" },
