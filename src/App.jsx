@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import SelectedWork from "./components/SelectedWork";
 import SkillsSection from "./components/SkillsSection";
+import ExperienceSection from "./components/ExperienceSection";
 import SummarySection from "./components/SummarySection";
 import EducationSection from "./components/EducationSection";
 import CertificationsSection from "./components/CertificationsSection";
@@ -37,7 +38,7 @@ export default function App() {
   const [selectedCert, setSelectedCert] = useState(null);
 
   const sectionIds = useMemo(
-    () => ["home", "projects", "skills", "summary", "education", "certifications", "contact"],
+    () => ["home", "projects", "skills", "experience", "summary", "education", "certifications", "contact"],
     []
   );
 
@@ -187,6 +188,7 @@ export default function App() {
             <Hero />
             <SelectedWork onSelectProject={(project) => setSelectedProject(project)} />
             <SkillsSection />
+            <ExperienceSection />
             <SummarySection />
             <EducationSection />
             <CertificationsSection
