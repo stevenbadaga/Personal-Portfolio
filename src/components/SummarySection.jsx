@@ -14,7 +14,7 @@ export default function SummarySection() {
           <div className="mt-2.5 h-1 w-20 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400" />
 
           <p className="mt-5 text-sm sm:text-[15px] leading-relaxed text-slate-600 dark:text-neutral-300">
-            Software Engineer focused on building practical full-stack systems, from production websites and business platforms to GIS-based applications. I work across frontend interfaces, backend APIs, databases and deployment, with an emphasis on software that solves clear operational problems. Experienced in translating real business and spatial requirements into clean architecture, resilient Spring Boot backend services, secure authentication workflows, and modern responsive user interfaces.
+            Software Engineer and Program Manager focused on building practical software and managing programs around real operational needs. I work across frontend interfaces, backend APIs, databases and deployment, while also coordinating people, milestones, workflows, and delivery. At Safari Strives, I manage venture-development programs and help build the systems that support entrepreneurs and turn plans into measurable execution.
           </p>
 
           {/* 4 Core Principles Grid */}
