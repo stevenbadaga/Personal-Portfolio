@@ -34,12 +34,12 @@ export default function Hero() {
 
           {/* Subtitle (H2) */}
           <h2 className="mt-2 font-display text-lg sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-amber-600 via-amber-500 to-teal-600 dark:from-amber-400 dark:via-yellow-200 dark:to-teal-400 bg-clip-text text-transparent tracking-tight">
-            Software Engineer & Full-Stack Developer
+            Software Engineer & Program Manager
           </h2>
 
           {/* Natural Concise Description */}
           <p className="mt-4 sm:mt-5 max-w-2xl text-sm sm:text-base lg:text-lg text-slate-600 dark:text-neutral-300 leading-relaxed">
-            I build full-stack web applications, backend services, business platforms, and GIS-based software designed around real operational problems.
+            I build full-stack software and manage programs that turn real operational needs into practical systems, products, and measurable execution.
           </p>
 
           {/* Clear Hero CTAs */}
